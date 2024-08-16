@@ -1,4 +1,4 @@
-const { Product } = require('../../models');
+const { Product,ProductImage } = require('../../models');
 
 const getProductByIdHandler = async (id) => {
 
