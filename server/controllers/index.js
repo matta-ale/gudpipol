@@ -2,11 +2,11 @@ const getAllProducts = require('./products/getAllProducts');
 const getProductById = require('./products/getProductById');
 const createProduct = require('./products/createProduct');
 const deleteProductById = require('./products/deleteProductById');
-const updateProductById = require('./products/updateProductById')
+const updateProductById = require('./products/updateProductById');
 const getAllCollections = require('./collections/getAllCollections');
 const createCollection = require('./collections/createCollection');
 const deleteCollectionById = require('./collections/deleteCollectionById');
-const updateCollectionById = require('./collections/updateCollectionById')
+const updateCollectionById = require('./collections/updateCollectionById');
 
 module.exports = {
   getAllProducts,
@@ -17,5 +17,5 @@ module.exports = {
   getAllCollections,
   createCollection,
   deleteCollectionById,
-  updateCollectionById
+  updateCollectionById,
 };

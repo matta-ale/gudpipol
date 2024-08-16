@@ -1,11 +1,11 @@
-const { Product } = require('../../models');
-const CustomError = require('../../utils/customError');
+const { Product, ProductImage } = require('../../models');
 
 const getAllProductsHandler = async (page, pageSize) => {
   const offset = (page - 1) * pageSize;
   const products = await Product.findAndCountAll({
     offset,
     limit: pageSize,
+    include: [{ model: ProductImage, as: 'images' }],
   });
   if (products.rows.length === 0) {
     const error = new Error('No products in database');

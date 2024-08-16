@@ -4,6 +4,7 @@ const getProductByIdHandler = async (id) => {
 
   const foundProduct = await Product.findOne({
     where: { id },
+    include: [{ model: ProductImage, as: 'images' }],
   });
   if (!foundProduct) {
     const error = new Error(`Product with id "${id}" not found in database`)
