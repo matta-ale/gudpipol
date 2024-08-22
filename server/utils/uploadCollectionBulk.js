@@ -19,7 +19,9 @@ const uploadCollectionsBulk = async (req, res) => {
     for (const row of rows) {
       if (row.name) {
         // Check if the collection already exists in the database
-        const existingCollection = await Collection.findOne({ where: { name: row.name } });
+        const existingCollection = await Collection.findOne({
+          where: { name: row.name },
+        });
 
         if (existingCollection) {
           // Update existing collection (if any other fields were to be updated, this is where it would be done)

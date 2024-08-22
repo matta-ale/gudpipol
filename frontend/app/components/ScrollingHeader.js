@@ -1,0 +1,16 @@
+const ScrollingHeader = () => {
+  const text =
+    '🚚 Cotizamos envíos a todo el país | 💳 Cuota simple: 3 y 6 cuotas | 🔄 Devolución sin cargo por 30 días';
+
+  return (
+    <div className='w-full bg-custom-green py-1 overflow-hidden'>
+      <div className='animate-scroll whitespace-nowrap'>
+        <p className='text-black inline-block mx-4'>{text}</p>
+        <p className='text-black inline-block mx-4'>{text}</p>
+        <p className='text-black inline-block mx-4'>{text}</p>
+      </div>
+    </div>
+  );
+};
+
+export default ScrollingHeader;

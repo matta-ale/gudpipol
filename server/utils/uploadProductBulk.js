@@ -19,10 +19,12 @@ const uploadProductsBulk = async (req, res) => {
     for (const row of rows) {
       if (row.id && row.name && row.price !== undefined) {
         // Check if the product already exists in the database
-        const existingProduct = await Product.findOne({ where: { id: row.id } });
+        const existingProduct = await Product.findOne({
+          where: { id: row.id },
+        });
         console.log(row.collectionId);
         const collectionId = parseInt(row.collectionId, 10);
-        row.collectionId = collectionId
+        row.collectionId = collectionId;
         if (existingProduct) {
           // Update existing product
           await existingProduct.update(row);

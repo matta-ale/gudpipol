@@ -1,11 +1,12 @@
 const express = require('express');
 const sequelize = require('./config/database');
-
+const cors = require('cors');
 
 const { productsRouter,collectionsRouter,productImagesRouter } = require('./routes');
 const {errorHandler} = require('./middlewares');
 const app = express();
 
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use('/', collectionsRouter);

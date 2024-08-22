@@ -1,5 +1,5 @@
 const xlsx = require('xlsx');
-const {ProductImage} = require('../models')
+const { ProductImage } = require('../models');
 
 const uploadProductImagesBulk = async (req, res) => {
   try {
@@ -21,14 +21,13 @@ const uploadProductImagesBulk = async (req, res) => {
 
       if (productId && url) {
         // Check if the image already exists in the database
-        const existingImage = await ProductImage.findOne({ where: { productId, url } });
+        const existingImage = await ProductImage.findOne({
+          where: { productId, url },
+        });
 
         if (!existingImage) {
-          console.log('Llegó');
           const image = await ProductImage.create({ productId, url });
-          console.log('Llegó2');
           images.push(image);
-          console.log('Llegó3');
         }
       }
     }
