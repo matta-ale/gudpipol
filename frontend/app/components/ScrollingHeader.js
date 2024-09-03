@@ -4,10 +4,10 @@ const ScrollingHeader = () => {
 
   return (
     <div className='w-full bg-custom-green py-1 overflow-hidden'>
-      <div className='animate-scroll whitespace-nowrap'>
-        <p className='text-black inline-block mx-4'>{text}</p>
-        <p className='text-black inline-block mx-4'>{text}</p>
-        <p className='text-black inline-block mx-4'>{text}</p>
+      <div className='animate-scroll whitespace-nowrap text-white'>
+        <p className=' inline-block mx-4'>{text}</p>
+        <p className='inline-block mx-4'>{text}</p>
+        <p className=' inline-block mx-4'>{text}</p>
       </div>
     </div>
   );
