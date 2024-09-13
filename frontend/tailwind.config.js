@@ -15,6 +15,7 @@ module.exports = {
       colors: {
         'custom-green': '#005d00',
         'custom-lightGreen': '#B3D435',
+        'custom-black': '#2D2E32',
       },
       fontFamily: {
         sans: ['Helvetica', 'Arial', 'sans-serif'],

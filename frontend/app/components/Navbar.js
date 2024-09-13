@@ -2,6 +2,8 @@ import { useState } from 'react';
 import Image from 'next/image';
 import Cart from './Cart';
 import { useSelector } from 'react-redux';
+import { FaAngleRight } from "react-icons/fa";
+import { FaAngleLeft } from "react-icons/fa";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -108,13 +110,11 @@ export default function Navbar() {
             <a href='/' className='hover:text-gray-300'>
               Inicio
             </a>
-            <span className='text-black'>&gt;</span>
           </li>
           <li className='flex justify-between w-full py-3'>
             <a href='/about' className='hover:text-gray-300'>
               Nosotros
             </a>
-            <span className='text-black'>&gt;</span>
           </li>
           <li className='flex justify-between w-full py-3'>
             <button
@@ -123,7 +123,7 @@ export default function Navbar() {
             >
               Productos
             </button>
-            <span className='text-black'>&gt;</span>
+          <FaAngleRight></FaAngleRight>
           </li>
 
           {/* Submenú hamburguesa productos */}
@@ -134,13 +134,13 @@ export default function Navbar() {
               } xl:hidden fixed top-32 left-0 w-full bg-white z-40 transform transition-transform duration-700 ease-in-out`}
             >
               <ul className='ml-6 space-y-2'>
-                <li className='bg-gray-200 py-2' key='title'>
+                <li className='bg-gray-200 py-2 pr-6' key='title'>
                   <button
                     onClick={() => setIsProductsOpen(false)}
                     className='hover:text-gray-300 w-full flex justify-between'
                   >
                       <span className='text-black pl-4'>Productos</span>
-                      <span className='text-black pr-4'>&gt;</span>
+                      <FaAngleRight></FaAngleRight>
                   </button>
                 </li>
                 <li key='productos'>
@@ -166,7 +166,6 @@ export default function Navbar() {
             <a href='/contact' className='hover:text-gray-300'>
               Contacto
             </a>
-            <span className='text-black'>&gt;</span>
           </li>
         </ul>
       </div>
