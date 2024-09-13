@@ -14,26 +14,23 @@ const uploadProductImagesBulk = async (req, res) => {
     const sheet = workbook.Sheets[workbook.SheetNames[0]];
     const rows = xlsx.utils.sheet_to_json(sheet);
 
+    // Delete all existing images in the database
+    await ProductImage.destroy({ where: {} });
+
     const images = [];
 
+    // Add new images from the Excel file
     for (const row of rows) {
       const { productId, url } = row;
 
       if (productId && url) {
-        // Check if the image already exists in the database
-        const existingImage = await ProductImage.findOne({
-          where: { productId, url },
-        });
-
-        if (!existingImage) {
-          const image = await ProductImage.create({ productId, url });
-          images.push(image);
-        }
+        const image = await ProductImage.create({ productId, url });
+        images.push(image);
       }
     }
 
     res.status(201).json({
-      message: 'Bulk images added successfully',
+      message: 'All images deleted and bulk images added successfully',
       images,
     });
   } catch (error) {
@@ -41,4 +38,5 @@ const uploadProductImagesBulk = async (req, res) => {
     res.status(500).json({ message: 'Failed to process the file' });
   }
 };
+
 module.exports = uploadProductImagesBulk;
