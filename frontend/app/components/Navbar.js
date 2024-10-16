@@ -2,8 +2,7 @@ import { useState } from 'react';
 import Image from 'next/image';
 import Cart from './Cart';
 import { useSelector } from 'react-redux';
-import { FaAngleRight } from "react-icons/fa";
-import { FaAngleLeft } from "react-icons/fa";
+import { FaAngleRight } from 'react-icons/fa';
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -32,7 +31,8 @@ export default function Navbar() {
   };
 
   return (
-    <nav className='bg-white h-20 flex items-center px-5 lg:border-b-2 lg:border-b-custom-green relative justify-between'>
+    // <nav className='bg-white h-20 flex items-center px-5 lg:border-b-2 lg:border-b-custom-green relative justify-between'>
+    <nav className='fixed top-8 left-0 w-full h-20 flex items-center px-5 lg:border-b-2 lg:border-b-custom-green z-30 bg-white justify-between'>
       {/*menú hamburguesa*/}
       <div className='xl:hidden flex items-center z-50'>
         <button
@@ -123,7 +123,7 @@ export default function Navbar() {
             >
               Productos
             </button>
-          <FaAngleRight></FaAngleRight>
+            <FaAngleRight></FaAngleRight>
           </li>
 
           {/* Submenú hamburguesa productos */}
@@ -139,8 +139,8 @@ export default function Navbar() {
                     onClick={() => setIsProductsOpen(false)}
                     className='hover:text-gray-300 w-full flex justify-between'
                   >
-                      <span className='text-black pl-4'>Productos</span>
-                      <FaAngleRight></FaAngleRight>
+                    <span className='text-black pl-4'>Productos</span>
+                    <FaAngleRight></FaAngleRight>
                   </button>
                 </li>
                 <li key='productos'>

@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import ProductCard from '../components/ProductCard';
 import { getProducts} from '../redux/features/products/productsSlice';
 
-export default function Home() {
+export default function Products() {
   const dispatch = useDispatch();
   const myProducts = useSelector((state) => state.products.myProducts);
   
@@ -16,7 +16,7 @@ export default function Home() {
   }, [dispatch]);
   
   return (
-    <main className='flex min-h-screen flex-col items-center justify-between p-24'>
+    <main className='flex min-h-screen flex-col items-center justify-between mt-32 lg:mt-44 md:grid md: grid-cols-2 lg:grid-cols-3 md:mx-auto md:justify-items-center max-w-[1200px]'>
       {myProducts ? (
         myProducts.map((product) => {
           return (
@@ -33,6 +33,7 @@ export default function Home() {
               isDestacado={product.isDestacado}
               isActive={product.isActive}
               images={product.images}
+              price={product.price}
             />
           );
         })

@@ -20,7 +20,7 @@ export default function RootLayout({ children }) {
         <title>Gudpipol ecomuebles</title>
         <link
           rel='icon'
-          href='./img/logoIcon.jpg'
+          href='/img/logoIcon.jpg'
           type='image/<generated>'
           sizes='<generated>'
         />

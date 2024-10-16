@@ -1,33 +1,53 @@
 import React from 'react';
 import Image from 'next/image';
 import placeholderImage from '../../public/img/No-Image-Placeholder.svg';
+import RotatingText from './RotatingText';
+import Link from 'next/link';
 
 const ProductCard = (product) => {
   const imageUrl =
     product.images && product.images.length > 0
       ? product.images[0].url
       : placeholderImage;
+
   return (
-    <div className='bg-custom-black shadow-md p-0 my-20 h-[500px] w-[300px] text-white'>
-      <div className='relative mb-4 h-[300px] w-[300px]'>
+    <div className='bg-custom-black shadow-2xl shadow-black p-0 my-8 h-[400px] w-[280px] text-white transform transition-transform duration-300 hover:scale-105'>
+      <div className='relative h-[220px] w-[280px] flex items-center justify-center bg-gray-200'>
         <Image
           src={imageUrl}
           alt={product.name}
-          width={300}
-          height={300}
-          className='object-cover object-center h-full w-full'
+          layout='fill'
+          objectFit='cover'
+          className='h-full w-full'
         />
-        <div className='absolute top-0 left-0 bg-blue-500 text-white p-2 rounded-tr-lg'>
-          0 % OFF
+        <div className='absolute bottom-0 left-0 text-xs font-bold bg-yellow-400 text-black p-2 rounded-tr-lg'>
+          <RotatingText />
         </div>
       </div>
-      <h3 className='text-xl font-semibold'>{product.name}</h3>
-      <p className='text-gray-600'>{product.description}</p>
-      <div className='flex justify-between items-center mt-4'>
-        <span className='text-green-600 font-semibold'>${product.price}</span>
-        <div className='flex space-x-2'>
-          <button className='text-blue-500 hover:underline'>Details</button>
-          <button className='text-blue-500 hover:underline'>Add to Cart</button>
+
+      <div className='flex flex-col justify-between h-[150px] pb-2 pt-2'>
+        <div className='flex flex-col pt-1'>
+          <h3 className='text-xs font-semibold text-custom-lightGreen px-4'>
+            {product.collection.name}
+          </h3>
+          <h3 className='text-xl font-semibold px-4'>{product.name}</h3>
+        </div>
+        <div className='flex justify-between items-center mx-2 pt-1 px-2'>
+          <span className='text-lg font-semi-bold'>
+            $ {product.price.toLocaleString('es-ES')}
+          </span>
+        </div>
+        <div className='flex justify-center items-center mt-2 w-full'>
+          <div className='flex flex-col gap-2'>
+            <Link href={`/detail/${product.id}`}>
+              <button className='text-white text-xs font-semibold border-white border-2 bg-custom-black rounded-2xl h-8 w-64 py-1'>
+                DETALLE
+              </button>
+            </Link>
+            <button className='text-white text-xs font-semibold border-white border-2 bg-custom-green rounded-2xl h-8 w-64 py-1 mb-2'>
+              AGREGAR AL CARRITO
+            </button>
+          </div>
         </div>
       </div>
     </div>

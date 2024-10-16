@@ -21,6 +21,7 @@ module.exports = {
         sans: ['Helvetica', 'Arial', 'sans-serif'],
         roboto: ['Roboto', 'Helvetica', 'Arial', 'sans-serif'],
         montserrat: ['Montserrat', 'Helvetica', 'Arial', 'sans-serif'],
+        Anaheim: ['Anaheim', 'Montserrat', 'roboto', 'sans-serif'],
       },
       screens: {
         sm: '640px', // Puedes ajustar este valor a lo que necesites
