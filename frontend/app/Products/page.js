@@ -16,7 +16,7 @@ export default function Products() {
   }, [dispatch]);
   
   return (
-    <main className='flex min-h-screen flex-col items-center justify-between mt-32 lg:mt-44 md:grid md: grid-cols-2 lg:grid-cols-3 md:mx-auto md:justify-items-center max-w-[1200px]'>
+    <main className='flex min-h-screen flex-col gap-16 items-center justify-between mt-32 lg:mt-44 md:grid md: grid-cols-2 lg:grid-cols-3 xl:grid-cols-4  md:mx-auto md:justify-items-center max-w-[1200px]'>
       {myProducts ? (
         myProducts.map((product) => {
           return (

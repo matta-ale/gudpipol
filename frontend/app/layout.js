@@ -9,11 +9,34 @@ import './globals.css';
 import { Providers } from './redux/provider';
 import { WhatsAppWidget } from 'react-whatsapp-widget';
 import 'react-whatsapp-widget/dist/index.css';
-// import { ReactComponent as CompanyIcon } from '../public/img/logo.svg'; 
+import { useState, useEffect } from 'react';
 
 axios.defaults.baseURL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
 export default function RootLayout({ children }) {
+  const [sloganHeight, setSloganHeight] = useState(32);
+  const [sloganVisible, setSloganVisible] = useState(true);
+
+  // Detect when the SloganHeader should hide
+  useEffect(() => {
+    const handleScroll = () => {
+      // Hide slogan when the scroll position is greater than the height of the slogan
+      if (window.scrollY > sloganHeight) {
+        setSloganVisible(false);
+      } else {
+        setSloganVisible(true);
+      }
+    };
+
+    // Add event listener
+    window.addEventListener('scroll', handleScroll);
+
+    // Clean up event listener on component unmount
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [sloganHeight]);
+
   return (
     <html lang='en'>
       <head>
@@ -25,22 +48,27 @@ export default function RootLayout({ children }) {
           sizes='<generated>'
         />
       </head>
-      <body className='bg-white-100 font-montserrat'>
-        <SloganHeader />
+      <body className='bg-white-100 font-montserrat relative'>
+        <div
+          className='absolute inset-0 bg-cover bg-center bg-fixed opacity-80 z-0'
+          style={{ backgroundImage: "url('/img/background.jpg')" }}
+        ></div>
+        <SloganHeader onHeightChange={(height) => setSloganHeight(height)} />
         <Providers>
-          <Navbar />
-          <SubNavbar />
-          <ScrollingHeader />
-          <main className='container mx-auto px-4 py-8'>{children}</main>
+          <Navbar sloganHeight={sloganHeight} sloganVisible = {sloganVisible} />
+          <SubNavbar sloganVisible={sloganVisible} />
+          <ScrollingHeader sloganVisible={sloganVisible} />
+          <main className='container mx-auto px-4 py-8 relative z-10'>
+            {children}
+          </main>
           <WhatsAppWidget
             phoneNumber='5493415924709'
             message='Hola, enviá un mensaje así te redirigimos a un chat de Whatsapp con nosotros'
             companyName='Gudpipol'
             companyInitial='GP'
-            // CompanyIcon='../public/img/logo.svg' 
-            replyTimeText = 'Responderemos a la brevedad'
-            sendButtonText = 'Enviar'
-            inputPlaceHolder = 'Escribe un mensaje...'
+            replyTimeText='Responderemos a la brevedad'
+            sendButtonText='Enviar'
+            inputPlaceHolder='Escribe un mensaje...'
           />
         </Providers>
         <Footer />

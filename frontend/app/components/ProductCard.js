@@ -11,7 +11,7 @@ const ProductCard = (product) => {
       : placeholderImage;
 
   return (
-    <div className='bg-custom-black shadow-2xl shadow-black p-0 my-8 h-[400px] w-[280px] text-white transform transition-transform duration-300 hover:scale-105'>
+    <div className='bg-custom-black shadow-2xl shadow-black p-0 h-[430px] w-[280px] text-white transform transition-transform duration-300 hover:scale-105'>
       <div className='relative h-[220px] w-[280px] flex items-center justify-center bg-gray-200'>
         <Image
           src={imageUrl}
@@ -20,31 +20,34 @@ const ProductCard = (product) => {
           objectFit='cover'
           className='h-full w-full'
         />
-        <div className='absolute bottom-0 left-0 text-xs font-bold bg-yellow-400 text-black p-2 rounded-tr-lg'>
+        {/* <div className='absolute bottom-0 left-0 text-xs font-bold bg-yellow-400 text-black p-2 rounded-tr-lg'>
           <RotatingText />
-        </div>
+        </div> */}
       </div>
 
       <div className='flex flex-col justify-between h-[150px] pb-2 pt-2'>
         <div className='flex flex-col pt-1'>
-          <h3 className='text-xs font-semibold text-custom-lightGreen px-4'>
+          <h3 className='text-xs font-semibold text-gray-400 px-4'>
             {product.collection.name}
           </h3>
           <h3 className='text-xl font-semibold px-4'>{product.name}</h3>
         </div>
-        <div className='flex justify-between items-center mx-2 pt-1 px-2'>
-          <span className='text-lg font-semi-bold'>
+        <div className='flex justify-between items-center mt-1 mx-2 pt-1 px-2'>
+          <span className='text-lg font-semibold'>
             $ {product.price.toLocaleString('es-ES')}
           </span>
         </div>
+        <p className='ml-4 text-xs text-yellow-400'>
+          (hasta 6 cuotas sin interés)
+        </p>
         <div className='flex justify-center items-center mt-2 w-full'>
           <div className='flex flex-col gap-2'>
             <Link href={`/detail/${product.id}`}>
-              <button className='text-white text-xs font-semibold border-white border-2 bg-custom-black rounded-2xl h-8 w-64 py-1'>
+              <button className='text-white text-xs font-bold border-white border-2 bg-custom-black rounded-2xl h-8 w-64 py-1'>
                 DETALLE
               </button>
             </Link>
-            <button className='text-white text-xs font-semibold border-white border-2 bg-custom-green rounded-2xl h-8 w-64 py-1 mb-2'>
+            <button className='text-black text-xs font-bold bg-yellow-400 rounded-2xl h-8 w-64 py-1 mb-2'>
               AGREGAR AL CARRITO
             </button>
           </div>
