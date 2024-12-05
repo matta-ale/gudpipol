@@ -2,6 +2,7 @@
 
 import { configureStore } from '@reduxjs/toolkit';
 import productsReducer from './features/products/productsSlice';
+import cartReducer from './features/cart/cartSlice';
 import { persistStore, persistReducer } from 'redux-persist';
 // import storage from 'redux-persist/lib/storage'; 
 import { combineReducers } from 'redux';
@@ -28,11 +29,12 @@ const storage = typeof window !== "undefined" ? createWebStorage("local") : crea
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: ['products'], // Aquí puedes añadir otros estados que quieras persistir
+  whitelist: ['products','cart'], // Aquí puedes añadir otros estados que quieras persistir
 };
 
 const rootReducer = combineReducers({
   products: productsReducer,
+  cart: cartReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

@@ -7,6 +7,8 @@ const getAllCollections = require('./collections/getAllCollections');
 const createCollection = require('./collections/createCollection');
 const deleteCollectionById = require('./collections/deleteCollectionById');
 const updateCollectionById = require('./collections/updateCollectionById');
+const {createPayment, createOrder} = require('./mercadopago/mercadopago');
+const receiveWebhook = require('./mercadopago/receiveWebhook');
 
 module.exports = {
   getAllProducts,
@@ -18,4 +20,7 @@ module.exports = {
   createCollection,
   deleteCollectionById,
   updateCollectionById,
+  createPayment,
+  createOrder,
+  receiveWebhook
 };

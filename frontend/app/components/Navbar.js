@@ -158,7 +158,7 @@ export default function Navbar({ sloganHeight, sloganVisible }) {
                 {myCollections &&
                   myCollections.map((collection) => (
                     <li key={collection.id}>
-                      <a href='#' className='hover:text-gray-300 pl-6'>
+                      <a href={`/products/${collection.name}`} className='hover:text-gray-300 pl-6'>
                         {collection.name}
                       </a>
                     </li>

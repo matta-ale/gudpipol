@@ -2,6 +2,7 @@ const { Product, ProductImage, Collection } = require('../../models');
 
 const getAllProductsHandler = async (page, pageSize) => {
   const products = await Product.findAndCountAll({
+    where: {isActive:true},
     include: [
       { model: ProductImage, as: 'images' },
       { model: Collection, as: 'collection' },

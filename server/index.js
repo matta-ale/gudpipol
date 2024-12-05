@@ -2,7 +2,7 @@ const express = require('express');
 const sequelize = require('./config/database');
 const cors = require('cors');
 
-const { productsRouter,collectionsRouter,productImagesRouter } = require('./routes');
+const { productsRouter,collectionsRouter,productImagesRouter, mercadopagoRouter } = require('./routes');
 const {errorHandler} = require('./middlewares');
 const app = express();
 
@@ -12,13 +12,14 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/', collectionsRouter);
 app.use('/', productsRouter);
 app.use('/', productImagesRouter);
+app.use('/', mercadopagoRouter);
 
 app.use('/',errorHandler);
 
 require('dotenv').config();
 
 sequelize.sync({ force: false }).then(() => {
-  console.log('Database & tables created!');
+  console.log('Database syncronized!');
 });
 
 

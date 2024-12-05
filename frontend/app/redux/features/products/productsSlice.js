@@ -15,8 +15,8 @@ const initialState = {
     firstRender: true,
   },
   cart: {
-    productQuantity: 0
-  }
+    productQuantity: 0,
+  },
 };
 
 export const getProducts = createAsyncThunk(
@@ -27,34 +27,47 @@ export const getProducts = createAsyncThunk(
   }
 );
 
-export const getCollections = createAsyncThunk(
-    'products/getCollections',
-    async () => {
-      const { data } = await axios.get('/collections');
-      return data;
-    }
-  );
+export const getFilteredProducts = createAsyncThunk(
+  'products/getFilteredProducts',
+  async (collection) => {
+    const { data } = await axios.get('/products');
+    const filteredData = data.filter(
+      (product) => product.collection.name === collection
+    );
+    return filteredData;
+  }
+);
 
-  export const productsSlice = createSlice({
-    name: 'products',
-    initialState,
-    reducers: {
-    },
-    extraReducers: (builder) => {
-        builder
-            .addCase(getProducts.fulfilled, (state, action) => {
-                state.myProducts = [...action.payload];
-                state.allProducts = [...action.payload];
-                state.homeStatus = { ...state.homeStatus, loading: false };
-            })
-            .addCase(getCollections.fulfilled, (state, action) => {
-                state.allCollections = [...action.payload];
-                state.homeStatus.loading = false;
-            });
-    },
+export const getCollections = createAsyncThunk(
+  'products/getCollections',
+  async () => {
+    const { data } = await axios.get('/collections');
+    return data;
+  }
+);
+
+export const productsSlice = createSlice({
+  name: 'products',
+  initialState,
+  reducers: {},
+  extraReducers: (builder) => {
+    builder
+      .addCase(getProducts.fulfilled, (state, action) => {
+        state.myProducts = [...action.payload];
+        state.allProducts = [...action.payload];
+        state.homeStatus = { ...state.homeStatus, loading: false };
+      })
+      .addCase(getFilteredProducts.fulfilled, (state, action) => {
+        state.myProducts = [...action.payload];
+        state.homeStatus = { ...state.homeStatus, loading: false };
+      })
+      .addCase(getCollections.fulfilled, (state, action) => {
+        state.allCollections = [...action.payload];
+        state.homeStatus.loading = false;
+      });
+  },
 });
 
 export const { setPage, setLoading, setFirstRender } = productsSlice.actions;
 
 export default productsSlice.reducer;
-

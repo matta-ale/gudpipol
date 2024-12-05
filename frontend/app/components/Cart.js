@@ -4,8 +4,8 @@ import cartImage from '../../public/img/cart.png'
 
 export default function Cart() {
   // Obtenemos el contador de productos del carrito desde el estado de Redux
-//   const productQuantity = useSelector((state) => state.products.cart.productQuantity);
-const productQuantity=2
+ const productQuantity = useSelector((state) => state.cart.totalQuantity);
+
   return (
     <div className='relative'>
       {/* Imagen del carrito */}

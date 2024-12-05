@@ -1,14 +1,21 @@
 import React from 'react';
+import { useDispatch } from 'react-redux';
 import Image from 'next/image';
 import placeholderImage from '../../public/img/No-Image-Placeholder.svg';
-import RotatingText from './RotatingText';
 import Link from 'next/link';
+import { addItemToCart } from '../redux/features/cart/cartSlice';
 
 const ProductCard = (product) => {
+  const dispatch = useDispatch();
+
   const imageUrl =
     product.images && product.images.length > 0
       ? product.images[0].url
       : placeholderImage;
+
+  const addToCart = async (product, quantity) => {
+    dispatch(addItemToCart(product, quantity));
+  };
 
   return (
     <div className='bg-custom-black shadow-2xl shadow-black p-0 h-[430px] w-[280px] text-white transform transition-transform duration-300 hover:scale-105'>
@@ -47,7 +54,18 @@ const ProductCard = (product) => {
                 DETALLE
               </button>
             </Link>
-            <button className='text-black text-xs font-bold bg-yellow-400 rounded-2xl h-8 w-64 py-1 mb-2'>
+            <button
+              onClick={() => addToCart({
+                id: product.id,
+                name: product.name,
+                collection: product.collection.name,
+                price: product.price,
+                quantity: 1,
+                image: product.images?.[0]?.url || '',
+                color: '#463F34'
+              })}
+              className='text-black text-xs font-bold bg-yellow-400 rounded-2xl h-8 w-64 py-1 mb-2'
+            >
               AGREGAR AL CARRITO
             </button>
           </div>

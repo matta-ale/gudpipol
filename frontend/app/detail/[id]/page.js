@@ -1,19 +1,20 @@
 'use client';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import ColorSelector from '@/app/components/ColorSelector';
+import { addItemToCart } from '@/app/redux/features/cart/cartSlice';
 
 export default function ProductDetail({ params }) {
   const { id } = params; // Aquí obtenemos el id del producto desde los parámetros de la URL
-
+  const dispatch = useDispatch()
   const products = useSelector((state) => state.products.myProducts);
   const [product, setProduct] = useState(null);
   const [quantity, setQuantity] = useState(1);
   const [selectedTab, setSelectedTab] = useState('descripcion');
-  const [selectedColor, setSelectedColor] = useState('#463F34'); // Estado para color
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false); // Estado para abrir/cerrar dropdown
   const [currentImageIndex, setCurrentImageIndex] = useState(0); // Estado para imagen actual
+  const [selectedColor, setSelectedColor] = useState('#463F34'); // Estado de color seleccionado
 
   useEffect(() => {
     if (products) {
@@ -21,6 +22,18 @@ export default function ProductDetail({ params }) {
       setProduct(selectedProduct);
     }
   }, [id, products]);
+
+  const addToCart = () => {
+    dispatch(addItemToCart({
+      id: product.id,
+      name: product.name,
+      collection: product.collection.name,
+      price: product.price,
+      quantity,
+      image: product.images?.[0]?.url || '',
+      color: selectedColor // Usa el color seleccionado aquí
+    }));
+  };
 
   if (!product) {
     return (
@@ -39,15 +52,6 @@ export default function ProductDetail({ params }) {
   };
 
   const totalPrice = product.price * quantity;
-
-  const toggleDropdown = () => {
-    setIsDropdownOpen(!isDropdownOpen);
-  };
-
-  const handleColorSelect = (color) => {
-    setSelectedColor(color);
-    setIsDropdownOpen(false); // Cierra el dropdown cuando se selecciona un color
-  };
 
   const handleImageSelect = (index) => {
     setCurrentImageIndex(index);
@@ -195,62 +199,7 @@ export default function ProductDetail({ params }) {
         </div>
         <div className='flex justify-between mt-1'>
           {/* Color Selection */}
-          <div className='relative mt-4'>
-            <div className='flex flex-col  font-semibold'>
-              <span className='ml-7 mb-1 text-sm '>COLOR</span>
-              <div className='bg-custom-black-2 w-28 rounded-3xl flex justify-center'>
-                <div
-                  className='flex items-center justify-between cursor-pointer m-0 p-2 w-[70px] bg-custom-blackrounded-3xl  font-semibold'
-                  onClick={toggleDropdown}
-                >
-                  <span className='flex items-center'>
-                    <div
-                      className={`w-7 h-7 rounded-full mr-2`}
-                      style={{ backgroundColor: selectedColor }}
-                    />
-                  </span>
-                  <svg
-                    className='w-4 h-4'
-                    fill='none'
-                    stroke='currentColor'
-                    viewBox='0 0 24 24'
-                  >
-                    <path
-                      strokeLinecap='round'
-                      strokeLinejoin='round'
-                      strokeWidth='3'
-                      d='M19 9l-7 7-7-7'
-                    />
-                  </svg>
-                </div>
-              </div>
-              {isDropdownOpen && (
-                <div className='absolute mt-6 bg-custom-black-2 rounded-3xl z-10 w-fit text-xs'>
-                  <div
-                    className='flex items-center p-2 cursor-pointer hover:bg-gray-400 hover:text-black hover:rounded-tl-3xl hover:rounded-tr-3xl w-28'
-                    onClick={() => handleColorSelect('#463F34')}
-                  >
-                    <div
-                      className='w-6 h-6 rounded-full mr-1'
-                      style={{ backgroundColor: '#463F34' }}
-                    />
-                    MARRÓN
-                  </div>
-                  <div
-                    className='flex items-center p-2 cursor-pointer hover:bg-gray-400 hover:text-black hover:rounded-bl-3xl hover:rounded-br-3xl w-full'
-                    onClick={() => handleColorSelect('black')}
-                  >
-                    <div
-                      className='w-6 h-6 rounded-full mr-1'
-                      style={{ backgroundColor: 'black' }}
-                    />
-                    NEGRO
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-
+          <ColorSelector selectedColor={selectedColor} onColorSelect={setSelectedColor} />
           {/* Quantity and Add to Cart */}
           <div className='flex flex-col items-center justify-between mt-4 mb-2 font-semibold'>
             <span className='mb-1 text-sm font-semibold'>CANTIDAD</span>
@@ -285,11 +234,7 @@ export default function ProductDetail({ params }) {
         {/* Add to Cart Button */}
         <button
           className='mt-4 bg-yellow-400 text-black h-11 px-6 py-2 text-sm font-bold w-full rounded-3xl'
-          onClick={() =>
-            alert(
-              `Agregado al carrito: ${selectedColor}, quantity: ${quantity}`
-            )
-          }
+          onClick={addToCart}
         >
           AGREGAR AL CARRITO
         </button>
