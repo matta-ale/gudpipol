@@ -1,34 +1,31 @@
 'use client';
-import { useSelector} from 'react-redux';
+import { useRouter } from 'next/navigation';
+import { useSelector } from 'react-redux';
 import CartItem from '../components/CartItem';
-import axios from 'axios'
 
 export default function Cart() {
   const cartItems = useSelector((state) => state.cart.items);
-  const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL
-
+  const router = useRouter();
+  
   if (cartItems.length === 0) {
     return (
       <div
-        className=' flex flex-col justify-center w-[320px] md:w-[544px] h-64 mx-auto mt-28 md:mt-56 md:mb-16 py-6 rounded-lg items-center text-center text-white font-semibold text-xl'
-        style={{ backgroundColor: 'rgba(45, 46, 50, 0.75)' }}
+      className=' flex flex-col justify-center w-[320px] md:w-[544px] h-64 mx-auto mt-28 md:mt-56 md:mb-16 py-6 rounded-lg items-center text-center text-white font-semibold text-xl'
+      style={{ backgroundColor: 'rgba(45, 46, 50, 0.75)' }}
       >
         <p>Tu carrito está vacío</p>
       </div>
     );
   }
-
+  
   const calculateTotal = () => {
     return cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
   };
-
-  const createPayment = async () => {
-    console.log('1');
-    const {data} = await axios.post(`${BACKEND_URL}/createPayment`,cartItems)
-    console.log(data);
-    window.location.href = data
-  }
-
+  
+  const checkout = async () => {
+    router.push('/checkout');
+  };
+  
   return (
     <main
       className='w-[320px] md:w-[544px] mx-auto mt-60 md:mt-56 py-6 rounded-lg'
@@ -51,7 +48,10 @@ export default function Cart() {
             </span>
           </div>
         </div>
-        <button onClick={createPayment} className='mt-4 w-full bg-yellow-400 text-black font-bold py-2 rounded-lg'>
+        <button
+          onClick={checkout}
+          className='mt-4 w-full bg-yellow-400 text-black font-bold py-2 rounded-lg'
+        >
           Proceder al Pago
         </button>
       </div>

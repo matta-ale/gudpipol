@@ -1,3 +1,4 @@
+'use client'
 import SmallColorSelector from '../components/SmallColorSelector';
 import { FaTrashAlt } from 'react-icons/fa';
 import { useSelector, useDispatch } from 'react-redux';
