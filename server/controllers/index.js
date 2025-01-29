@@ -3,11 +3,14 @@ const getProductById = require('./products/getProductById');
 const createProduct = require('./products/createProduct');
 const deleteProductById = require('./products/deleteProductById');
 const updateProductById = require('./products/updateProductById');
+const getAllOrders = require('./orders/getAllOrders');
+const createOrder = require('./orders/createOrder');
+const deleteOrderById = require('./orders/deleteOrderById');
 const getAllCollections = require('./collections/getAllCollections');
 const createCollection = require('./collections/createCollection');
 const deleteCollectionById = require('./collections/deleteCollectionById');
 const updateCollectionById = require('./collections/updateCollectionById');
-const {createPayment, createOrder} = require('./mercadopago/mercadopago');
+const {createPayment, createMpOrder} = require('./mercadopago/mercadopago');
 const receiveWebhook = require('./mercadopago/receiveWebhook');
 
 module.exports = {
@@ -22,5 +25,8 @@ module.exports = {
   updateCollectionById,
   createPayment,
   createOrder,
+  deleteOrderById,
+  getAllOrders,
+  createMpOrder,
   receiveWebhook
 };

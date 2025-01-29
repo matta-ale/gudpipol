@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { getHexCode } from '../utils/colorSettings';
 
 export default function SmallColorSelector({ item}) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false); // Estado para abrir/cerrar dropdown
@@ -28,7 +29,7 @@ export default function SmallColorSelector({ item}) {
             <span className='flex items-center'>
               <div
                 className={`w-5 h-5 rounded-full mr-2`}
-                style={{ backgroundColor: item.color }}
+                style={{ backgroundColor: getHexCode(item.color) }}
               />
             </span>
             <svg
@@ -50,20 +51,20 @@ export default function SmallColorSelector({ item}) {
           <div className='absolute mt-5 bg-custom-black-2 rounded-3xl z-10 w-20 text-xs'>
             <div
               className='flex items-center p-2 cursor-pointer hover:bg-gray-400 hover:text-black hover:rounded-tl-2xl hover:rounded-tr-2xl w-full'
-              onClick={() => handleColorSelect('#463F34')}
+              onClick={() => handleColorSelect('Marron')}
             >
               <div
                 className='w-5 h-5 rounded-full mr-1'
-                style={{ backgroundColor: '#463F34' }}
+                style={{ backgroundColor: getHexCode('Marron') }}
               />
             </div>
             <div
               className='flex items-center p-2 cursor-pointer hover:bg-gray-400 hover:text-black hover:rounded-bl-3xl hover:rounded-br-3xl w-full'
-              onClick={() => handleColorSelect('black')}
+              onClick={() => handleColorSelect('Negro')}
             >
               <div
                 className='w-5 h-5 rounded-full mr-1'
-                style={{ backgroundColor: 'black' }}
+                style={{ backgroundColor: getHexCode('Negro') }}
               />
             </div>
           </div>

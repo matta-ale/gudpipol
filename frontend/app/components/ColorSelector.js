@@ -1,8 +1,10 @@
 import { useState } from 'react';
+import { getHexCode } from '../utils/colorSettings';
 
 export default function ColorSelector({ selectedColor, onColorSelect }) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false); // Estado para abrir/cerrar dropdown
-  
+
+
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
@@ -24,7 +26,7 @@ export default function ColorSelector({ selectedColor, onColorSelect }) {
             <span className='flex items-center'>
               <div
                 className={`w-7 h-7 rounded-full mr-2`}
-                style={{ backgroundColor: selectedColor }}
+                style={{ backgroundColor: getHexCode(selectedColor) }}
               />
             </span>
             <svg
@@ -46,21 +48,21 @@ export default function ColorSelector({ selectedColor, onColorSelect }) {
           <div className='absolute mt-6 bg-custom-black-2 rounded-3xl z-10 w-fit text-xs'>
             <div
               className='flex items-center p-2 cursor-pointer hover:bg-gray-400 hover:text-black hover:rounded-tl-3xl hover:rounded-tr-3xl w-28'
-              onClick={() => handleColorSelect('#463F34')}
+              onClick={() => handleColorSelect('Marron')}
             >
               <div
                 className='w-6 h-6 rounded-full mr-1'
-                style={{ backgroundColor: '#463F34' }}
+                style={{ backgroundColor: getHexCode('Marron') }}
               />
               MARRÓN
             </div>
             <div
               className='flex items-center p-2 cursor-pointer hover:bg-gray-400 hover:text-black hover:rounded-bl-3xl hover:rounded-br-3xl w-full'
-              onClick={() => handleColorSelect('black')}
+              onClick={() => handleColorSelect('Negro')}
             >
               <div
                 className='w-6 h-6 rounded-full mr-1'
-                style={{ backgroundColor: 'black' }}
+                style={{ backgroundColor: getHexCode('Negro') }}
               />
               NEGRO
             </div>

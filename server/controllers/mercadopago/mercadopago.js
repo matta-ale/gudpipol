@@ -55,8 +55,8 @@ const createPayment = async (req, res) => {
   }
 };
 
-const createOrder = async (req, res) => {
+const createMpOrder = async (req, res) => {
   res.send('Crear orden');
 };
 
-module.exports = { createPayment, createOrder };
+module.exports = { createPayment, createMpOrder };

@@ -22,7 +22,7 @@ export default function Checkout() {
     fullName: '',
     email: '',
     phone: '',
-    id: '',
+    idNumber: '',
     address: '',
     province: '',
     city: '',
@@ -32,7 +32,7 @@ export default function Checkout() {
     fullName: false,
     email: false,
     phone: false,
-    id: false,
+    idNumber: false,
     address: false,
     province: false,
     city: false,
@@ -73,7 +73,7 @@ export default function Checkout() {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
-
+  
     let error = '';
     switch (name) {
       case 'fullName':
@@ -85,7 +85,7 @@ export default function Checkout() {
       case 'phone':
         error = validatePhone(value);
         break;
-      case 'id':
+      case 'idNumber':
         error = validateID(value);
         break;
       case 'address':
@@ -100,7 +100,9 @@ export default function Checkout() {
       default:
         break;
     }
+  
     setErrors((prev) => ({ ...prev, [name]: error }));
+    setTouched((prev) => ({ ...prev, [name]: true }));
   };
 
   const handleBlur = (e) => {
@@ -111,20 +113,16 @@ export default function Checkout() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Verificamos si existen errores
     const hasErrors = Object.values(errors).some((error) => error);
     if (hasErrors) {
       console.log('Formulario con errores, no se puede enviar.');
-      return; // No enviamos el formulario si hay errores
+      return;
     }
 
-    console.log('Formulario enviado:', formData); // Verificamos que los datos son correctos antes de enviar
-
+    console.log('Formulario enviado:', formData);
     try {
+      localStorage.setItem("userData", JSON.stringify(formData));
       router.push('/paymentMethod');
-      // const { order } = await axios.post(`${BACKEND_URL}/createOrder`, formData);
-      // const { data } = await axios.post(`${BACKEND_URL}/createPayment`, formData);
-      // window.location.href = data;
     } catch (error) {
       console.error('Error al enviar datos:', error);
     }
@@ -140,14 +138,15 @@ export default function Checkout() {
       </h1>
       <form onSubmit={handleSubmit} className="space-y-4 mx-4 md:mx-6">
         <div className="md:grid md:grid-cols-2 md:gap-4 md:gap-x-8">
-          {[{ label: 'Nombre completo', name: 'fullName', type: 'text' },
+          {[
+            { label: 'Nombre completo', name: 'fullName', type: 'text' },
             { label: 'Correo electrónico', name: 'email', type: 'email' },
             { label: 'Teléfono', name: 'phone', type: 'text' },
-            { label: 'DNI', name: 'id', type: 'text' },
+            { label: 'DNI', name: 'idNumber', type: 'text' },
             { label: 'Dirección', name: 'address', type: 'text' },
             { label: 'Código Postal', name: 'postalCode', type: 'text' },
           ].map((field) => (
-            <div key={field.name}>
+            <div key={field.name} className='mb-4 md:mb-0'>
               <label className="block text-white font-bold mb-2">
                 {field.label}
               </label>
@@ -157,15 +156,18 @@ export default function Checkout() {
                 value={formData[field.name]}
                 onChange={handleInputChange}
                 onBlur={handleBlur}
-                className={`w-full h-10 p-2 rounded-md ${touched[field.name] && errors[field.name] ? 'border-2 border-red-500' : ''}`}
+                className={`w-full h-10 p-2 rounded-md mb-1 ${
+                  touched[field.name] && errors[field.name] ? 'border-2 border-red-500' : ''
+                }`}
                 required
               />
-              {touched[field.name] && errors[field.name] && (
-                <div className="text-red-500 h-5 text-sm mt-1 mb-3 md:mb-0 flex items-center space-x-2">
-                  <span>⚠️</span>
-                  <span>{errors[field.name]}</span>
-                </div>
-              )}
+              <div className="min-h-[20px] flex items-center">
+                {touched[field.name] && errors[field.name] && (
+                  <span className="text-red-500 text-sm flex items-center space-x-2">
+                    ⚠️ <span>{errors[field.name]}</span>
+                  </span>
+                )}
+              </div>
             </div>
           ))}
           <div>
@@ -175,7 +177,7 @@ export default function Checkout() {
               value={formData.province}
               onChange={handleProvinceChange}
               onBlur={handleBlur}
-              className={`w-full h-10 p-2 rounded-md mb-8 ${touched.province && errors.province ? 'border-2 border-red-500' : ''}`}
+              className="w-full h-10 p-2 rounded-md"
               required
             >
               <option value="">Seleccione una provincia</option>
@@ -185,12 +187,6 @@ export default function Checkout() {
                 </option>
               ))}
             </select>
-            {touched.province && errors.province && (
-              <div className="text-red-500 h-5 text-sm flex items-center space-x-2">
-                <span>⚠️</span>
-                <span>{errors.province}</span>
-              </div>
-            )}
           </div>
           <div>
             <label className="block text-white font-bold mb-2">Localidad</label>
@@ -200,15 +196,16 @@ export default function Checkout() {
               value={formData.city}
               onChange={handleInputChange}
               onBlur={handleBlur}
-              className={`w-full h-10 p-2 rounded-md ${touched.city && errors.city ? 'border-2 border-red-500' : ''}`}
+              className="w-full h-10 p-2 rounded-md"
               required
             />
-            {touched.city && errors.city && (
-              <div className="text-red-500 h-5 text-sm">
-                <span>⚠️</span>
-                {errors.city}
-              </div>
-            )}
+            <div className="min-h-[20px] flex items-center">
+              {touched.city && errors.city && (
+                <span className="text-red-500 text-sm flex items-center space-x-2">
+                  ⚠️ <span>{errors.city}</span>
+                </span>
+              )}
+            </div>
           </div>
         </div>
         <button

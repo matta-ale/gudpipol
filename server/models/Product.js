@@ -86,6 +86,15 @@ const Product = sequelize.define('Product', {
   updatedAt: false
 });
 
+Product.associate = (models) => {
+  Product.belongsToMany(models.Order, {
+    through: models.OrderProducts,
+    as: 'orders',
+    foreignKey: 'productId',
+  });
+};
+
+
 module.exports = Product
 
 

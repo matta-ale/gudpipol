@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import ColorSelector from '@/app/components/ColorSelector';
 import { addItemToCart } from '@/app/redux/features/cart/cartSlice';
+import { getHexCode } from '@/app/utils/colorSettings';
 
 export default function ProductDetail({ params }) {
   const { id } = params; // Aquí obtenemos el id del producto desde los parámetros de la URL
@@ -14,7 +15,7 @@ export default function ProductDetail({ params }) {
   const [quantity, setQuantity] = useState(1);
   const [selectedTab, setSelectedTab] = useState('descripcion');
   const [currentImageIndex, setCurrentImageIndex] = useState(0); // Estado para imagen actual
-  const [selectedColor, setSelectedColor] = useState('#463F34'); // Estado de color seleccionado
+  const [selectedColor, setSelectedColor] = useState('Marron'); // Estado de color seleccionado
 
   useEffect(() => {
     if (products) {
@@ -24,6 +25,7 @@ export default function ProductDetail({ params }) {
   }, [id, products]);
 
   const addToCart = () => {
+    console.log('Selected color al dispatch addItemToCart del detail: ' + selectedColor);
     dispatch(addItemToCart({
       id: product.id,
       name: product.name,

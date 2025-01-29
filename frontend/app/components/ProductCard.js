@@ -62,7 +62,7 @@ const ProductCard = (product) => {
                 price: product.price,
                 quantity: 1,
                 image: product.images?.[0]?.url || '',
-                color: '#463F34'
+                color: 'Marron'
               })}
               className='text-black text-xs font-bold bg-yellow-400 rounded-2xl h-8 w-64 py-1 mb-2'
             >

@@ -11,8 +11,8 @@ export const validateFullName = (fullName) => {
   };
   
   export const validatePhone = (phone) => {
-    const phoneRegex = /^[0-9]{10,15}$/;
-    if (!phoneRegex.test(phone)) return 'Entre 10 y 15 dígitos';
+    const phoneRegex = /^[0-9]{7,12}$/;
+    if (!phoneRegex.test(phone)) return 'Entre 7 y 12 dígitos';
     return '';
   };
   
