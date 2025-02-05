@@ -16,7 +16,7 @@ export default function CartItem({ item }) {
   return (
     <div
       key={item.id}
-      className='sm:h-[150px] grid grid-cols-1 md:grid-cols-[120px_130px_200px] gap-4 mb-6 bg-custom-black text-white p-4 rounded-lg shadow-md relative z-50 mx-6'
+      className='sm:h-[150px] grid grid-cols-2 md:grid-cols-[120px_130px_200px] gap-4 mb-6 bg-custom-black text-white p-4 rounded-lg shadow-md relative z-50 mx-6'
     >
       {/* Trash Icon */}
       <button
@@ -72,7 +72,7 @@ export default function CartItem({ item }) {
         </div>
       </div>
       {/* Product Info Section */}
-      <div className='flex flex-col justify-between'>
+      <div className='flex md:flex-col justify-between'>
         <div>
           <p className='text-gray-400 text-sm'>{item.collection}</p>
           <h2 className='text-md font-bold'>{item.name}</h2>

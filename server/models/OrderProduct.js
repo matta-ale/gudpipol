@@ -18,7 +18,4 @@ const OrderProduct = sequelize.define('OrderProducts', {
     updatedAt: 'updated_at',
   });
   
-  // Elimina cualquier configuración innecesaria de PRIMARY KEY
-  
-
 module.exports = OrderProduct;

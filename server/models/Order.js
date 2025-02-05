@@ -39,6 +39,13 @@ const Order = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
+    paymentMethod: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        isIn: [['TRANSFERENCIA/EFECTIVO', '6 CUOTAS']]
+      }
+    }    
   },
   {
     tableName: 'Orders',

@@ -2,8 +2,7 @@
 const { Order, OrderProduct } = require('../../models')
 
 const createOrder = async (req, res) => {
-  const { fullName, email, phone, idNumber, address, province, city, postalCode, cart } = req.body;
-    console.log(Order);
+  const { fullName, email, phone, idNumber, address, province, city, postalCode, paymentMethod,cart } = req.body;
   try {
     // Crear la orden principal
     const newOrder = await Order.create({
@@ -15,6 +14,7 @@ const createOrder = async (req, res) => {
       province,
       city,
       postalCode,
+      paymentMethod
     });
 
     // Asociar productos con la orden

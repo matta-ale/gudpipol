@@ -19,7 +19,7 @@ app.use('/',errorHandler);
 
 require('dotenv').config();
 
-sequelize.sync({ force: false }).then(() => {
+sequelize.sync({ alter: true }).then(() => {
   console.log('Database syncronized!');
 });
 

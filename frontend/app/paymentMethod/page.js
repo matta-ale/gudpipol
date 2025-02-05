@@ -1,28 +1,62 @@
 'use client';
 import { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
+import sendOrderConfirmationEmail from '../utils/sendOrderComfirmationEmail';
+import sendOrderDataEmail from '../utils/sendOrderDataEmail';
+import { clearCart } from '../redux/features/cart/cartSlice';
 
 export default function PaymentMethod() {
-  const totalPrice = useSelector((state) => state.cart.totalPrice);
+  const cartTotalPrice = useSelector((state) => state.cart.totalPrice);
   const cartItems = useSelector((state) => state.cart.items);
   const [selectedMethod, setSelectedMethod] = useState(null);
   const [orderConfirmed, setOrderConfirmed] = useState(false);
   const [orderNumber, setOrderNumber] = useState(null);
+  const [totalPrice, setTotalPrice] = useState(cartTotalPrice);
+  const [isLoading, setIsLoading] = useState(false);
+  const dispatch = useDispatch();
 
   const handleMethodChange = (method) => {
-    setSelectedMethod(method);
-    setOrderConfirmed(false); // Reiniciar el estado de confirmación al cambiar de método
+    if (!orderConfirmed) {
+      setSelectedMethod(method);
+      setOrderConfirmed(false);
+    }
   };
 
   const handleConfirmOrder = async () => {
+    setIsLoading(true);
     const userData = JSON.parse(localStorage.getItem('userData'));
-    const orderData = userData; // Ya es un objeto
-    orderData.cart = cartItems; // Ahora puedes agregar la propiedad 'cart'
-    const { data } = await axios.post('/orders', orderData,{headers: { 'Content-Type': 'application/json' }});
-    console.log(data);
-    // setOrderNumber(data.id);
-    // setOrderConfirmed(true);
+    const orderData = userData;
+    orderData.cart = cartItems;
+    orderData.paymentMethod = 'TRANSFERENCIA/EFECTIVO';
+    try {
+      const data = await axios.post('/orders', orderData, {
+        headers: { 'Content-Type': 'application/json' },
+      });
+      if (data.status === 201) {
+        orderData.id = data.data.order.id;
+        const { status } = await sendOrderConfirmationEmail(
+          orderData,
+          process.env.NEXT_PUBLIC_EMAIL_TRANSF_TEMPLATE
+        );
+        if (status === 'OK') {
+          const { status } = await sendOrderDataEmail(
+            orderData,
+            process.env.NEXT_PUBLIC_EMAIL2_DATA_TEMPLATE
+          );
+          console.log(status);
+          if (status === 'OK') {
+            setOrderNumber(data.data.order.id);
+            setOrderConfirmed(true);
+            dispatch(clearCart());
+          }
+        }
+      }
+    } catch (error) {
+      console.error('Error confirming order:', error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const cantCuotas = Number(process.env.NEXT_PUBLIC_CANT_CUOTAS);
@@ -35,141 +69,161 @@ export default function PaymentMethod() {
 
   return (
     <main
-      className='w-[95%] min-h-[350px] md:w-[800px] mx-auto mt-24 md:mt-52 py-6 rounded-lg'
+      className="w-[95%] min-h-[350px] md:w-[800px] mx-auto mt-24 md:mt-52 py-6 rounded-lg"
       style={{ backgroundColor: 'rgba(45, 46, 50, 0.75)' }}
     >
-      <h1 className='text-white text-2xl mx-4 md:mx-7 mb-6 font-bold'>
+      <h1 className="text-white text-2xl mx-4 md:mx-7 mb-6 font-bold">
         Seleccione forma de pago:
       </h1>
-      <form className='space-y-4 mx-4 md:mx-6'>
-        {/* Contenedor común para las opciones */}
-        <div className='flex flex-col gap-0 bg-gray-800 rounded-md'>
-          {/* Opción 1: Transferencia bancaria */}
+      <form className="space-y-4 mx-4 md:mx-6">
+        <div className="flex flex-col gap-0 bg-gray-800 rounded-md">
           <label
             className={`block text-white font-semibold p-4 py-6 rounded-md cursor-pointer ${
               selectedMethod === 'transfer' ? 'border-2 border-yellow-400' : ''
+            } ${
+              orderConfirmed && selectedMethod === 'installments'
+                ? 'text-gray-600'
+                : 'text-white'
             }`}
           >
             <input
-              type='radio'
-              name='paymentMethod'
-              value='transfer'
+              type="radio"
+              name="paymentMethod"
+              value="transfer"
               checked={selectedMethod === 'transfer'}
               onChange={() => handleMethodChange('transfer')}
-              className='mr-2 accent-gray-500'
+              className="mr-2 accent-gray-500"
+              disabled={totalPrice === 0}
             />
             Pago por transferencia bancaria: &nbsp;&nbsp;$&nbsp;
             {totalPrice.toFixed(2).toLocaleString('es-ES')}
           </label>
 
-          {/* Opción 2: Pago en cuotas */}
           <label
-            className={`block text-white font-semibold p-4 rounded-md cursor-pointer py-6 ${
+            className={`block font-semibold p-4 rounded-md cursor-pointer py-6 ${
               selectedMethod === 'installments'
                 ? 'border-2 border-yellow-400'
                 : ''
+            } ${
+              orderConfirmed && selectedMethod === 'transfer'
+                ? 'text-gray-600'
+                : 'text-white'
             }`}
           >
             <input
-              type='radio'
-              name='paymentMethod'
-              value='installments'
+              type="radio"
+              name="paymentMethod"
+              value="installments"
               checked={selectedMethod === 'installments'}
               onChange={() => handleMethodChange('installments')}
-              className='mr-2 accent-gray-500'
+              className="mr-2 accent-gray-500"
+              disabled={totalPrice === 0 || orderConfirmed}
             />
             Pago en {cantCuotas} cuotas de: &nbsp;$&nbsp;
-            {
-              ((totalPrice * (1 + recargoCuotas)) / cantCuotas)
-                .toFixed(2) // Redondea a 2 decimales
-                .toLocaleString('es-ES') // Formatea el número según el idioma
-            }
+            {((totalPrice * (1 + recargoCuotas)) / cantCuotas)
+              .toFixed(2)
+              .toLocaleString('es-ES')}
             &nbsp; - Total &nbsp;$&nbsp;
-            {
-              (totalPrice * (1 + recargoCuotas))
-                .toFixed(2) // Redondea a 2 decimales
-                .toLocaleString('es-ES') // Formatea el número según el idioma
-            }
+            {(totalPrice * (1 + recargoCuotas))
+              .toFixed(2)
+              .toLocaleString('es-ES')}
           </label>
         </div>
 
-        {/* Contenido de la opción seleccionada */}
         {selectedMethod && (
-          <div className={`mt-6 p-4 rounded-md bg-gray-800 text-white`}>
+          <div className="mt-6 p-4 rounded-md bg-gray-800 text-white">
             {selectedMethod === 'transfer' ? (
               <>
                 <p>Siga los pasos a continuación para completar el pago:</p>
-                <ol className='list-decimal pl-5 mt-8 space-y-1'>
-                  {/* Resumen de la orden y botones de confirmación */}
+                <ol className="list-decimal pl-5 mt-8 space-y-1">
                   <li>
                     Pre-confirme la orden:
                     {!orderConfirmed && (
                       <>
-                        <div className='mt-4 mb-8'>
-                          <h2 className='text-lg font-bold mt-8'>
+                        <div className="mt-4 mb-8">
+                          <h2 className="text-lg font-bold mt-8">
                             Resumen de su orden:
                           </h2>
                           {cartItems.map((item, index) => (
-                            <div key={index} className='mt-2'>
+                            <div key={index} className="mt-2">
                               <p>
                                 {item.quantity} x {item.name} - ${' '}
                                 {(item.price * item.quantity).toFixed(2)}
                               </p>
                             </div>
                           ))}
-                          <p className='mt-8 mb-8 font-bold text-xl underline'>
+                          <p className="mt-8 mb-8 font-bold text-xl underline">
                             Total a transferir: $ {totalPrice.toFixed(2)}
                           </p>
                         </div>
-                        <div className='mt-4 pb-8 flex gap-4'>
+                        <div className="mt-4 pb-8 flex gap-4">
                           <button
-                            type='button'
-                            className='bg-red-500 text-white font-bold py-2 px-4 rounded-lg'
-                            onClick={() => setSelectedMethod(null)} // Cancelar y volver a la selección de método
+                            type="button"
+                            className="bg-red-500 text-white font-bold py-2 px-4 rounded-lg"
+                            onClick={() => setSelectedMethod(null)}
                           >
                             Cancelar
                           </button>
                           <button
-                            type='button'
-                            className='bg-green-500 text-white font-bold py-2 px-4 rounded-lg max-w-44 md:max-w-96'
+                            type="button"
+                            className={`relative w-full md:max-w-96 bg-green-500 text-white font-bold py-2 px-4 rounded-lg transition-transform transform ${
+                              isLoading
+                                ? 'opacity-50 cursor-not-allowed'
+                                : 'hover:scale-95 active:scale-90'
+                            }`}
                             onClick={handleConfirmOrder}
+                            disabled={isLoading}
                           >
-                            Pre-confirmar (voy a transferir)
+                            {/* Texto invisible para reservar el ancho */}
+                            <span className="invisible">
+                              Pre-confirmar (voy a transferir)
+                            </span>
+                            {/* Contenido superpuesto */}
+                            <span className="absolute inset-0 flex items-center justify-center">
+                              {isLoading ? (
+                                <div className="flex items-center">
+                                  <div
+                                    className="animate-spin border-b-2 border-white rounded-lg"
+                                    style={{ width: '1rem', height: '1rem' }}
+                                  ></div>
+                                  <span className="ml-2">Procesando...</span>
+                                </div>
+                              ) : (
+                                'Pre-confirmar (voy a transferir)'
+                              )}
+                            </span>
                           </button>
                         </div>
                       </>
                     )}
                     {orderConfirmed && (
-                      <p className='text-green-400 font-bold mt-4 pb-4'>
-                        Orden {orderNumber} pre-confirmada. Ya recibimos su
-                        pedido. Prosiga con el siguiente paso para confirmarla.
+                      <p className="text-green-400 font-bold mt-4 pb-4">
+                        Orden {orderNumber} pre-confirmada. Ya recibimos su pedido.
+                        Prosiga con el siguiente paso para confirmarla.
                       </p>
                     )}
                   </li>
                   <li>
                     Realice una transferencia bancaria por &nbsp;$&nbsp;
-                    {totalPrice.toFixed(2).toLocaleString('es-ES')} a la
-                    siguiente cuenta: <br />
-                    <span className='block mt-4'>Alias:&nbsp; {alias}</span>
-                    <span className='block'>CVU:&nbsp; {cvu}</span>
-                    <span className='block'>
-                      A nombre de:&nbsp; {aNombreDe}
-                    </span>
-                    <span className='block mb-4'>CUIT:&nbsp; {cuit}</span>
+                    {totalPrice.toFixed(2).toLocaleString('es-ES')} a la siguiente
+                    cuenta: <br />
+                    <span className="block mt-4">Alias:&nbsp; {alias}</span>
+                    <span className="block">CVU:&nbsp; {cvu}</span>
+                    <span className="block">A nombre de:&nbsp; {aNombreDe}</span>
+                    <span className="block mb-4">CUIT:&nbsp; {cuit}</span>
                   </li>
                   <li>
                     Envíe el comprobante a nuestro número de WhatsApp:{' '}
                     <a
                       href={`https://wa.me/549${whatsappNumber}`}
-                      className='text-yellow-400 underline'
-                      target='_blank'
-                      rel='noopener noreferrer'
+                      className="text-yellow-400 underline"
+                      target="_blank"
+                      rel="noopener noreferrer"
                     >
                       {whatsappNumber}
                     </a>
-                    .<br></br>
-                    Una vez que recibamos el comprobante, la orden queda
-                    confirmada.
+                    .<br />
+                    Una vez que recibamos el comprobante, la orden queda confirmada.
                   </li>
                 </ol>
               </>
@@ -180,8 +234,8 @@ export default function PaymentMethod() {
                   continuación.
                 </p>
                 <button
-                  type='button'
-                  className='w-full bg-yellow-400 text-black font-bold py-2 rounded-lg mt-4'
+                  type="button"
+                  className="w-full bg-yellow-400 text-black font-bold py-2 rounded-lg mt-4"
                   onClick={() => alert('Redirigiendo al pago en cuotas...')}
                 >
                   Proceder al pago en cuotas
