@@ -83,7 +83,7 @@ export default function Navbar({ sloganHeight, sloganVisible }) {
             </a>
           </li>
           <li className='flex items-center'>
-            <a href='/about' className='hover:text-gray-300'>
+            <a href='/aboutUs' className='hover:text-gray-300'>
               Nosotros
             </a>
           </li>
@@ -116,7 +116,7 @@ export default function Navbar({ sloganHeight, sloganVisible }) {
             </a>
           </li>
           <li className='flex justify-between w-full py-3'>
-            <a href='/about' className='hover:text-gray-300'>
+            <a href='/aboutUs' className='hover:text-gray-300'>
               Nosotros
             </a>
           </li>

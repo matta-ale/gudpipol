@@ -2,15 +2,16 @@ const { MercadoPagoConfig, Preference, Payment } = require('mercadopago');
 const mercadopago = require('mercadopago');
 require('dotenv').config();
 
-const createPayment = async (req, res) => {
-  const { ACCESS_TOKEN, APP_URL } = process.env;
+const createPaymentUrl = async (req, res) => {
+  const { ACCESS_TOKEN, APP_URL,APP_URL_FRONTEND} = process.env;
   const mp = new MercadoPagoConfig({
     accessToken: ACCESS_TOKEN,
   });
-  const cart = req.body;
+  const cart = req.body.items;
+  const orderId= req.body.orderId
 
   const backUrls = {
-    success: `${APP_URL}/success`,
+    success: `${APP_URL_FRONTEND}/success`,
     failure: `${APP_URL}/failure`,
     pending: `${APP_URL}/pending`,
   };
@@ -33,6 +34,7 @@ const createPayment = async (req, res) => {
       items: preferenceArray,
       back_urls: backUrls,
       notification_url: notificationUrl,
+      external_reference: orderId
     },
   };
 
@@ -59,4 +61,4 @@ const createMpOrder = async (req, res) => {
   res.send('Crear orden');
 };
 
-module.exports = { createPayment, createMpOrder };
+module.exports = { createPaymentUrl, createMpOrder };

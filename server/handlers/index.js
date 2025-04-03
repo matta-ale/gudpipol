@@ -9,6 +9,7 @@ const getAllCollectionsHandler = require('./collections/getAllCollectionsHandler
 const deleteCollectionByIdHandler = require('./collections/deleteCollectionByIdHandler')
 const createCollectionHandler = require('./collections/createCollectionHandler')
 const updateCollectionByIdHandler = require('./collections/updateCollectionByIdHandler')
+const createPayHandler = require('./payments/createPayHandler')
 
 module.exports = {
     getAllProductsHandler,
@@ -21,5 +22,6 @@ module.exports = {
     getAllCollectionsHandler,
     createCollectionHandler,
     deleteCollectionByIdHandler,
-    updateCollectionByIdHandler
+    updateCollectionByIdHandler,
+    createPayHandler
 }

@@ -1,50 +1,58 @@
-const mercadopago = require('mercadopago');
-// const axios = require('axios');
+const {
+  MercadoPagoConfig,
+  Preference,
+  Payment,
+  MerchantOrder,
+} = require('mercadopago');
+const axios = require('axios');
 require('dotenv').config();
 
 const receiveWebhook = async (req, res) => {
-  const { APP_URL } = process.env;
+  console.log('RecieveWebhook');
+
+  const { APP_URL, ACCESS_TOKEN} = process.env;
+  const mercadopago = new MercadoPagoConfig({
+    accessToken: ACCESS_TOKEN,
+  });
+
   try {
     const { query } = req;
+    console.log('Query:', query);
     const topic = query.topic || query.type;
-
     switch (topic) {
       case 'payment':
-        const paymentId = query['data.id'];
+        console.log('payment');
+        const paymentId = query['data.id'] || query['id'];
         console.log('getting', topic, paymentId);
-        const payment = await mercadopago.payment.findById(paymentId);
+        const payment = await new Payment(mercadopago).get({ id: paymentId });
+
+        console.log('Payment');
         console.log(payment);
-        // const pay = {
-        //   id: payment.body.additional_info.items[0].id,
-        //   idMP: payment.body.id,
-        //   amount: payment.body.transaction_amount,
-        //   date: payment.body.date_approved,
-        //   method: payment.body.payment_type_id,
-        //   status: payment.body.status,
-        // };
-        // // console.log(pay);
+        const pay = {
+          id: payment.external_reference,
+          idMP: payment.id,
+          amount: payment.transaction_amount,
+          date: payment.date_approved,
+          method: payment.payment_type_id,
+          status: payment.status,
+        };
+        console.log('Pay');
+        if (pay.status === 'approved') {
+          const response = await axios.post(`${APP_URL}/payments`, pay);
 
-        // // Enviar el objeto JSON como parte del cuerpo de la solicitud POST
-        // const crearPagoUrl = `${MP_URL}/payments`; // Reemplaza con la URL correcta
+          console.log('Respuesta de la creación de pago:', response.data);
 
-        // const response = await axios.post(crearPagoUrl, pay);
-        // // console.log('Respuesta de la creación de pago:', response.data);
-
-        // const merchantO = await mercadopago.merchant_orders.findById(
-        //   payment.body.order.id,
-        // );
-        // // console.log(merchantO);
+        }
         break;
       // case 'merchant_order':
-      //   const orderId = query.id;
-      //   // console.log('getting', topic, orderId);
-      //   const merchantOrder = await mercadopago.merchant_orders.findById(
-      //     orderId,
-      //   );
-      //   // console.log(merchantOrder);
+      //   console.log('merchant_order');
+      //   const orderId = query['id'] || query['data.id'];
+      //   console.log('Merchant order ID: ' + orderId);
+      //   const merchantOrder = await new MerchantOrder(mercadopago).get({id:orderId});
+      //   console.log(merchantOrder);
       //   break;
     }
-    res.status(200).send('success') 
+    res.sendStatus(200);
   } catch (error) {
     console.error('error notification payment:', error);
     res.status(500).json({ error: error.message });

@@ -10,8 +10,9 @@ const getAllCollections = require('./collections/getAllCollections');
 const createCollection = require('./collections/createCollection');
 const deleteCollectionById = require('./collections/deleteCollectionById');
 const updateCollectionById = require('./collections/updateCollectionById');
-const {createPayment, createMpOrder} = require('./mercadopago/mercadopago');
+const {createPaymentUrl, createMpOrder} = require('./mercadopago/mercadopago');
 const receiveWebhook = require('./mercadopago/receiveWebhook');
+const createPayment = require('./payments/createPayments');
 
 module.exports = {
   getAllProducts,
@@ -23,10 +24,11 @@ module.exports = {
   createCollection,
   deleteCollectionById,
   updateCollectionById,
-  createPayment,
+  createPaymentUrl,
   createOrder,
   deleteOrderById,
   getAllOrders,
   createMpOrder,
+  createPayment,
   receiveWebhook
 };
