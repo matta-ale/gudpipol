@@ -48,10 +48,10 @@ export default function RootLayout({ children }) {
           sizes='<generated>'
         />
       </head>
-      <body className='bg-white-100 font-montserrat relative'>
+      <body className='font-montserrat relative'>
         <div
-          className='absolute inset-0 bg-cover bg-center bg-fixed opacity-80 z-0'
-          style={{ backgroundImage: "url('/img/background.jpg')" }}
+          // className='absolute inset-0 bg-cover bg-center bg-fixed opacity-80 z-0'
+          // style={{ backgroundImage: "url('/img/background.jpg')" }}
         ></div>
         <SloganHeader onHeightChange={(height) => setSloganHeight(height)} />
         <Providers>

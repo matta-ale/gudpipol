@@ -24,10 +24,10 @@ const SloganHeader = ({ onHeightChange }) => {
 
   return (
     <div
-      className='w-full hidden bg-custom-green fixed top-0 left-0 z-40 md:flex justify-center items-center transition-all duration-300'
+      className='w-full hidden bg-custom-green3 fixed top-0 left-0 z-40 md:flex justify-center items-center transition-all duration-300'
       style={{ height: `${height}px`, opacity }}
     >
-      <p className='text-xs sm:text-sm text-white inline-block mx-4'>{text}</p>
+      <p className='text-xs sm:text-sm text-custom-green5 inline-block mx-4'>{text}</p>
     </div>
   );
 };

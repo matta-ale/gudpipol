@@ -25,13 +25,10 @@
 
 body {
   color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    white;
+  background: #f2f4f4; /* gris claro */
 }
+
+
 
 @layer utilities {
   .text-balance {

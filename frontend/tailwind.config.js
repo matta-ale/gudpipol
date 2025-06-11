@@ -14,10 +14,16 @@ module.exports = {
       },
       colors: {
         'custom-green': '#005d00',
+        'custom-green1': '#CAD8C7',
+        'custom-green2': '#C1D9C1',
+        'custom-green3': '#A0BF9F',
+        'custom-green4': '#667467',
+        'custom-green5': '#353F34',
         'custom-lightGreen': '#B3D435',
         'custom-brown': '#3E342A',
         'custom-black': '#2D2E32',
         'custom-black-2': '#26272B',
+        'custom-gray': '#f2f4f4'
       },
       fontFamily: {
         sans: ['Helvetica', 'Arial', 'sans-serif'],

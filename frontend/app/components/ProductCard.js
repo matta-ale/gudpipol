@@ -18,14 +18,14 @@ const ProductCard = (product) => {
   };
 
   return (
-    <div className='bg-custom-black shadow-2xl shadow-black p-0 h-[430px] w-[280px] text-white transform transition-transform duration-300 hover:scale-105'>
+    <div className='bg-custom-black shadow-2xl shadow-black p-0 h-[430px] w-[280px] text-white transform transition-transform duration-300 hover:scale-105 rounded-2xl'>
       <div className='relative h-[220px] w-[280px] flex items-center justify-center bg-gray-200'>
         <Image
           src={imageUrl}
           alt={product.name}
           layout='fill'
           objectFit='cover'
-          className='h-full w-full'
+          className='h-full w-full rounded-lg'
         />
         {/* <div className='absolute bottom-0 left-0 text-xs font-bold bg-yellow-400 text-black p-2 rounded-tr-lg'>
           <RotatingText />
@@ -34,7 +34,7 @@ const ProductCard = (product) => {
 
       <div className='flex flex-col justify-between h-[150px] pb-2 pt-2'>
         <div className='flex flex-col pt-1'>
-          <h3 className='text-xs font-semibold text-gray-400 px-4'>
+          <h3 className='text-xs font-semibold text-yellow-400 px-4'>
             {product.collection.name}
           </h3>
           <h3 className='text-xl font-semibold px-4'>{product.name}</h3>
@@ -64,7 +64,7 @@ const ProductCard = (product) => {
                 image: product.images?.[0]?.url || '',
                 color: 'Marron'
               })}
-              className='text-black text-xs font-bold bg-yellow-400 rounded-2xl h-8 w-64 py-1 mb-2'
+              className='text-black text-xs font-bold bg-custom-green3 rounded-2xl h-8 w-64 py-1 mb-2'
             >
               AGREGAR AL CARRITO
             </button>

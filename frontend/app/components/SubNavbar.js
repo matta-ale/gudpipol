@@ -5,15 +5,15 @@ const SubNavbar = ({ sloganVisible }) => {
 
   return (
     <nav
-      className={`bg-white h-12 hidden md:flex items-center justify-center px-5 border-y-2 border-y-custom-green fixed w-full z-20 transition-all duration-500 ease-in-out ${
+      className={`bg-white h-12 hidden md:flex items-center justify-center px-5 border-y-2 border-y-custom-green3 fixed w-full z-20 transition-all duration-500 ease-in-out ${
         sloganVisible ? 'top-28' : 'top-20'
       }`}
     >
-      <ul className='flex space-x-6 text-black font-semibold text-sm'>
+      <ul className='flex space-x-6 text-custom-green4 font-semibold text-sm'>
         {allCollections.length > 0 ? (
           allCollections.map((collection) => (
             <li key={collection.id} className='flex items-center h-full'>
-              <a href={`/products/${collection.name}`} className='hover:text-gray-300'>
+              <a href={`/products/${collection.name}`} className='hover:text-custom-green3'>
                 {collection.name}
               </a>
             </li>

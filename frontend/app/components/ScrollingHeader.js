@@ -3,11 +3,11 @@ const ScrollingHeader = ({ sloganVisible }) => {
 
   return (
     <div
-      className={`w-full bg-custom-green flex fixed z-10 overflow-hidden transition-all duration-500 ${
+      className={`w-full bg-custom-green3 flex fixed z-10 overflow-hidden transition-all duration-500 ${
         sloganVisible ? 'top-20 md:top-40' : 'top-20 opacity-0'
       }`}
     >
-      <div className='animate-scroll whitespace-nowrap text-white py-1'>
+      <div className='animate-scroll whitespace-nowrap text-custom-green5 py-1'>
         <p className='inline-block mx-4'>{text}</p>
         <p className='inline-block mx-4'>{text}</p>
       </div>

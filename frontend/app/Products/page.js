@@ -17,6 +17,7 @@ export default function Products() {
   
   return (
     <>
+    
       <ProductsContainer products={allProducts}/>
     </>
   );

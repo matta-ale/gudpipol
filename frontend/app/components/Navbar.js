@@ -61,7 +61,7 @@ export default function Navbar({ sloganHeight, sloganVisible }) {
       <div className='flex-1 flex items-center justify-center xl:absolute xl:left-1/2 xl:transform xl:-translate-x-1/2'>
         <a href='/' className='relative h-10 w-48'>
           <Image
-            src='/img/logo.jpg'
+            src='/img/logo2.jpg'
             alt='Gudpipol logo'
             fill
             style={{ objectFit: 'contain' }}
@@ -71,24 +71,24 @@ export default function Navbar({ sloganHeight, sloganVisible }) {
 
       {/*links pantallas grandes*/}
       <div className={`hidden xl:flex flex-1 justify-end space-x-6 pr-5`}>
-        <ul className='flex flex-row space-x-6 text-black font-semibold'>
+        <ul className='flex flex-row space-x-6 text-custom-green4 font-semibold'>
           <li className='flex items-center'>
-            <a href='/' className='hover:text-gray-300'>
+            <a href='/' className='hover:text-custom-green3'>
               Inicio
             </a>
           </li>
           <li className='flex items-center'>
-            <a href='/products' className='hover:text-gray-300'>
+            <a href='/products' className='hover:text-custom-green3'>
               Productos
             </a>
           </li>
           <li className='flex items-center'>
-            <a href='/aboutUs' className='hover:text-gray-300'>
+            <a href='/aboutUs' className='hover:text-custom-green3'>
               Nosotros
             </a>
           </li>
           <li className='flex items-center'>
-            <a href='/contact' className='hover:text-gray-300'>
+            <a href='/contact' className='hover:text-custom-green3'>
               Contacto
             </a>
           </li>
@@ -109,21 +109,21 @@ export default function Navbar({ sloganHeight, sloganVisible }) {
       }`}
         
       >
-        <ul className='flex flex-col items-start p-6 text-black font-semibold'>
+        <ul className='flex flex-col items-start p-6 text-custom-green4 font-semibold'>
           <li className='flex justify-between w-full py-3'>
-            <a href='/' className='hover:text-gray-300'>
+            <a href='/' className='hover:text-custom-green3'>
               Inicio
             </a>
           </li>
           <li className='flex justify-between w-full py-3'>
-            <a href='/aboutUs' className='hover:text-gray-300'>
+            <a href='/aboutUs' className='hover:text-custom-green3'>
               Nosotros
             </a>
           </li>
           <li className='flex justify-between w-full py-3'>
             <button
               onClick={handleProductsToggle}
-              className='hover:text-gray-300 w-full text-left'
+              className='hover:text-custom-green3 w-full text-left'
             >
               Productos
             </button>
@@ -141,7 +141,7 @@ export default function Navbar({ sloganHeight, sloganVisible }) {
                 <li className='bg-gray-200 py-2 pr-6' key='title'>
                   <button
                     onClick={() => setIsProductsOpen(false)}
-                    className='hover:text-gray-300 w-full flex justify-between'
+                    className='hover:text-custom-green3 w-full flex justify-between'
                   >
                     <span className='text-black pl-4'>Productos</span>
                     <FaAngleRight></FaAngleRight>
@@ -150,7 +150,7 @@ export default function Navbar({ sloganHeight, sloganVisible }) {
                 <li key='productos'>
                   <a
                     href='/products'
-                    className='hover:text-gray-300 bg-custom-lightGreen pl-6 py-2 font-bold w-full block'
+                    className='hover:text-custom-green3 bg-custom-green2 pl-6 py-2 font-bold w-full block'
                   >
                     Ver todos
                   </a>
@@ -158,7 +158,7 @@ export default function Navbar({ sloganHeight, sloganVisible }) {
                 {myCollections &&
                   myCollections.map((collection) => (
                     <li key={collection.id}>
-                      <a href={`/products/${collection.name}`} className='hover:text-gray-300 pl-6'>
+                      <a href={`/products/${collection.name}`} className='hover:text-custom-green3 pl-6'>
                         {collection.name}
                       </a>
                     </li>
@@ -167,7 +167,7 @@ export default function Navbar({ sloganHeight, sloganVisible }) {
             </div>
           )}
           <li className='flex justify-between w-full py-3'>
-            <a href='/contact' className='hover:text-gray-300'>
+            <a href='/contact' className='hover:text-custom-green3'>
               Contacto
             </a>
           </li>
