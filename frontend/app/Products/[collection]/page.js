@@ -17,6 +17,13 @@ export default function Products({ params }) {
 
   return (
     <>
+      <div className='container mx-auto'>
+        <div className='max-w-[1200px] mx-auto'>
+          <h1 className='text-4xl font-bold text-custom-green5 mt-40 md:mt-52 text-center md:text-start'>
+            {collection}
+          </h1>
+        </div>
+      </div>
       <ProductsContainer products={myProducts} />
     </>
   );

@@ -38,6 +38,17 @@ export const getFilteredProducts = createAsyncThunk(
   }
 );
 
+export const getFavoriteProducts = createAsyncThunk(
+  'products/getFavoriteProducts',
+  async (colletion) => {
+    const { data } = await axios.get('/products');
+    const favoriteData = data.filter(
+      (product) => product.isDestacado === true
+    );
+    return favoriteData;
+  }
+);
+
 export const getCollections = createAsyncThunk(
   'products/getCollections',
   async () => {
@@ -58,6 +69,10 @@ export const productsSlice = createSlice({
         state.homeStatus = { ...state.homeStatus, loading: false };
       })
       .addCase(getFilteredProducts.fulfilled, (state, action) => {
+        state.myProducts = [...action.payload];
+        state.homeStatus = { ...state.homeStatus, loading: false };
+      })
+      .addCase(getFavoriteProducts.fulfilled, (state, action) => {
         state.myProducts = [...action.payload];
         state.homeStatus = { ...state.homeStatus, loading: false };
       })

@@ -99,7 +99,7 @@ export default function ProductDetail({ params }) {
             <button
               key={index}
               className={`w-3 h-3 rounded-full mx-1 ${
-                currentImageIndex === index ? 'bg-yellow-400' : 'bg-gray-400'
+                currentImageIndex === index ? 'bg-custom-green3' : 'bg-gray-400'
               }`}
               onClick={() => handleImageSelect(index)}
             ></button>
@@ -235,7 +235,7 @@ export default function ProductDetail({ params }) {
         </div>
         {/* Add to Cart Button */}
         <button
-          className='mt-4 bg-yellow-400 text-black h-11 px-6 py-2 text-sm font-bold w-full rounded-3xl'
+          className='mt-4 bg-custom-green3 text-black h-11 px-6 py-2 text-sm font-bold w-full rounded-3xl'
           onClick={addToCart}
         >
           AGREGAR AL CARRITO
