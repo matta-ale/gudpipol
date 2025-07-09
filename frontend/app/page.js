@@ -78,8 +78,8 @@ export default function HomePage() {
 
       {/* DESTACADOS */}
       <section className='py-16 px-6 sm:px-12 bg-gray-100'>
-        <div className='max-w-6xl mx-auto text-center space-y-8'>
-          <h2 className='text-4xl font-bold text-gray-700'>
+        <div className='max-w-6xl mx-auto text-left space-y-8'>
+          <h2 className='text-4xl font-bold text-gray-700 text-center'>
             Productos destacados
           </h2>
           <br></br>
