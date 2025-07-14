@@ -10,8 +10,7 @@ export default function Cart() {
   if (cartItems.length === 0) {
     return (
       <div
-        className=' flex flex-col justify-center w-[320px] md:w-[544px] h-64 mx-auto mt-28 md:mt-56 md:mb-16 py-6 rounded-lg items-center text-center text-white font-semibold text-xl'
-        style={{ backgroundColor: 'rgba(45, 46, 50, 0.75)' }}
+        className=' flex flex-col justify-center w-[320px] md:w-[544px] h-64 mx-auto mt-28 md:mt-56 md:mb-16 py-6 rounded-lg items-center text-center text-custom-black bg-white font-semibold text-xl'
       >
         <p>Tu carrito está vacío</p>
       </div>
@@ -28,10 +27,10 @@ export default function Cart() {
 
   return (
     <main
-      className='w-[360px] md:w-[544px] mx-auto mt-60 md:mt-56 py-6 rounded-lg'
-      style={{ backgroundColor: 'rgba(45, 46, 50, 0.75)' }}
+      className='w-[360px] md:w-[544px] mx-auto mt-60 md:mt-56 py-6 rounded-lg bg-white'
+      // style={{ backgroundColor: 'rgba(45, 46, 50, 0.75)' }}
     >
-      <h1 className='text-white text-2xl mx-7 mb-6 font-bold'>
+      <h1 className='text-custom-black text-2xl mx-7 mb-6 font-bold'>
         Carrito de compras
       </h1>
       {cartItems.map((item) => (
@@ -39,10 +38,10 @@ export default function Cart() {
       ))}
 
       {/* Total Price Section */}
-      <div className='bg-custom-black text-white p-4 rounded-lg shadow-md mt-6 mx-6'>
+      <div className='text-custom-black bg-white p-4 rounded-lg shadow-md mt-6 mx-6 border-2'>
         <div className='flex justify-between items-center'>
           <span className='text-lg font-bold'>Total:</span>
-          <div className='flex items-center bg-custom-black-2 h-9 w-32 rounded-full justify-around mr-[54px]'>
+          <div className='flex items-center bg-gray-600 h-9 w-32 rounded-full justify-around mr-[54px] text-white'>
             <span className='text-md font-bold'>
               $ {calculateTotal().toLocaleString('es-ES')}
             </span>
@@ -50,7 +49,7 @@ export default function Cart() {
         </div>
         <button
           onClick={checkout}
-          className='mt-4 mb-4 w-full bg-yellow-400 text-black font-bold py-2 rounded-lg'
+          className='mt-4 mb-4 w-full bg-custom-green3 text-black font-bold py-2 rounded-lg'
         >
           Proceder al Pago
         </button>

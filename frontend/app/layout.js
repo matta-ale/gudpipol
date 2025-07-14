@@ -48,30 +48,32 @@ export default function RootLayout({ children }) {
           sizes='<generated>'
         />
       </head>
-      <body className='font-montserrat relative'>
+      <body className='font-montserrat relative min-h-screen flex flex-col'>
         <div
-          // className='absolute inset-0 bg-cover bg-center bg-fixed opacity-80 z-0'
-          // style={{ backgroundImage: "url('/img/background.jpg')" }}
+        // className='absolute inset-0 bg-cover bg-center bg-fixed opacity-80 z-0'
+        // style={{ backgroundImage: "url('/img/background.jpg')" }}
         ></div>
-        <SloganHeader onHeightChange={(height) => setSloganHeight(height)} />
         <Providers>
-          <Navbar sloganHeight={sloganHeight} sloganVisible = {sloganVisible} />
+          <SloganHeader onHeightChange={(height) => setSloganHeight(height)} />
+          <Navbar sloganHeight={sloganHeight} sloganVisible={sloganVisible} />
           <SubNavbar sloganVisible={sloganVisible} />
           <ScrollingHeader sloganVisible={sloganVisible} />
           <main className='container mx-auto px-4 py-8 relative z-10'>
             {children}
           </main>
-          <WhatsAppWidget
-            phoneNumber='5493415924709'
-            message='Hola, enviá un mensaje así te redirigimos a un chat de Whatsapp con nosotros'
-            companyName='Gudpipol'
-            companyInitial='GP'
-            replyTimeText='Responderemos a la brevedad'
-            sendButtonText='Enviar'
-            inputPlaceHolder='Escribe un mensaje...'
-          />
+          <div className='fixed bottom-4 right-4 z-50 text-custom-black'>
+            <WhatsAppWidget
+              phoneNumber='5493415924709'
+              message='Hola, enviá un mensaje así te redirigimos a un chat de Whatsapp con nosotros'
+              companyName='Gudpipol'
+              companyInitial='GP'
+              replyTimeText='Responderemos a la brevedad'
+              sendButtonText='Enviar'
+              inputPlaceHolder='Escribe un mensaje...'
+            />
+          </div>
+          <Footer />
         </Providers>
-        <Footer />
       </body>
     </html>
   );

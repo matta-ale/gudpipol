@@ -130,14 +130,14 @@ export default function Checkout() {
 
   return (
     <main
-      className="w-[95%] md:w-[800px] mx-auto mt-24 md:mt-44 py-6 rounded-lg"
-      style={{ backgroundColor: 'rgba(45, 46, 50, 0.75)' }}
+      className="w-[95%] md:w-[800px] mx-auto mt-24 md:mt-44 py-6 rounded-lg bg-white"
+     
     >
-      <h1 className="text-white text-2xl mx-4 md:mx-7 mb-6 font-bold">
+      <h1 className="text-custom-black text-2xl mx-4 md:mx-7 mb-6 font-bold">
         Ingrese sus datos
       </h1>
       <form onSubmit={handleSubmit} className="space-y-4 mx-4 md:mx-6">
-        <div className="md:grid md:grid-cols-2 md:gap-4 md:gap-x-8">
+        <div className="md:grid md:grid-cols-2 md:gap-4 md:gap-x-8 ">
           {[
             { label: 'Nombre completo', name: 'fullName', type: 'text' },
             { label: 'Correo electrónico', name: 'email', type: 'email' },
@@ -147,7 +147,7 @@ export default function Checkout() {
             { label: 'Código Postal', name: 'postalCode', type: 'text' },
           ].map((field) => (
             <div key={field.name} className='mb-4 md:mb-0'>
-              <label className="block text-white font-bold mb-2">
+              <label className="block text-gray-500 font-bold mb-2">
                 {field.label}
               </label>
               <input
@@ -156,7 +156,7 @@ export default function Checkout() {
                 value={formData[field.name]}
                 onChange={handleInputChange}
                 onBlur={handleBlur}
-                className={`w-full h-10 p-2 rounded-md mb-1 ${
+                className={`w-full h-10 p-2 rounded-md mb-1 border-2 border-gray-300 text-custom-black ${
                   touched[field.name] && errors[field.name] ? 'border-2 border-red-500' : ''
                 }`}
                 required
@@ -210,7 +210,7 @@ export default function Checkout() {
         </div>
         <button
           type="submit"
-          className="w-full bg-yellow-400 text-black font-bold py-2 rounded-lg mt-4"
+          className="w-full bg-custom-green3 text-black font-bold py-2 rounded-lg mt-4"
         >
           Confirmar y Pagar
         </button>

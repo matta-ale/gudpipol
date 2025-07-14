@@ -21,7 +21,7 @@ export default function SmallColorSelector({ item}) {
     <div className='relative'>
       <div className='flex flex-col  font-semibold'>
         <span className='ml-4 mb-1 text-xs '>COLOR</span>
-        <div className='bg-custom-black-2 w-20 rounded-3xl flex justify-center'>
+        <div className='bg-gray-600 w-20 rounded-3xl flex justify-center text-white'>
           <div
             className='flex items-center justify-between cursor-pointer m-0 p-2 w-[70px] bg-custom-blackrounded-3xl  font-semibold'
             onClick={toggleDropdown}

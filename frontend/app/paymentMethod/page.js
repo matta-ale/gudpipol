@@ -128,7 +128,7 @@ export default function PaymentMethod() {
   };
 
   const cantCuotas = Number(process.env.NEXT_PUBLIC_CANT_CUOTAS);
-  const recargoCuotas = Number(process.env.NEXT_PUBLIC_RECARGO_CUOTAS);
+  const dtoTransf = Number(process.env.NEXT_PUBLIC_DTO_TRANSF);
   const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER;
   const alias = process.env.NEXT_PUBLIC_ALIAS;
   const cvu = process.env.NEXT_PUBLIC_CVU;
@@ -137,21 +137,21 @@ export default function PaymentMethod() {
 
   return (
     <main
-      className='w-[95%] min-h-[350px] md:w-[800px] mx-auto mt-24 md:mt-52 py-6 rounded-lg'
-      style={{ backgroundColor: 'rgba(45, 46, 50, 0.75)' }}
+      className='w-[95%] min-h-[350px] md:w-[800px] mx-auto mt-24 md:mt-52 py-6 rounded-lg bg-white'
+      
     >
-      <h1 className='text-white text-2xl mx-4 md:mx-7 mb-6 font-bold'>
+      <h1 className='text-custom-black text-2xl mx-4 md:mx-7 mb-6 font-bold'>
         Seleccione forma de pago:
       </h1>
       <form className='space-y-4 mx-4 md:mx-6'>
-        <div className='flex flex-col gap-0 bg-gray-800 rounded-md'>
+        <div className='flex flex-col gap-0 bg-white rounded-md'>
           <label
-            className={`block text-white font-semibold p-4 py-6 rounded-md cursor-pointer ${
-              selectedMethod === 'transfer' ? 'border-2 border-yellow-400' : ''
+            className={`block text-custom-black font-semibold p-4 py-6 rounded-md cursor-pointer ${
+              selectedMethod === 'transfer' ? 'border-2 border-custom-green3' : ''
             } ${
               orderConfirmed && selectedMethod === 'installments'
                 ? 'text-gray-600'
-                : 'text-white'
+                : 'text-custom-black'
             }`}
           >
             <input
@@ -164,18 +164,18 @@ export default function PaymentMethod() {
               disabled={totalPrice === 0}
             />
             Pago por transferencia bancaria: &nbsp;&nbsp;$&nbsp;
-            {totalPrice.toFixed(2).toLocaleString('es-ES')}
+            {(totalPrice.toFixed(2)*(1-dtoTransf)).toLocaleString('es-ES')}
           </label>
 
           <label
             className={`block font-semibold p-4 rounded-md cursor-pointer py-6 ${
               selectedMethod === 'installments'
-                ? 'border-2 border-yellow-400'
+                ? 'border-2 border-custom-green3'
                 : ''
             } ${
               orderConfirmed && selectedMethod === 'transfer'
                 ? 'text-gray-600'
-                : 'text-white'
+                : 'text-custom-black'
             }`}
           >
             <input
@@ -188,11 +188,11 @@ export default function PaymentMethod() {
               disabled={totalPrice === 0 || orderConfirmed}
             />
             Pago en {cantCuotas} cuotas de: &nbsp;$&nbsp;
-            {((totalPrice * (1 + recargoCuotas)) / cantCuotas)
+            {(totalPrice/cantCuotas)
               .toFixed(2)
               .toLocaleString('es-ES')}
             &nbsp; - Total &nbsp;$&nbsp;
-            {(totalPrice * (1 + recargoCuotas))
+            {(totalPrice)
               .toFixed(2)
               .toLocaleString('es-ES')}
           </label>
@@ -272,7 +272,7 @@ export default function PaymentMethod() {
                     )}
                   </li>
                   <li>
-                    Realice una transferencia bancaria por &nbsp;$&nbsp;
+                    Realice una transferencia bancaria por&nbsp;$&nbsp;
                     {totalPrice.toFixed(2).toLocaleString('es-ES')} a la
                     siguiente cuenta: <br />
                     <span className='block mt-4'>Alias:&nbsp; {alias}</span>
@@ -286,7 +286,7 @@ export default function PaymentMethod() {
                     Envíe el comprobante a nuestro número de WhatsApp:{' '}
                     <a
                       href={`https://wa.me/549${whatsappNumber}`}
-                      className='text-yellow-400 underline'
+                      className='text-custom-green3 underline'
                       target='_blank'
                       rel='noopener noreferrer'
                     >
@@ -294,7 +294,7 @@ export default function PaymentMethod() {
                     </a>
                     .<br />
                     Una vez que recibamos el comprobante, la orden queda
-                    confirmada.
+                    confirmada. Un representante comercial te confirmará la recepción del pago.
                   </li>
                 </ol>
               </>
@@ -306,7 +306,7 @@ export default function PaymentMethod() {
                 </p>
                 <button
                   type='button'
-                  className='w-full bg-yellow-400 text-black font-bold py-2 rounded-lg mt-4'
+                  className='w-full bg-custom-green3 text-black font-bold py-2 rounded-lg mt-4'
                   onClick={handleConfirmInstallmentsOrder}
                 >
                   Proceder al pago en cuotas

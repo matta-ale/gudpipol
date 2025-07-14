@@ -16,6 +16,7 @@ app.use('/', mercadopagoRouter);
 app.use('/', ordersRouter);
 app.use('/', paymentsRouter);
 
+// app.use('/',errorHandler);
 app.use('/',errorHandler);
 
 require('dotenv').config();

@@ -8,6 +8,9 @@ const axios = require('axios');
 require('dotenv').config();
 
 const receiveWebhook = async (req, res) => {
+  console.log('Headers:', JSON.stringify(req.headers, null, 2));
+  console.log('Query:', JSON.stringify(req.query, null, 2));
+  console.log('Body:', JSON.stringify(req.body, null, 2));
   console.log('RecieveWebhook');
 
   const { APP_URL, ACCESS_TOKEN} = process.env;
@@ -41,6 +44,8 @@ const receiveWebhook = async (req, res) => {
           const response = await axios.post(`${APP_URL}/payments`, pay);
 
           console.log('Respuesta de la creación de pago:', response.data);
+
+          //envío los dos correos notificando
 
         }
         break;

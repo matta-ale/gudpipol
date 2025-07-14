@@ -1,7 +1,7 @@
 'use client';
 import { React, useEffect } from 'react';
 import Link from 'next/link';
-import { getFavoriteProducts } from './redux/features/products/productsSlice';
+import {getFavoriteProducts } from './redux/features/products/productsSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import FavoriteProductsContainer from './components/FavoriteProductsContainer';
 
@@ -20,7 +20,6 @@ export default function HomePage() {
   const instagramPost1 = process.env.NEXT_PUBLIC_INSTAGRAM_POST_1
   const instagramPost2 = process.env.NEXT_PUBLIC_INSTAGRAM_POST_2
   const instagramPost3 = process.env.NEXT_PUBLIC_INSTAGRAM_POST_3
-  console.log(myProducts);
   return (
     <div className='text-black'>
       {/* HERO */}
@@ -37,13 +36,13 @@ export default function HomePage() {
           </h1>
           <div className='flex justify-center gap-4 flex-wrap'>
             <Link
-              href='/productos'
+              href='/products'
               className='bg-custom-green3 text-white px-6 py-3 rounded-full text-lg hover:bg-custom-green4 transition font-bold'
             >
               Ver productos
             </Link>
             <Link
-              href='/nosotros'
+              href='/aboutUs'
               className='bg-white text-custom-green3 px-6 py-3 rounded-full text-lg hover:bg-gray-200 transition font-bold'
             >
               Quienes somos
@@ -56,22 +55,22 @@ export default function HomePage() {
       <section className='py-16 px-6 sm:px-12 bg-gray-200'>
         <div className='max-w-6xl mx-auto grid grid-cols-2 sm:grid-cols-4 gap-6 text-center text-gray-700'>
           <div>
-            <p className='text-3xl'>♻️</p>
-            <p className='font-semibold mt-2'>100% Plástico reciclado</p>
+            <p className='text-5xl'>♻️</p>
+            <p className='font-semibold mt-6'>100% Plástico reciclado</p>
           </div>
           <div>
-            <p className='text-3xl'>💪</p>
-            <p className='font-semibold mt-2'>Resistentes y duraderos</p>
+            <p className='text-5xl'>💪</p>
+            <p className='font-semibold mt-6'>Resistentes y duraderos</p>
           </div>
           <div>
-            <p className='text-3xl'>🌧️</p>
-            <p className='font-semibold mt-2'>Aptos todo clima</p>
+            <p className='text-5xl'>🌧️</p>
+            <p className='font-semibold mt-6'>Aptos todo clima</p>
           </div>
           <div>
-            <p className='text-3xl'>
+            <p className='text-5xl'>
               <p>💸</p>
             </p>
-            <p className='font-semibold mt-2'>Sin costos de mantenimiento</p>
+            <p className='font-semibold mt-6'>Sin costos de mantenimiento</p>
           </div>
         </div>
       </section>

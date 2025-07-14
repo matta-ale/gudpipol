@@ -5,7 +5,6 @@ import Image from 'next/image';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import ColorSelector from '@/app/components/ColorSelector';
 import { addItemToCart } from '@/app/redux/features/cart/cartSlice';
-import { getHexCode } from '@/app/utils/colorSettings';
 
 export default function ProductDetail({ params }) {
   const { id } = params; // Aquí obtenemos el id del producto desde los parámetros de la URL
@@ -107,13 +106,13 @@ export default function ProductDetail({ params }) {
         </div>
       </div>
       {/* segundo recuadro */}
-      <div className='w-[370px] relative h-full bg-custom-black text-white px-8 py-10 lg:max-h-[500px] lg:w-full'>
-        <p className='text-gray-400 text-sm mb-1'>{product.collection.name}</p>
+      <div className='w-[370px] relative h-full text-custom-black bg-white px-8 py-10 lg:max-h-[500px] lg:w-full'>
+        <p className='text-gray-700 font-bold text-sm mb-1'>{product.collection.name}</p>
         <h1 className='text-2xl font-bold mb-2'>{product.name}</h1>
         <p className='font-semibold text-2xl'>
           $ {product.price.toLocaleString('es-ES')}
         </p>
-        <p className='mb-4 text-xs text-yellow-400'>
+        <p className='mb-4 text-xs text-gray-700'>
           (hasta 6 cuotas sin interés)
         </p>
 
@@ -122,8 +121,8 @@ export default function ProductDetail({ params }) {
           <button
             className={`mr-2 pb-2 ${
               selectedTab === 'descripcion'
-                ? 'text-white border-b-2 border-white'
-                : 'text-gray-400'
+                ? 'text-black border-b-2 border-white font-bold'
+                : 'text-custom-black'
             }`}
             onClick={() => setSelectedTab('descripcion')}
           >
@@ -132,8 +131,8 @@ export default function ProductDetail({ params }) {
           <button
             className={`mr-2 pb-2 ${
               selectedTab === 'medidas'
-                ? 'text-white border-b-2 border-white'
-                : 'text-gray-400'
+                ? 'text-black border-b-2 border-white font-bold'
+                : 'text-custom-black'
             }`}
             onClick={() => setSelectedTab('medidas')}
           >
@@ -142,8 +141,8 @@ export default function ProductDetail({ params }) {
           <button
             className={`pb-2 ${
               selectedTab === 'formasdepago'
-                ? 'text-white border-b-2 border-white'
-                : 'text-gray-400'
+                ? 'text-black border-b-2 border-white font-bold'
+                : 'text-custom-black'
             }`}
             onClick={() => setSelectedTab('formasdepago')}
           >
@@ -151,7 +150,7 @@ export default function ProductDetail({ params }) {
           </button>
         </div>
 
-        <div className='mt-4 text-gray-400 w-[360px] min-h-[96px] max-h-[96px] overflow-y-auto custom-scrollbar flex'>
+        <div className='mt-4 text-custom-black w-[360px] min-h-[96px] max-h-[96px] overflow-y-auto custom-scrollbar flex'>
           {selectedTab === 'descripcion' && <p>{product.description}</p>}
           {selectedTab === 'medidas' && (
             <div className='grid grid-cols-2 w-full'>
@@ -205,7 +204,7 @@ export default function ProductDetail({ params }) {
           {/* Quantity and Add to Cart */}
           <div className='flex flex-col items-center justify-between mt-4 mb-2 font-semibold'>
             <span className='mb-1 text-sm font-semibold'>CANTIDAD</span>
-            <div className='bg-custom-black-2 h-11 w-24 mt-0 rounded-3xl flex justify-around items-center'>
+            <div className='bg-custom-black-2 h-11 w-20 lg:w-24 mt-0 rounded-3xl flex justify-around items-center'>
               <button
                 onClick={decreaseQuantity}
                 className='pl-4 rounded text-white'
@@ -213,7 +212,7 @@ export default function ProductDetail({ params }) {
                 -
               </button>
               {/* Ancho fijo para la cantidad */}
-              <span className='mx-1 inline-block text-center w-8'>
+              <span className='mx-1 inline-block text-center w-2 text-white'>
                 {quantity}
               </span>
               <button
@@ -228,7 +227,7 @@ export default function ProductDetail({ params }) {
           <div className='flex flex-col items-center justify-between mt-4 mb-2 font-semibold'>
             <span className='text-sm'>TOTAL</span>
             {/* Ancho fijo para el total */}
-            <p className='w-24 text-center bg-custom-black-2 h-11 flex justify-center items-center rounded-3xl'>
+            <p className='w-28 text-center bg-custom-black-2 h-11 flex justify-center items-center rounded-3xl text-white'>
               $ {totalPrice.toLocaleString('es-ES')}
             </p>
           </div>

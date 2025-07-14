@@ -1,29 +1,49 @@
 'use client';
 
 import { useForm } from 'react-hook-form';
-import { FaWhatsapp } from 'react-icons/fa';
+import { FaWhatsapp, FaInstagram, FaFacebook } from 'react-icons/fa';
 import { MdEmail } from 'react-icons/md';
-import { FaInstagram } from 'react-icons/fa';
-import { FaFacebook } from 'react-icons/fa';
+import { useState } from 'react';
+import  sendContactEmail  from '../utils/sendContactEmail'; // Asegurate de tener esta función en esa ruta
 
 export default function Contact() {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm();
 
+  const [statusMessage, setStatusMessage] = useState('');
+  const [submitError, setSubmitError] = useState(false);
+
   const onSubmit = async (data) => {
-    console.log(data);
+    try {
+      console.log(data);
+      console.log(process.env.NEXT_PUBLIC_EMAIL2_CONTACT_TEMPLATE);
+      const { status } = await sendContactEmail(
+        data,
+        process.env.NEXT_PUBLIC_EMAIL2_CONTACT_TEMPLATE
+      );
+
+      if (status === "OK") {
+        setStatusMessage('¡Mensaje enviado! Responderemos a la brevedad');
+        setSubmitError(false);
+        reset();
+      } else {
+        throw new Error();
+      }
+    } catch (err) {
+      setStatusMessage('Hubo un error al enviar el mensaje. Intenta nuevamente.');
+      setSubmitError(true);
+    }
   };
 
   return (
     <div className='flex justify-center'>
       <div className='min-h-screen flex flex-col items-center justify-center px-6 py-6 mt-32 lg:mt-48 w-[700px]'>
-        <div className='flex flex-col items-start pl-12 py-12 text-custom-green5 w-full text-lg bg-gray-100 rounded-2xl shadow-2xl '>
-          <h1 className='text-4xl font-extrabold tracking-wide text-custom-green5 text-left'>
-            Contacto
-          </h1>
+        <div className='flex flex-col items-start pl-12 py-12 text-custom-green5 w-full text-lg bg-gray-100 rounded-2xl shadow-2xl'>
+          <h1 className='text-4xl font-extrabold tracking-wide text-custom-green5 text-left'>Contacto</h1>
           <br />
           <div className='flex flex-col md:flex-row'>
             <div className='mr-8'>
@@ -73,6 +93,7 @@ export default function Contact() {
             </div>
           </div>
         </div>
+
         <div className='max-w-3xl w-full bg-gray-100 rounded-2xl shadow-2xl p-12 mt-8'>
           <h1 className='text-4xl font-extrabold tracking-wide text-custom-green5 mb-4 text-left'>
             Escribinos
@@ -99,9 +120,7 @@ export default function Contact() {
                 Nombre
               </label>
               {errors.name && (
-                <p className='mt-4 text-red-500 text-sm'>
-                  El nombre es obligatorio
-                </p>
+                <p className='mt-4 text-red-500 text-sm'>El nombre es obligatorio</p>
               )}
             </div>
 
@@ -123,9 +142,7 @@ export default function Contact() {
                 Correo
               </label>
               {errors.email && (
-                <p className='mt-4 text-red-500 text-sm'>
-                  El correo es obligatorio
-                </p>
+                <p className='mt-4 text-red-500 text-sm'>El correo es obligatorio</p>
               )}
             </div>
 
@@ -147,9 +164,7 @@ export default function Contact() {
                 Mensaje
               </label>
               {errors.message && (
-                <p className='mt-4 text-red-500 text-sm'>
-                  El mensaje es obligatorio
-                </p>
+                <p className='mt-4 text-red-500 text-sm'>El mensaje es obligatorio</p>
               )}
             </div>
 
@@ -159,6 +174,12 @@ export default function Contact() {
             >
               Enviar
             </button>
+
+            {statusMessage && (
+              <p className={`mt-4 text-sm ${submitError ? 'text-red-500' : 'text-green-600'}`}>
+                {statusMessage}
+              </p>
+            )}
           </form>
         </div>
       </div>

@@ -16,7 +16,7 @@ export default function CartItem({ item }) {
   return (
     <div
       key={item.id}
-      className='sm:h-[150px] grid grid-cols-2 md:grid-cols-[120px_130px_200px] gap-4 mb-6 bg-custom-black text-white p-4 rounded-lg shadow-md relative z-50 mx-6'
+      className='sm:h-[150px] grid grid-cols-2 md:grid-cols-[120px_130px_200px] gap-4 mb-6 text-custom-black bg-white p-4 rounded-lg shadow-md relative z-50 mx-6 border-2'
     >
       {/* Trash Icon */}
       <button
@@ -44,7 +44,7 @@ export default function CartItem({ item }) {
             <SmallColorSelector item={item} />
           </div>
           <span className='ml-2 text-xs font-semibold mb-0'>CANTIDAD</span>
-          <div className='flex items-center bg-custom-black-2 h-9 w-20 rounded-full justify-around'>
+          <div className='flex items-center bg-gray-600 h-9 w-20 rounded-full justify-around'>
             <button
               onClick={() => {
                 dispatch({
@@ -74,10 +74,10 @@ export default function CartItem({ item }) {
       {/* Product Info Section */}
       <div className='flex md:flex-col justify-between'>
         <div>
-          <p className='text-gray-400 text-sm'>{item.collection}</p>
+          <p className='text-custom-black text-sm'>{item.collection}</p>
           <h2 className='text-md font-bold'>{item.name}</h2>
         </div>
-        <div className='flex items-center bg-custom-black-2 h-9 w-32 rounded-full justify-around'>
+        <div className='flex items-center bg-gray-600 text-white h-9 w-32 rounded-full justify-around'>
           <p className='font-semibold text-md'>
             $ {(item.price * item.quantity).toLocaleString('es-ES')}
           </p>

@@ -1,7 +1,19 @@
-import { useSelector } from 'react-redux';
+'use client';
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect, useState } from 'react';
+import { getCollections} from '../redux/features/products/productsSlice';
 
 const SubNavbar = ({ sloganVisible }) => {
   const allCollections = useSelector((state) => state.products.allCollections);
+  const [hasMounted, setHasMounted] = useState(false);
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    setHasMounted(true);
+    dispatch(getCollections)
+  }, []);
+
+  if (!hasMounted || !Array.isArray(allCollections)) return null;
 
   return (
     <nav
@@ -13,13 +25,16 @@ const SubNavbar = ({ sloganVisible }) => {
         {allCollections.length > 0 ? (
           allCollections.map((collection) => (
             <li key={collection.id} className='flex items-center h-full'>
-              <a href={`/products/${collection.name}`} className='hover:text-custom-green3'>
+              <a
+                href={`/products/${encodeURIComponent(collection.name)}`}
+                className='hover:text-custom-green3'
+              >
                 {collection.name}
               </a>
             </li>
           ))
         ) : (
-          <p>No collections available</p>
+          <p>Cargando colecciones...</p>
         )}
       </ul>
     </nav>

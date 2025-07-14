@@ -17,15 +17,15 @@ export default function ColorSelector({ selectedColor, onColorSelect }) {
   return (
     <div className='relative mt-4'>
       <div className='flex flex-col  font-semibold'>
-        <span className='ml-7 mb-1 text-sm '>COLOR</span>
-        <div className='bg-custom-black-2 w-28 rounded-3xl flex justify-center'>
+        <span className='ml-[22px] mb-1 text-sm '>COLOR</span>
+        <div className='bg-custom-black-2 w-24 rounded-3xl flex justify-center text-white'>
           <div
             className='flex items-center justify-between cursor-pointer m-0 p-2 w-[70px] bg-custom-blackrounded-3xl  font-semibold'
             onClick={toggleDropdown}
           >
             <span className='flex items-center'>
               <div
-                className={`w-7 h-7 rounded-full mr-2`}
+                className={`w-7 h-7 rounded-full mr-2 border-white`}
                 style={{ backgroundColor: getHexCode(selectedColor) }}
               />
             </span>
@@ -45,7 +45,7 @@ export default function ColorSelector({ selectedColor, onColorSelect }) {
           </div>
         </div>
         {isDropdownOpen && (
-          <div className='absolute mt-6 bg-custom-black-2 rounded-3xl z-10 w-fit text-xs'>
+          <div className='absolute mt-6 bg-custom-black-2 rounded-3xl z-10 w-fit text-xs text-white'>
             <div
               className='flex items-center p-2 cursor-pointer hover:bg-gray-400 hover:text-black hover:rounded-tl-3xl hover:rounded-tr-3xl w-28'
               onClick={() => handleColorSelect('Marron')}
