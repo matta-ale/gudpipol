@@ -40,7 +40,7 @@ export const getFilteredProducts = createAsyncThunk(
 
 export const getFavoriteProducts = createAsyncThunk(
   'products/getFavoriteProducts',
-  async (colletion) => {
+  async () => {
     const { data } = await axios.get('/products');
     const favoriteData = data.filter(
       (product) => product.isDestacado === true
@@ -49,11 +49,22 @@ export const getFavoriteProducts = createAsyncThunk(
   }
 );
 
+// Extrae colecciones únicas desde allProducts ya filtrados
 export const getCollections = createAsyncThunk(
   'products/getCollections',
-  async () => {
-    const { data } = await axios.get('/collections');
-    return data;
+  async (_, { getState }) => {
+    const { allProducts } = getState().products;
+
+    const uniqueMap = new Map();
+
+    allProducts.forEach((product) => {
+      const name = product.collection?.name;
+      if (name && !uniqueMap.has(name)) {
+        uniqueMap.set(name, product.collection);
+      }
+    });
+
+    return Array.from(uniqueMap.values());
   }
 );
 

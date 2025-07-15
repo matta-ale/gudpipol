@@ -1,7 +1,7 @@
 'use client';
 import { React, useEffect } from 'react';
 import Link from 'next/link';
-import {getFavoriteProducts } from './redux/features/products/productsSlice';
+import {getFavoriteProducts, getProducts } from './redux/features/products/productsSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import FavoriteProductsContainer from './components/FavoriteProductsContainer';
 
@@ -13,6 +13,7 @@ export default function HomePage() {
   useEffect(() => {
     const fetchData = async () => {
       dispatch(getFavoriteProducts());
+      dispatch(getProducts());
     };
     fetchData();
   }, [dispatch]);

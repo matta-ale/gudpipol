@@ -13,7 +13,7 @@ const updateCollectionByIdHandler = async (data) => {
     error.statusCode = 400;
     throw error;
   } else {
-    return updated;
+    return id;
   }
 };
 

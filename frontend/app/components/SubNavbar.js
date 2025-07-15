@@ -1,7 +1,7 @@
 'use client';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
-import { getCollections} from '../redux/features/products/productsSlice';
+import { getCollections, getProducts} from '../redux/features/products/productsSlice';
 
 const SubNavbar = ({ sloganVisible }) => {
   const allCollections = useSelector((state) => state.products.allCollections);
@@ -10,7 +10,7 @@ const SubNavbar = ({ sloganVisible }) => {
 
   useEffect(() => {
     setHasMounted(true);
-    dispatch(getCollections)
+    dispatch(getCollections())
   }, []);
 
   if (!hasMounted || !Array.isArray(allCollections)) return null;
