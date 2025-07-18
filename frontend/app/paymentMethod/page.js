@@ -17,6 +17,14 @@ export default function PaymentMethod() {
   const [totalPrice, setTotalPrice] = useState(cartTotalPrice);
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
+  const cantCuotas = Number(process.env.NEXT_PUBLIC_CANT_CUOTAS);
+  const rate3 = process.env.NEXT_PUBLIC_RATE_3_CUOTAS;
+  const rate6 = process.env.NEXT_PUBLIC_RATE_6_CUOTAS;
+  const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER;
+  const alias = process.env.NEXT_PUBLIC_ALIAS;
+  const cvu = process.env.NEXT_PUBLIC_CVU;
+  const aNombreDe = process.env.NEXT_PUBLIC_A_NOMBRE_DE;
+  const cuit = process.env.NEXT_PUBLIC_CUIT;
 
   const handleMethodChange = (method) => {
     if (!orderConfirmed) {
@@ -74,7 +82,7 @@ export default function PaymentMethod() {
       id: item.id,
       name: item.name,
       collection: item.collection,
-      price: item.price,
+      price: item.price*(1+rate6/100),
       quantity: item.quantity,
       image: item.image,
       color: item.color,
@@ -83,14 +91,14 @@ export default function PaymentMethod() {
       const data = await axios.post('/orders', orderData, {
         headers: { 'Content-Type': 'application/json' },
       });
-      const orderId = data.data.order.id
-      const body = {orderId:orderId,items:cartData}
+      const orderId = data.data.order.id;
+      const body = { orderId: orderId, items: cartData };
       if (data.status === 201) {
-        const {data} = await axios.post('/createPaymentUrl', body, {
+        const { data } = await axios.post('/createPaymentUrl', body, {
           headers: { 'Content-Type': 'application/json' },
         });
-        const mercadoPagoUrl = data
-        console.log('URL: '+mercadoPagoUrl);
+        const mercadoPagoUrl = data;
+        console.log('URL: ' + mercadoPagoUrl);
 
         router.push(mercadoPagoUrl); // Use router.push to navigate
       }
@@ -127,19 +135,10 @@ export default function PaymentMethod() {
     // }
   };
 
-  const cantCuotas = Number(process.env.NEXT_PUBLIC_CANT_CUOTAS);
-  const dtoTransf = Number(process.env.NEXT_PUBLIC_DTO_TRANSF);
-  const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER;
-  const alias = process.env.NEXT_PUBLIC_ALIAS;
-  const cvu = process.env.NEXT_PUBLIC_CVU;
-  const aNombreDe = process.env.NEXT_PUBLIC_A_NOMBRE_DE;
-  const cuit = process.env.NEXT_PUBLIC_CUIT;
+  
 
   return (
-    <main
-      className='w-[95%] min-h-[350px] md:w-[800px] mx-auto mt-24 md:mt-52 py-6 rounded-lg bg-white'
-      
-    >
+    <main className='w-[95%] min-h-[350px] md:w-[800px] mx-auto mt-24 md:mt-52 py-6 rounded-lg bg-white'>
       <h1 className='text-custom-black text-2xl mx-4 md:mx-7 mb-6 font-bold'>
         Seleccione forma de pago:
       </h1>
@@ -147,7 +146,9 @@ export default function PaymentMethod() {
         <div className='flex flex-col gap-0 bg-white rounded-md'>
           <label
             className={`block text-custom-black font-semibold p-4 py-6 rounded-md cursor-pointer ${
-              selectedMethod === 'transfer' ? 'border-2 border-custom-green3' : ''
+              selectedMethod === 'transfer'
+                ? 'border-2 border-custom-green3'
+                : ''
             } ${
               orderConfirmed && selectedMethod === 'installments'
                 ? 'text-gray-600'
@@ -164,7 +165,7 @@ export default function PaymentMethod() {
               disabled={totalPrice === 0}
             />
             Pago por transferencia bancaria: &nbsp;&nbsp;$&nbsp;
-            {(totalPrice.toFixed(2)*(1-dtoTransf)).toLocaleString('es-ES')}
+            {totalPrice.toFixed(2).toLocaleString('es-ES')}
           </label>
 
           <label
@@ -178,23 +179,41 @@ export default function PaymentMethod() {
                 : 'text-custom-black'
             }`}
           >
-            <input
-              type='radio'
-              name='paymentMethod'
-              value='installments'
-              checked={selectedMethod === 'installments'}
-              onChange={() => handleMethodChange('installments')}
-              className='mr-2 accent-gray-500'
-              disabled={totalPrice === 0 || orderConfirmed}
-            />
-            Pago en {cantCuotas} cuotas de: &nbsp;$&nbsp;
-            {(totalPrice/cantCuotas)
-              .toFixed(2)
-              .toLocaleString('es-ES')}
-            &nbsp; - Total &nbsp;$&nbsp;
-            {(totalPrice)
-              .toFixed(2)
-              .toLocaleString('es-ES')}
+            <div className='flex items-center mb-2'>
+              <input
+                type='radio'
+                name='paymentMethod'
+                value='installments'
+                checked={selectedMethod === 'installments'}
+                onChange={() => handleMethodChange('installments')}
+                className='mr-2 accent-gray-500'
+                disabled={totalPrice === 0 || orderConfirmed}
+              />
+              Pago en cuotas con tarjeta de crédito:
+            </div>
+              <br></br>
+            <div className='ml-6 space-y-2 font-normal'>
+              <div>
+                <span className='font-semibold'><span>💳</span> 3 cuotas de</span> ${' '}
+                {((totalPrice * (1 + rate3 / 100)) / 3)
+                  .toFixed(2)
+                  .toLocaleString('es-ES')}
+                &nbsp;- Total: ${' '}
+                {(totalPrice * (1 + rate3 / 100))
+                  .toFixed(2)
+                  .toLocaleString('es-ES')}
+              </div>
+              <div>
+                <span className='font-semibold'>💳 6 cuotas de</span> ${' '}
+                {((totalPrice * (1 + rate6 / 100)) / 6)
+                  .toFixed(2)
+                  .toLocaleString('es-ES')}
+                &nbsp;- Total: ${' '}
+                {(totalPrice * (1 + rate6 / 100))
+                  .toFixed(2)
+                  .toLocaleString('es-ES')}
+              </div>
+            </div>
           </label>
         </div>
 
@@ -294,7 +313,8 @@ export default function PaymentMethod() {
                     </a>
                     .<br />
                     Una vez que recibamos el comprobante, la orden queda
-                    confirmada. Un representante comercial te confirmará la recepción del pago.
+                    confirmada. Un representante comercial te confirmará la
+                    recepción del pago.
                   </li>
                 </ol>
               </>

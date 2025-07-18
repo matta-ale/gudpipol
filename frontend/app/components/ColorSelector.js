@@ -18,7 +18,7 @@ export default function ColorSelector({ selectedColor, onColorSelect }) {
     <div className='relative mt-4'>
       <div className='flex flex-col  font-semibold'>
         <span className='ml-[22px] mb-1 text-sm '>COLOR</span>
-        <div className='bg-custom-black-2 w-24 rounded-3xl flex justify-center text-white'>
+        <div className='bg-custom-black-2 w-28 md:w-24 rounded-3xl flex justify-center text-white'>
           <div
             className='flex items-center justify-between cursor-pointer m-0 p-2 w-[70px] bg-custom-blackrounded-3xl  font-semibold'
             onClick={toggleDropdown}
