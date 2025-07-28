@@ -58,11 +58,11 @@ const Product = sequelize.define('Product', {
   },
   costoMO: {
     type: DataTypes.FLOAT,
-    allowNull: false
+    allowNull: true
   },
   costosOcultos: {
     type: DataTypes.FLOAT,
-    allowNull: false
+    allowNull: true
   },
   costoTotal: {
     type: DataTypes.FLOAT,

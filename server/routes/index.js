@@ -1,5 +1,5 @@
 const productsRouter = require('./products/productsRouter')
-const ordersRouter = require('./Orders/ordersRouter')
+const ordersRouter = require('./orders/ordersRouter')
 const collectionsRouter = require('./collections/collectionsRouter')
 const productImagesRouter = require('./productImages/productImagesRouter')
 const paymentsRouter = require('./payments/paymentsRouter')

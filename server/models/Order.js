@@ -45,7 +45,12 @@ const Order = sequelize.define(
       validate: {
         isIn: [['TRANSFERENCIA/EFECTIVO', 'CUOTAS']]
       }
-    }    
+    },
+    emailSent: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+    },
   },
   {
     tableName: 'Orders',

@@ -13,8 +13,7 @@ async function createPayHandler({ id, idMP, amount, date, method, status }) {
 
     if (existingPayment) {
       // Si ya existe un pago aprobado, retornar el pago existente
-      throw new Error('Pago existente')
-      return existingPayment;
+      return {existing: true, payment: existingPayment};
     }
 
     const payment = await Pay.create({
@@ -26,7 +25,7 @@ async function createPayHandler({ id, idMP, amount, date, method, status }) {
       orderId: order.id  // Relaciona el pago con la orden
     });
 
-    return payment;
+    return {existing: false, payment: payment};
   } catch (error) {
     throw new Error(error.message, 500);
   }

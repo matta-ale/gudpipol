@@ -7,18 +7,18 @@ const createPaymentUrl = async (req, res) => {
   const mp = new MercadoPagoConfig({
     accessToken: ACCESS_TOKEN,
   });
-  const cart = req.body.items;
-  const orderId= req.body.orderId
+
+  const {items, orderId, fullName} = req.body
 
   const backUrls = {
     success: `${APP_URL_FRONTEND}/success`,
-    failure: `${APP_URL}/failure`,
+    failure: `$${APP_URL_FRONTEND}`,
     pending: `${APP_URL}/pending`,
   };
   const notificationUrl = `${APP_URL}/webhook`;
 
   const preferenceArray = [];
-  cart.forEach((item) => {
+  items.forEach((item) => {
     arrayItem = {
       id: item.id,
       title: item.name,
@@ -34,7 +34,8 @@ const createPaymentUrl = async (req, res) => {
       items: preferenceArray,
       back_urls: backUrls,
       notification_url: notificationUrl,
-      external_reference: orderId
+      external_reference: orderId,
+      auto_return: "approved",
     },
   };
 

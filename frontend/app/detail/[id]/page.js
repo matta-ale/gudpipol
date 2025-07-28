@@ -197,7 +197,7 @@ export default function ProductDetail({ params }) {
         </div>
 
         {/* Info: 40% */}
-        <div className='h-[20%] md:h-[40%] flex flex-col pt-5 px-4 text-custom-black bg-white mb-4'>
+        <div className='h-[20%] md:h-[40%] flex flex-col pt-5 md:pt-8 px-4 text-custom-black bg-white mb-4'>
           <p className='text-gray-700 font-bold text-sm mb-1'>
             {product.collection.name}
           </p>

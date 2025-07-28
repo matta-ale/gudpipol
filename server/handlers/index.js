@@ -1,5 +1,7 @@
 const getAllProductsHandler = require('./products/getAllProductsHandler')
 const getAllOrdersHandler = require('./orders/getAllOrdersHandler')
+const updateEmailSentHandler = require('./orders/updateEmailSentHandler')
+const getOrderByIdHandler = require('./orders/getOrderByIdHandler')
 const deleteOrderByIdHandler = require('./orders/deleteOrderByIdHandler')
 const createProductHandler = require('./products/createProductHandler')
 const deleteProductByIdHandler = require('./products/deleteProductByIdHandler')
@@ -14,6 +16,7 @@ const createPayHandler = require('./payments/createPayHandler')
 module.exports = {
     getAllProductsHandler,
     getAllOrdersHandler,
+    getOrderByIdHandler,
     deleteOrderByIdHandler,
     createProductHandler,
     deleteProductByIdHandler,
@@ -23,5 +26,6 @@ module.exports = {
     createCollectionHandler,
     deleteCollectionByIdHandler,
     updateCollectionByIdHandler,
-    createPayHandler
+    createPayHandler,
+    updateEmailSentHandler
 }

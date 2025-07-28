@@ -18,13 +18,14 @@ export default function PaymentMethod() {
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
   const cantCuotas = Number(process.env.NEXT_PUBLIC_CANT_CUOTAS);
-  const rate3 = process.env.NEXT_PUBLIC_RATE_3_CUOTAS;
-  const rate6 = process.env.NEXT_PUBLIC_RATE_6_CUOTAS;
+  const rate3 = Number(process.env.NEXT_PUBLIC_RATE_3_CUOTAS);
+  const rate6 = Number(process.env.NEXT_PUBLIC_RATE_6_CUOTAS);
   const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER;
   const alias = process.env.NEXT_PUBLIC_ALIAS;
   const cvu = process.env.NEXT_PUBLIC_CVU;
   const aNombreDe = process.env.NEXT_PUBLIC_A_NOMBRE_DE;
   const cuit = process.env.NEXT_PUBLIC_CUIT;
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL || ''; // URL base absoluta para SSE
 
   const handleMethodChange = (method) => {
     if (!orderConfirmed) {
@@ -33,35 +34,60 @@ export default function PaymentMethod() {
     }
   };
 
+
   const handleConfirmTransferOrder = async () => {
     setIsLoading(true);
     const userData = JSON.parse(localStorage.getItem('userData'));
     const orderData = userData;
     orderData.cart = cartItems;
     orderData.paymentMethod = 'TRANSFERENCIA/EFECTIVO';
-    console.log(orderData);
+  
     try {
       const data = await axios.post('/orders', orderData, {
         headers: { 'Content-Type': 'application/json' },
       });
+  
       if (data.status === 201) {
         orderData.id = data.data.order.id;
-        const { status } = await sendOrderConfirmationEmail(
+  
+        // Consultar si el email ya fue enviado
+        const res = await axios.get(`/orders/${orderData.id}`);
+        const existingOrder = res.data;
+  
+        if (existingOrder.emailSent) {
+          console.log('Email ya fue enviado, abortando...');
+          setOrderNumber(orderData.id);
+          setOrderConfirmed(true);
+          dispatch(clearCart());
+          return;
+        }
+  
+        const confirmStatus = await sendOrderConfirmationEmail(
           orderData,
           process.env.NEXT_PUBLIC_EMAIL_TRANSF_TEMPLATE
         );
-        if (status === 'OK') {
-          const { status } = await sendOrderDataEmail(
-            orderData,
-            process.env.NEXT_PUBLIC_EMAIL2_DATA_TEMPLATE
-          );
-          console.log(status);
-          if (status === 'OK') {
-            setOrderNumber(data.data.order.id);
-            setOrderConfirmed(true);
-            dispatch(clearCart());
-          }
+  
+        if (confirmStatus.status !== 'OK') {
+          console.error('Error enviando primer mail');
+          return;
         }
+  
+        const dataStatus = await sendOrderDataEmail(
+          orderData,
+          process.env.NEXT_PUBLIC_EMAIL2_DATA_TEMPLATE
+        );
+  
+        if (dataStatus.status !== 'OK') {
+          console.error('Error enviando segundo mail');
+          return;
+        }
+  
+        // Marcar la orden como email enviado solo si ambos mails salieron OK
+        await axios.put(`/orders/${orderData.id}/email-sent`);
+  
+        setOrderNumber(orderData.id);
+        setOrderConfirmed(true);
+        dispatch(clearCart());
       }
     } catch (error) {
       console.error('Error confirming order:', error);
@@ -69,6 +95,9 @@ export default function PaymentMethod() {
       setIsLoading(false);
     }
   };
+  
+  
+  
 
   const handleConfirmInstallmentsOrder = async () => {
     setIsLoading(true);
@@ -76,66 +105,46 @@ export default function PaymentMethod() {
     const orderData = userData;
     orderData.cart = cartItems;
     orderData.paymentMethod = 'CUOTAS';
-    console.log(orderData);
-
+  
     const cartData = orderData.cart.map((item) => ({
       id: item.id,
       name: item.name,
       collection: item.collection,
-      price: item.price*(1+rate6/100),
+      price: item.price * (1 + rate6 / 100),
       quantity: item.quantity,
       image: item.image,
       color: item.color,
     }));
+  
     try {
       const data = await axios.post('/orders', orderData, {
         headers: { 'Content-Type': 'application/json' },
       });
       const orderId = data.data.order.id;
-      const body = { orderId: orderId, items: cartData };
+      const body = { orderId, items: cartData };
+  
       if (data.status === 201) {
-        const { data } = await axios.post('/createPaymentUrl', body, {
+        const response = await axios.post('/createPaymentUrl', body, {
           headers: { 'Content-Type': 'application/json' },
         });
-        const mercadoPagoUrl = data;
-        console.log('URL: ' + mercadoPagoUrl);
-
-        router.push(mercadoPagoUrl); // Use router.push to navigate
+  
+        if (response.status === 200) {
+          setOrderNumber(orderId);
+          setOrderConfirmed(true);
+          dispatch(clearCart());
+          orderData.id = orderId;
+  
+          const mercadoPagoUrl = response.data;
+          // Redirigir a Mercado Pago
+          router.push(mercadoPagoUrl);
+        }
       }
     } catch (error) {
       console.error('Error: ', error);
     } finally {
       setIsLoading(false);
     }
-
-    //SEGUIR DESDE ACÁ: QUE CUANDO MANDE LA NOTIFICACIÖN DEL PAGO, CONSULTE LOS DATOS DE LA ORDEN CON EL ID Y ENVÏE AMBOS MAILS
-
-    //   if (data.status === 201) {
-    //     orderData.id = data.data.order.id;
-    //     const { status } = await sendOrderConfirmationEmail(
-    //       orderData,
-    //       process.env.NEXT_PUBLIC_EMAIL_CUOTAS_TEMPLATE
-    //     );
-    //     if (status === 'OK') {
-    //       const { status } = await sendOrderDataEmail(
-    //         orderData,
-    //         process.env.NEXT_PUBLIC_EMAIL2_DATA_TEMPLATE
-    //       );
-    //       if (status === 'OK') {
-    //         setOrderNumber(data.data.order.id);
-    //         setOrderConfirmed(true);
-    //         dispatch(clearCart());
-    //       }
-    //     }
-    //   }
-    // } catch (error) {
-    //   console.error('Error confirming order:', error);
-    // } finally {
-    //   setIsLoading(false);
-    // }
   };
-
-  
 
   return (
     <main className='w-[95%] min-h-[350px] md:w-[800px] mx-auto mt-24 md:mt-52 py-6 rounded-lg bg-white'>
@@ -146,9 +155,7 @@ export default function PaymentMethod() {
         <div className='flex flex-col gap-0 bg-white rounded-md'>
           <label
             className={`block text-custom-black font-semibold p-4 py-6 rounded-md cursor-pointer ${
-              selectedMethod === 'transfer'
-                ? 'border-2 border-custom-green3'
-                : ''
+              selectedMethod === 'transfer' ? 'border-2 border-custom-green3' : ''
             } ${
               orderConfirmed && selectedMethod === 'installments'
                 ? 'text-gray-600'
@@ -170,9 +177,7 @@ export default function PaymentMethod() {
 
           <label
             className={`block font-semibold p-4 rounded-md cursor-pointer py-6 ${
-              selectedMethod === 'installments'
-                ? 'border-2 border-custom-green3'
-                : ''
+              selectedMethod === 'installments' ? 'border-2 border-custom-green3' : ''
             } ${
               orderConfirmed && selectedMethod === 'transfer'
                 ? 'text-gray-600'
@@ -191,27 +196,22 @@ export default function PaymentMethod() {
               />
               Pago en cuotas con tarjeta de crédito:
             </div>
-              <br></br>
+            <br />
             <div className='ml-6 space-y-2 font-normal'>
               <div>
-                <span className='font-semibold'><span>💳</span> 3 cuotas de</span> ${' '}
-                {((totalPrice * (1 + rate3 / 100)) / 3)
-                  .toFixed(2)
-                  .toLocaleString('es-ES')}
+                <span className='font-semibold'>
+                  <span>💳</span> 3 cuotas de
+                </span>{' '}
+                ${' '}
+                {((totalPrice * (1 + rate3 / 100)) / 3).toFixed(2).toLocaleString('es-ES')}
                 &nbsp;- Total: ${' '}
-                {(totalPrice * (1 + rate3 / 100))
-                  .toFixed(2)
-                  .toLocaleString('es-ES')}
+                {(totalPrice * (1 + rate3 / 100)).toFixed(2).toLocaleString('es-ES')}
               </div>
               <div>
                 <span className='font-semibold'>💳 6 cuotas de</span> ${' '}
-                {((totalPrice * (1 + rate6 / 100)) / 6)
-                  .toFixed(2)
-                  .toLocaleString('es-ES')}
+                {((totalPrice * (1 + rate6 / 100)) / 6).toFixed(2).toLocaleString('es-ES')}
                 &nbsp;- Total: ${' '}
-                {(totalPrice * (1 + rate6 / 100))
-                  .toFixed(2)
-                  .toLocaleString('es-ES')}
+                {(totalPrice * (1 + rate6 / 100)).toFixed(2).toLocaleString('es-ES')}
               </div>
             </div>
           </label>
@@ -228,14 +228,11 @@ export default function PaymentMethod() {
                     {!orderConfirmed && (
                       <>
                         <div className='mt-4 mb-8'>
-                          <h2 className='text-lg font-bold mt-8'>
-                            Resumen de su orden:
-                          </h2>
+                          <h2 className='text-lg font-bold mt-8'>Resumen de su orden:</h2>
                           {cartItems.map((item, index) => (
                             <div key={index} className='mt-2'>
                               <p>
-                                {item.quantity} x {item.name} - ${' '}
-                                {(item.price * item.quantity).toFixed(2)}
+                                {item.quantity} x {item.name} - $ {(item.price * item.quantity).toFixed(2)}
                               </p>
                             </div>
                           ))}
@@ -254,25 +251,16 @@ export default function PaymentMethod() {
                           <button
                             type='button'
                             className={`relative w-full md:max-w-96 bg-green-500 text-white font-bold py-2 px-4 rounded-lg transition-transform transform ${
-                              isLoading
-                                ? 'opacity-50 cursor-not-allowed'
-                                : 'hover:scale-95 active:scale-90'
+                              isLoading ? 'opacity-50 cursor-not-allowed' : 'hover:scale-95 active:scale-90'
                             }`}
                             onClick={handleConfirmTransferOrder}
                             disabled={isLoading}
                           >
-                            {/* Texto invisible para reservar el ancho */}
-                            <span className='invisible'>
-                              Pre-confirmar (voy a transferir)
-                            </span>
-                            {/* Contenido superpuesto */}
+                            <span className='invisible'>Pre-confirmar (voy a transferir)</span>
                             <span className='absolute inset-0 flex items-center justify-center'>
                               {isLoading ? (
                                 <div className='flex items-center'>
-                                  <div
-                                    className='animate-spin border-b-2 border-white rounded-lg'
-                                    style={{ width: '1rem', height: '1rem' }}
-                                  ></div>
+                                  <div className='animate-spin border-b-2 border-white rounded-lg' style={{ width: '1rem', height: '1rem' }}></div>
                                   <span className='ml-2'>Procesando...</span>
                                 </div>
                               ) : (
@@ -285,52 +273,53 @@ export default function PaymentMethod() {
                     )}
                     {orderConfirmed && (
                       <p className='text-green-400 font-bold mt-4 pb-4'>
-                        Orden {orderNumber} pre-confirmada. Ya recibimos su
-                        pedido. Prosiga con el siguiente paso para confirmarla.
+                        Orden {orderNumber} pre-confirmada. Ya recibimos su pedido. Prosiga con el siguiente paso para confirmarla.
                       </p>
                     )}
                   </li>
                   <li>
                     Realice una transferencia bancaria por&nbsp;$&nbsp;
-                    {totalPrice.toFixed(2).toLocaleString('es-ES')} a la
-                    siguiente cuenta: <br />
+                    {totalPrice.toFixed(2).toLocaleString('es-ES')} a la siguiente cuenta: <br />
                     <span className='block mt-4'>Alias:&nbsp; {alias}</span>
                     <span className='block'>CVU:&nbsp; {cvu}</span>
-                    <span className='block'>
-                      A nombre de:&nbsp; {aNombreDe}
-                    </span>
+                    <span className='block'>A nombre de:&nbsp; {aNombreDe}</span>
                     <span className='block mb-4'>CUIT:&nbsp; {cuit}</span>
                   </li>
                   <li>
                     Envíe el comprobante a nuestro número de WhatsApp:{' '}
-                    <a
-                      href={`https://wa.me/549${whatsappNumber}`}
-                      className='text-custom-green3 underline'
-                      target='_blank'
-                      rel='noopener noreferrer'
-                    >
+                    <a href={`https://wa.me/549${whatsappNumber}`} className='text-custom-green3 underline' target='_blank' rel='noopener noreferrer'>
                       {whatsappNumber}
                     </a>
                     .<br />
-                    Una vez que recibamos el comprobante, la orden queda
-                    confirmada. Un representante comercial te confirmará la
-                    recepción del pago.
+                    Una vez que recibamos el comprobante, la orden queda confirmada. Un representante comercial te confirmará la recepción del pago.
                   </li>
                 </ol>
               </>
             ) : (
               <>
-                <p>
-                  Puede proceder al pago en cuotas seleccionando el botón a
-                  continuación.
-                </p>
-                <button
-                  type='button'
-                  className='w-full bg-custom-green3 text-black font-bold py-2 rounded-lg mt-4'
-                  onClick={handleConfirmInstallmentsOrder}
-                >
-                  Proceder al pago en cuotas
-                </button>
+                <p className='text-center'>Puede proceder al pago en cuotas seleccionando el botón a continuación.</p>
+                <div className='flex justify-center'>
+                  <button
+                    type='button'
+                    className={`relative w-full md:max-w-96 bg-custom-green3 text-black font-bold py-2 rounded-lg mt-4 transition-transform transform ${
+                      isLoading ? 'opacity-50 cursor-not-allowed' : 'hover:scale-95 active:scale-90'
+                    }`}
+                    onClick={handleConfirmInstallmentsOrder}
+                    disabled={isLoading}
+                  >
+                    <span className='invisible'>Proceder al pago en cuotas</span>
+                    <span className='absolute inset-0 flex items-center justify-center'>
+                      {isLoading ? (
+                        <div className='flex items-center'>
+                          <div className='animate-spin border-b-2 border-black rounded-lg' style={{ width: '1rem', height: '1rem' }}></div>
+                          <span className='ml-2'>Procesando...</span>
+                        </div>
+                      ) : (
+                        'Proceder al pago en cuotas'
+                      )}
+                    </span>
+                  </button>
+                </div>
               </>
             )}
           </div>

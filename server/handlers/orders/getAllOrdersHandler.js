@@ -1,14 +1,19 @@
-const { Order, Product, OrderProduct } = require('../../models');
+const { Order, Product, OrderProduct, Pay } = require('../../models');
 
 const getAllOrdersHandler = async () => {
   const orders = await Order.findAndCountAll({
     include: [
       {
-        model: Product, // Incluye el modelo Product
-        as: 'products', // Alias de la asociación definida en el modelo Order
+        model: Product,
+        as: 'products',
         through: {
-          attributes: ['quantity', 'color'], // Incluye los atributos de la tabla intermedia OrderProduct
+          attributes: ['quantity', 'color'],
         },
+      },
+      {
+        model: Pay,
+        as: 'pay', // este alias debe coincidir con el definido en la asociación
+        attributes: ['status'], // podés incluir más campos si querés
       },
     ],
   });
