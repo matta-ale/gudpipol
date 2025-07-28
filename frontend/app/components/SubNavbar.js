@@ -26,7 +26,7 @@ const SubNavbar = ({ sloganVisible }) => {
           allCollections.map((collection) => (
             <li key={collection.id} className='flex items-center h-full'>
               <a
-                href={`/productos/${encodeURIComponent(collection.name)}`}
+                href={`/products/${encodeURIComponent(collection.name)}`}
                 className='hover:text-custom-green3'
               >
                 {collection.name}
