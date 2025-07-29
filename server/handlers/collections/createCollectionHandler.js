@@ -7,8 +7,8 @@ const createCollectionHandler = async (data) => {
     where: { name },
   });
   if (foundCollection) {
-    const error = new Error('Collection already registered with that name')
-    error.statusCode = 409
+    const error = new Error('Collection already registered with that name');
+    error.statusCode = 409;
     throw error;
   } else {
     const created = await Collection.create(data);

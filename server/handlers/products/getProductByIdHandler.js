@@ -1,16 +1,19 @@
-const { Product } = require('../../models');
+const { Product, ProductImage, Collection } = require('../../models');
 
 const getProductByIdHandler = async (id) => {
-
   const foundProduct = await Product.findOne({
     where: { id },
+    include: [
+      { model: ProductImage, as: 'images' },
+      { model: Collection, as: 'collection' },
+    ],
   });
   if (!foundProduct) {
-    const error = new Error(`Product with id "${id}" not found in database`)
-    error.statusCode = 400
+    const error = new Error(`Product with id "${id}" not found in database`);
+    error.statusCode = 400;
     throw error;
   } else {
-    return foundProduct
+    return foundProduct;
   }
 };
 

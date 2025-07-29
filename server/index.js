@@ -1,27 +1,29 @@
 const express = require('express');
-// const mysql = require('mysql2');
 const sequelize = require('./config/database');
-const { Product, Collection } = require('./models');
+const cors = require('cors');
 
-
-const { productsRouter,collectionsRouter } = require('./routes');
+const { productsRouter,collectionsRouter,productImagesRouter, mercadopagoRouter,ordersRouter,paymentsRouter } = require('./routes');
 const {errorHandler} = require('./middlewares');
 const app = express();
 
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use('/', collectionsRouter);
 app.use('/', productsRouter);
+app.use('/', productImagesRouter);
+app.use('/', mercadopagoRouter);
+app.use('/', ordersRouter);
+app.use('/', paymentsRouter);
+
+// app.use('/',errorHandler);
 app.use('/',errorHandler);
 
 require('dotenv').config();
 
-sequelize.sync({ force: false }).then(() => {
-  console.log('Database & tables created!');
+sequelize.sync({ alter: true }).then(() => {
+  console.log('Database syncronized!');
 });
-
-
-
 
 
 // Ruta de prueba

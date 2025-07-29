@@ -1,113 +1,174 @@
-import Image from "next/image";
+'use client';
+import { React, useEffect } from 'react';
+import Link from 'next/link';
+import {getFavoriteProducts, getProducts } from './redux/features/products/productsSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import FavoriteProductsContainer from './components/FavoriteProductsContainer';
 
-export default function Home() {
+
+export default function HomePage() {
+  const dispatch = useDispatch();
+  const myProducts = useSelector((state) => state.products.myProducts);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      dispatch(getFavoriteProducts());
+      dispatch(getProducts());
+    };
+    fetchData();
+  }, [dispatch]);
+  
+  const instagramPost1 = process.env.NEXT_PUBLIC_INSTAGRAM_POST_1
+  const instagramPost2 = process.env.NEXT_PUBLIC_INSTAGRAM_POST_2
+  const instagramPost3 = process.env.NEXT_PUBLIC_INSTAGRAM_POST_3
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">app/page.js</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:h-auto lg:w-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
+    <div className='text-black'>
+      {/* HERO */}
+      <section
+        className='relative h-[90vh] bg-cover bg-center flex items-center justify-center  mt-44'
+        style={{
+          backgroundImage:
+            'url(https://res.cloudinary.com/di7oltk6y/image/upload/v1751900199/IMG_2930_chpmeq.jpg)',
+        }}
+      >
+        <div className='bg-black bg-opacity-50 p-8 rounded-2xl shadow-2xl text-center max-w-2xl h-80 flex flex-col justify-between'>
+          <h1 className='text-4xl sm:text-5xl font-bold text-white mb-6 leading-tight'>
+            Muebles sustentables para disfrutar sin mantenimiento
+          </h1>
+          <div className='flex justify-center gap-4 flex-wrap'>
+            <Link
+              href='/products'
+              className='bg-custom-green3 text-white px-6 py-3 rounded-full text-lg hover:bg-custom-green4 transition font-bold'
+            >
+              Ver productos
+            </Link>
+            <Link
+              href='/aboutUs'
+              className='bg-white text-custom-green3 px-6 py-3 rounded-full text-lg hover:bg-gray-200 transition font-bold'
+            >
+              Quienes somos
+            </Link>
+          </div>
         </div>
-      </div>
+      </section>
 
-      <div className="relative flex place-items-center before:absolute before:h-[300px] before:w-full sm:before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-full sm:after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 before:lg:h-[360px] z-[-1]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
+      {/* BENEFICIOS */}
+      <section className='py-16 px-6 sm:px-12 bg-gray-200'>
+        <div className='max-w-6xl mx-auto grid grid-cols-2 sm:grid-cols-4 gap-6 text-center text-gray-700'>
+          <div>
+            <p className='text-5xl'>♻️</p>
+            <p className='font-semibold mt-6'>100% Plástico reciclado</p>
+          </div>
+          <div>
+            <p className='text-5xl'>💪</p>
+            <p className='font-semibold mt-6'>Resistentes y duraderos</p>
+          </div>
+          <div>
+            <p className='text-5xl'>🌧️</p>
+            <p className='font-semibold mt-6'>Aptos todo clima</p>
+          </div>
+          <div>
+            <p className='text-5xl'>
+              <p>💸</p>
+            </p>
+            <p className='font-semibold mt-6'>Sin costos de mantenimiento</p>
+          </div>
+        </div>
+      </section>
 
-      <div className="mb-32 grid text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Docs{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
+      {/* DESTACADOS */}
+      <section className='py-16 px-6 sm:px-12 bg-gray-100'>
+        <div className='max-w-6xl mx-auto text-left space-y-8'>
+          <h2 className='text-4xl font-bold text-gray-700 text-center'>
+            Productos destacados
           </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
+          <br></br>
+          <FavoriteProductsContainer products={myProducts} />
+        </div>
+      </section>
 
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800 hover:dark:bg-opacity-30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Learn{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
+      {/* NOSOTROS PREVIEW */}
+      <section className='py-16 px-6 sm:px-12 bg-gray-50'>
+        <div className='max-w-4xl mx-auto text-center space-y-6'>
+          <h2 className='text-4xl font-bold text-gray-700'>
+            Transformamos residuos en espacios con vida
           </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
+          <p className='text-lg text-gray-600 leading-relaxed'>
+            Desde muebles funcionales hasta diseño consciente. En Gudpipol
+            creemos en las segundas oportunidades y en la belleza de lo simple.
           </p>
-        </a>
+          <Link
+            href='/nosotros'
+            className='inline-block text-custom-green3 font-semibold underline hover:text-custom-green4 transition'
+          >
+            Conocé más sobre nosotros →
+          </Link>
+        </div>
+      </section>
 
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Templates{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
+      {/* INSTAGRAM */}
+      <section className='py-16 px-6 sm:px-12 bg-white'>
+        <div className='max-w-6xl mx-auto text-center space-y-6'>
+          <h2 className='text-4xl font-bold text-gray-700'>
+            Seguinos en Instagram
           </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Explore starter templates for Next.js.
-          </p>
-        </a>
+          <br></br>
+          <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-8'>
+            <div className='aspect-[4/5] w-full'>
+              <iframe
+                src={instagramPost1}
+                className='w-full h-full rounded-xl shadow-lg'
+                frameBorder='0'
+                scrolling='no'
+                allowTransparency
+              ></iframe>
+            </div>
+            <div className='aspect-[4/5] w-full'>
+              <iframe
+                src={instagramPost2}
+                className='w-full h-full rounded-xl shadow-lg'
+                frameBorder='0'
+                scrolling='no'
+                allowTransparency
+              ></iframe>
+            </div>
+            <div className='aspect-[4/5] w-full'>
+              <iframe
+                src={instagramPost3}
+                className='w-full h-full rounded-xl shadow-lg'
+                frameBorder='0'
+                scrolling='no'
+                allowTransparency
+              ></iframe>
+            </div>
+          </div>
 
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
+          {/* Botón "Ver más" */}
+          <div className='mt-10'>
+            <a
+              href='https://www.instagram.com/gudpipolok/'
+              target='_blank'
+              rel='noopener noreferrer'
+              className='inline-block bg-custom-green3 text-white px-6 py-3 rounded-full text-lg font-semibold hover:bg-custom-green4 transition'
+            >
+              Ver más en Instagram
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA FINAL */}
+      <section className='bg-custom-green3 text-white py-16 text-center px-4'>
+        <h2 className='text-3xl sm:text-4xl font-bold mb-4'>
+          Explorá nuestra colección completa
+        </h2>
+        <Link
+          href='/productos'
+          className='inline-block bg-white text-custom-green3 px-6 py-3 rounded-full text-lg font-semibold hover:bg-gray-200 transition'
         >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Deploy{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50 text-balance`}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
+          Ver todos los productos
+        </Link>
+      </section>
+    </div>
   );
 }
