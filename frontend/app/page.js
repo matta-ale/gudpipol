@@ -25,8 +25,6 @@ export default function HomePage() {
   const instagramPost3 = process.env.NEXT_PUBLIC_INSTAGRAM_POST_3;
   return (
     <div className='text-black'>
-      {/* HERO */}
-      // Desktop
       <section
         className='hidden md:flex relative h-[90vh] bg-cover bg-center items-center justify-center mt-44'
         style={{
@@ -56,13 +54,13 @@ export default function HomePage() {
       </section>
       {/* Mobile */}
       <section
-        className='flex md:hidden relative h-[90vh] bg-cover bg-center items-center justify-center mt-24'
+        className='flex md:hidden relative h-[90vh] bg-no-repeat bg-contain bg-center items-center justify-center mt-[-40px]'
         style={{
           backgroundImage:
             'url(https://res.cloudinary.com/di7oltk6y/image/upload/v1753879098/Home-mobile_nuxo6m.webp)',
         }}
       >
-        <div className='bg-black bg-opacity-50 p-6 rounded-2xl shadow-2xl text-center max-w-md h-80 flex flex-col justify-between'>
+        <div className='bg-black bg-opacity-40 p-6 rounded-2xl shadow-2xl text-center max-w-md h-80 flex flex-col justify-between mx-4'>
           <h1 className='text-3xl font-bold text-white mb-4 leading-tight'>
             Muebles sustentables para disfrutar sin mantenimiento
           </h1>
@@ -82,8 +80,9 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
       {/* BENEFICIOS */}
-      <section className='py-16 px-6 sm:px-12 bg-gray-200'>
+      <section className='py-16 px-6 sm:px-12 bg-gray-200 my-[-120px] mb-2 md:my-0'>
         <div className='max-w-6xl mx-auto grid grid-cols-2 sm:grid-cols-4 gap-6 text-center text-gray-700'>
           <div>
             <p className='text-5xl'>♻️</p>
@@ -106,7 +105,7 @@ export default function HomePage() {
         </div>
       </section>
       {/* DESTACADOS */}
-      <section className='py-16 px-6 sm:px-12 bg-gray-100'>
+      <section className='py-16 md:px-12 bg-gray-100'>
         <div className='max-w-6xl mx-auto text-left space-y-8'>
           <h2 className='text-4xl font-bold text-gray-700 text-center'>
             Productos destacados
