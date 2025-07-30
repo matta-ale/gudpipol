@@ -1,10 +1,12 @@
 'use client';
 import { React, useEffect } from 'react';
 import Link from 'next/link';
-import {getFavoriteProducts, getProducts } from './redux/features/products/productsSlice';
+import {
+  getFavoriteProducts,
+  getProducts,
+} from './redux/features/products/productsSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import FavoriteProductsContainer from './components/FavoriteProductsContainer';
-
 
 export default function HomePage() {
   const dispatch = useDispatch();
@@ -17,18 +19,19 @@ export default function HomePage() {
     };
     fetchData();
   }, [dispatch]);
-  
-  const instagramPost1 = process.env.NEXT_PUBLIC_INSTAGRAM_POST_1
-  const instagramPost2 = process.env.NEXT_PUBLIC_INSTAGRAM_POST_2
-  const instagramPost3 = process.env.NEXT_PUBLIC_INSTAGRAM_POST_3
+
+  const instagramPost1 = process.env.NEXT_PUBLIC_INSTAGRAM_POST_1;
+  const instagramPost2 = process.env.NEXT_PUBLIC_INSTAGRAM_POST_2;
+  const instagramPost3 = process.env.NEXT_PUBLIC_INSTAGRAM_POST_3;
   return (
     <div className='text-black'>
       {/* HERO */}
+      // Desktop
       <section
-        className='relative h-[90vh] bg-cover bg-center flex items-center justify-center  mt-44'
+        className='hidden md:flex relative h-[90vh] bg-cover bg-center items-center justify-center mt-44'
         style={{
           backgroundImage:
-            'url(https://res.cloudinary.com/di7oltk6y/image/upload/v1751900199/IMG_2930_chpmeq.jpg)',
+            'url(https://res.cloudinary.com/di7oltk6y/image/upload/v1753878375/home_ztb51w.webp)',
         }}
       >
         <div className='bg-black bg-opacity-50 p-8 rounded-2xl shadow-2xl text-center max-w-2xl h-80 flex flex-col justify-between'>
@@ -51,7 +54,34 @@ export default function HomePage() {
           </div>
         </div>
       </section>
-
+      {/* Mobile */}
+      <section
+        className='flex md:hidden relative h-[90vh] bg-cover bg-center items-center justify-center mt-24'
+        style={{
+          backgroundImage:
+            'url(https://res.cloudinary.com/di7oltk6y/image/upload/v1753879098/Home-mobile_nuxo6m.webp)',
+        }}
+      >
+        <div className='bg-black bg-opacity-50 p-6 rounded-2xl shadow-2xl text-center max-w-md h-80 flex flex-col justify-between'>
+          <h1 className='text-3xl font-bold text-white mb-4 leading-tight'>
+            Muebles sustentables para disfrutar sin mantenimiento
+          </h1>
+          <div className='flex justify-center gap-3 flex-wrap'>
+            <Link
+              href='/products'
+              className='bg-custom-green3 text-white px-5 py-2 rounded-full text-base hover:bg-custom-green4 transition font-bold'
+            >
+              Ver productos
+            </Link>
+            <Link
+              href='/aboutUs'
+              className='bg-white text-custom-green3 px-5 py-2 rounded-full text-base hover:bg-gray-200 transition font-bold'
+            >
+              Quienes somos
+            </Link>
+          </div>
+        </div>
+      </section>
       {/* BENEFICIOS */}
       <section className='py-16 px-6 sm:px-12 bg-gray-200'>
         <div className='max-w-6xl mx-auto grid grid-cols-2 sm:grid-cols-4 gap-6 text-center text-gray-700'>
@@ -75,7 +105,6 @@ export default function HomePage() {
           </div>
         </div>
       </section>
-
       {/* DESTACADOS */}
       <section className='py-16 px-6 sm:px-12 bg-gray-100'>
         <div className='max-w-6xl mx-auto text-left space-y-8'>
@@ -86,7 +115,6 @@ export default function HomePage() {
           <FavoriteProductsContainer products={myProducts} />
         </div>
       </section>
-
       {/* NOSOTROS PREVIEW */}
       <section className='py-16 px-6 sm:px-12 bg-gray-50'>
         <div className='max-w-4xl mx-auto text-center space-y-6'>
@@ -105,7 +133,6 @@ export default function HomePage() {
           </Link>
         </div>
       </section>
-
       {/* INSTAGRAM */}
       <section className='py-16 px-6 sm:px-12 bg-white'>
         <div className='max-w-6xl mx-auto text-center space-y-6'>
@@ -156,7 +183,6 @@ export default function HomePage() {
           </div>
         </div>
       </section>
-
       {/* CTA FINAL */}
       <section className='bg-custom-green3 text-white py-16 text-center px-4'>
         <h2 className='text-3xl sm:text-4xl font-bold mb-4'>
