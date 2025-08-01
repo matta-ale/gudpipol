@@ -16,6 +16,7 @@ export default function ProductDetail({ params }) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [selectedColor, setSelectedColor] = useState('Marron');
   const [isZoomed, setIsZoomed] = useState(false);
+  const [isImageLoading, setIsImageLoading] = useState(true);
   const imageRef = useRef(null);
   const rate3 = process.env.NEXT_PUBLIC_RATE_3_CUOTAS;
   const rate6 = process.env.NEXT_PUBLIC_RATE_6_CUOTAS;
@@ -24,6 +25,7 @@ export default function ProductDetail({ params }) {
     if (products) {
       const selectedProduct = products.find((product) => product.id === id);
       setProduct(selectedProduct);
+      setIsImageLoading(true);
     }
   }, [id, products]);
 
@@ -69,7 +71,15 @@ export default function ProductDetail({ params }) {
   const decreaseQuantity = () =>
     quantity > 1 && setQuantity((prev) => prev - 1);
   const totalPrice = product.price * quantity;
-  const handleImageSelect = (index) => setCurrentImageIndex(index);
+
+  const handleImageSelect = (index) => {
+    setIsImageLoading(true);
+    setCurrentImageIndex(index);
+  };
+
+  const handleImageLoad = () => {
+    setIsImageLoading(false);
+  };
 
   return (
     <main className='flex flex-col lg:flex-row items-start justify-center mt-32 lg:mt-56 w-[400px] lg:w-[650px] mx-auto shadow-2xl shadow-black bg-white'>
@@ -84,16 +94,26 @@ export default function ProductDetail({ params }) {
 
           {/* Imagen en zoom */}
           {isZoomed ? (
-            <div className='fixed inset-0 z-[200] overflow-hidden'>
-              <div className='absolute top-1/2 left-1/2 w-[200vw] h-[200vh] transform -translate-x-1/2 -translate-y-1/2'>
+            <div className='fixed inset-0 z-[200] flex items-center justify-center'>
+              <div className='relative w-[90vw] h-[90vh] max-w-[1200px] max-h-[800px]'>
+                {/* Loader for zoomed state */}
+                {isImageLoading && (
+                  <div className='absolute inset-0 flex items-center justify-center bg-white z-[201]'>
+                    <div className='w-12 h-12 border-4 border-t-4 border-gray-200 border-t-custom-green3 rounded-full animate-spin'></div>
+                  </div>
+                )}
                 <Image
                   src={product.images?.[currentImageIndex]?.url}
                   fill
                   style={{
-                    objectFit: 'cover',
+                    objectFit: 'contain',
                     objectPosition: 'center',
                   }}
                   alt={product.name}
+                  onLoad={handleImageLoad}
+                  className={`transition-opacity duration-300 ${
+                    isImageLoading ? 'opacity-0' : 'opacity-100'
+                  }`}
                 />
 
                 {/* Flecha izquierda */}
@@ -128,7 +148,7 @@ export default function ProductDetail({ params }) {
                       key={index}
                       className={`w-4 h-4 rounded-full mx-2 ${
                         currentImageIndex === index
-                          ? 'bg-yellow-400'
+                          ? 'bg-custom-green3'
                           : 'bg-gray-300'
                       }`}
                       onClick={() => handleImageSelect(index)}
@@ -141,9 +161,15 @@ export default function ProductDetail({ params }) {
             // Imagen normal
             <div
               ref={imageRef}
-              className='relative w-full h-full transition-transform duration-500 ease-in-out ] md:group-hover:scale-150 z-[50]'
+              className='relative w-full h-full transition-transform duration-500 ease-in-out md:group-hover:scale-150 z-[50]'
               onTouchStart={() => setIsZoomed(true)}
             >
+              {/* Loader for normal state */}
+              {isImageLoading && (
+                <div className='absolute inset-0 flex items-center justify-center bg-white z-[70]'>
+                  <div className='w-12 h-12 border-4 border-t-4 border-gray-200 border-t-custom-green3  rounded-full animate-spin'></div>
+                </div>
+              )}
               <Image
                 src={product.images?.[currentImageIndex]?.url}
                 fill
@@ -152,6 +178,10 @@ export default function ProductDetail({ params }) {
                   objectPosition: 'center',
                 }}
                 alt={product.name}
+                onLoad={handleImageLoad}
+                className={`transition-opacity duration-300 ${
+                  isImageLoading ? 'opacity-0' : 'opacity-100'
+                }`}
               />
 
               {/* Flechas en modo normal */}
@@ -185,7 +215,7 @@ export default function ProductDetail({ params }) {
                     key={index}
                     className={`w-3 h-3 rounded-full mx-1 ${
                       currentImageIndex === index
-                        ? 'bg-yellow-400'
+                        ? 'bg-custom-green3 '
                         : 'bg-gray-300'
                     }`}
                     onClick={() => handleImageSelect(index)}
@@ -216,7 +246,7 @@ export default function ProductDetail({ params }) {
       </div>
 
       {/* Recuadro derecho */}
-      <div className='w-full lg:w-[370px] relative h-full text-custom-black bg-white  px-4 md:px-8 py-4'>
+      <div className='w-full lg:w-[370px] relative h-full text-custom-black bg-white px-4 md:px-8 py-4'>
         {/* Tabs */}
         <div className='mt-2 text-sm flex justify-between border-b border-gray-700'>
           <button
@@ -270,26 +300,21 @@ export default function ProductDetail({ params }) {
                 <span>💵</span>
                 <p className='ml-2 mt-1'>
                   Transf/efectivo $
-                  {(Math.round(product.price,2)).toLocaleString(
-                    'es-ES'
-                  )}
+                  {(Math.round(product.price, 2)).toLocaleString('es-ES')}
                 </p>
               </div>
               <div className='flex items-center'>
                 <span>💳</span>
                 <p className='ml-2 mt-[5px]'>
                   3 cuotas de $
-                  {(Math.round(100*((product.price * (1 + rate3 / 100)) / 3))/100
-                  ).toLocaleString('es-ES')}
+                  {(Math.round(100 * ((product.price * (1 + rate3 / 100)) / 3)) / 100).toLocaleString('es-ES')}
                 </p>
               </div>
               <div className='flex items-center'>
                 <span>💳</span>
                 <p className='ml-2 mt-[5px]'>
                   6 cuotas de $
-                  {
-                    Math.round(100*((product.price * (1 + rate6 / 100)) / 6))/100
-                    .toLocaleString('es-ES')}
+                  {(Math.round(100 * ((product.price * (1 + rate6 / 100)) / 6)) / 100).toLocaleString('es-ES')}
                 </p>
               </div>
             </div>

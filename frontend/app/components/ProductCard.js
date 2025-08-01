@@ -1,4 +1,5 @@
-import React from 'react';
+'use client';
+import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import Image from 'next/image';
 import placeholderImage from '../../public/img/No-Image-Placeholder.svg';
@@ -7,29 +8,43 @@ import { addItemToCart } from '../redux/features/cart/cartSlice';
 
 const ProductCard = (product) => {
   const dispatch = useDispatch();
+  const [isImageLoaded, setIsImageLoaded] = useState(false);
 
   const imageUrl =
     product.images && product.images.length > 0
       ? product.images[0].url
       : placeholderImage;
 
-  const addToCart = async (product, quantity) => {
-    dispatch(addItemToCart(product, quantity));
+  const addToCart = async () => {
+    dispatch(addItemToCart({
+      id: product.id,
+      name: product.name,
+      collection: product.collection.name,
+      price: product.price,
+      quantity: 1,
+      image: product.images?.[0]?.url || '',
+      color: 'Marron',
+    }));
   };
 
   return (
     <div className='bg-white shadow-2xl shadow-black p-0 h-[430px] w-[280px] text-custom-black transform transition-transform duration-300 hover:scale-105'>
       <div className='relative h-[220px] w-[280px] flex items-center justify-center bg-gray-200'>
+        {!isImageLoaded && (
+          <div className="absolute inset-0 flex items-center justify-center z-10">
+            <div className="w-8 h-8 border-4 border-custom-green4 border-t-transparent rounded-full animate-spin"></div>
+          </div>
+        )}
         <Image
           src={imageUrl}
           alt={product.name}
           layout='fill'
           objectFit='cover'
-          className='h-full w-full'
+          className={`transition-opacity duration-500 ${isImageLoaded ? 'opacity-100' : 'opacity-0'}`}
+          placeholder='blur'
+          blurDataURL='/img/No-Image-Placeholder.svg'
+          onLoad={() => setIsImageLoaded(true)}
         />
-        {/* <div className='absolute bottom-0 left-0 text-xs font-bold bg-yellow-400 text-black p-2 rounded-tr-lg'>
-          <RotatingText />
-        </div> */}
       </div>
 
       <div className='flex flex-col justify-between h-[150px] pb-2 pt-2'>
@@ -55,16 +70,7 @@ const ProductCard = (product) => {
               </button>
             </Link>
             <button
-              onClick={() => addToCart({
-                id: product.id,
-                name: product.name,
-                collection: product.collection.name,
-                price: product.price,
-                quantity: 1,
-                image: product.images?.[0]?.url || '',
-                color: 'Marron'
-              })}
-              // className='text-black text-xs font-bold bg-custom-green3 rounded-2xl h-8 w-64 py-1 mb-2'
+              onClick={addToCart}
               className='text-black text-xs font-bold bg-custom-green3 rounded-2xl h-8 w-64 py-1 mb-2'
             >
               AGREGAR AL CARRITO

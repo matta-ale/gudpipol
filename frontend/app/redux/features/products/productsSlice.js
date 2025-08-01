@@ -17,6 +17,7 @@ const initialState = {
   cart: {
     productQuantity: 0,
   },
+  loadingProducts: false,
 };
 
 export const getProducts = createAsyncThunk(
@@ -79,9 +80,15 @@ export const productsSlice = createSlice({
         state.allProducts = [...action.payload];
         state.homeStatus = { ...state.homeStatus, loading: false };
       })
+      .addCase(getFilteredProducts.pending, (state) => {
+        state.loadingProducts = true;
+      })
       .addCase(getFilteredProducts.fulfilled, (state, action) => {
         state.myProducts = [...action.payload];
-        state.homeStatus = { ...state.homeStatus, loading: false };
+        state.loadingProducts = false;
+      })
+      .addCase(getFilteredProducts.rejected, (state) => {
+        state.loadingProducts = false;
       })
       .addCase(getFavoriteProducts.fulfilled, (state, action) => {
         state.myProducts = [...action.payload];
