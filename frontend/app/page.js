@@ -1,6 +1,7 @@
 'use client';
-import { React, useEffect } from 'react';
+import { React, useEffect, useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import {
   getFavoriteProducts,
   getProducts,
@@ -10,19 +11,53 @@ import FavoriteProductsContainer from './components/FavoriteProductsContainer';
 
 export default function HomePage() {
   const dispatch = useDispatch();
+  const router = useRouter();
   const myProducts = useSelector((state) => state.products.myProducts);
+  const [isLoadingProducts, setIsLoadingProducts] = useState(false);
+  const [isLoadingAbout, setIsLoadingAbout] = useState(false);
+  const [isLoadingInstagram, setIsLoadingInstagram] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
-      dispatch(getFavoriteProducts());
       dispatch(getProducts());
+      dispatch(getFavoriteProducts());
     };
     fetchData();
   }, [dispatch]);
 
+  
+  const favorites = useSelector(
+    (state) => state.products.favoriteProducts
+  );
+
+  const handleProductsClick = async (e) => {
+    e.preventDefault();
+    setIsLoadingProducts(true);
+    window.scrollTo({ top: 0, behavior: 'instant' });
+    await new Promise((resolve) => setTimeout(resolve, 500)); // Reduced delay
+    router.push('/products');
+    setIsLoadingProducts(false);
+  };
+
+  const handleAboutClick = async (e) => {
+    e.preventDefault();
+    setIsLoadingAbout(true);
+    window.scrollTo({ top: 0, behavior: 'instant' });
+    await new Promise((resolve) => setTimeout(resolve, 500)); // Reduced delay
+    router.push('/aboutUs');
+    setIsLoadingAbout(false);
+  };
+
+  const handleInstagramClick = async (e) => {
+    setIsLoadingInstagram(true);
+    await new Promise((resolve) => setTimeout(resolve, 500));
+    setIsLoadingInstagram(false);
+  };
+
   const instagramPost1 = process.env.NEXT_PUBLIC_INSTAGRAM_POST_1;
   const instagramPost2 = process.env.NEXT_PUBLIC_INSTAGRAM_POST_2;
   const instagramPost3 = process.env.NEXT_PUBLIC_INSTAGRAM_POST_3;
+
   return (
     <div className='text-black'>
       <section
@@ -39,15 +74,67 @@ export default function HomePage() {
           <div className='flex justify-center gap-4 flex-wrap'>
             <Link
               href='/products'
-              className='bg-custom-green3 text-white px-6 py-3 rounded-full text-lg hover:bg-custom-green4 transition font-bold'
+              onClick={handleProductsClick}
+              className={`bg-custom-green3 w-52 text-white px-6 py-3 rounded-full text-lg font-semibold hover:bg-custom-green4 active:animate-press transition-all duration-200 shadow-lg flex items-center justify-center ${
+                isLoadingProducts ? 'cursor-not-allowed opacity-75' : ''
+              }`}
             >
-              Ver productos
+              {isLoadingProducts ? (
+                <svg
+                  className='animate-spin h-5 w-5 text-white'
+                  xmlns='http://www.w3.org/2000/svg'
+                  fill='none'
+                  viewBox='0 0 24 24'
+                >
+                  <circle
+                    className='opacity-25'
+                    cx='12'
+                    cy='12'
+                    r='10'
+                    stroke='currentColor'
+                    strokeWidth='4'
+                  ></circle>
+                  <path
+                    className='opacity-75'
+                    fill='currentColor'
+                    d='M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z'
+                  ></path>
+                </svg>
+              ) : (
+                'Ver productos'
+              )}
             </Link>
             <Link
               href='/aboutUs'
-              className='bg-white text-custom-green3 px-6 py-3 rounded-full text-lg hover:bg-gray-200 transition font-bold'
+              onClick={handleAboutClick}
+              className={`bg-white w-52 text-custom-green3 px-6 py-3 rounded-full text-lg font-semibold hover:bg-gray-200 active:animate-press transition-all duration-200 shadow-lg flex items-center justify-center ${
+                isLoadingAbout ? 'cursor-not-allowed opacity-75' : ''
+              }`}
             >
-              Quienes somos
+              {isLoadingAbout ? (
+                <svg
+                  className='animate-spin h-5 w-5 text-custom-green3'
+                  xmlns='http://www.w3.org/2000/svg'
+                  fill='none'
+                  viewBox='0 0 24 24'
+                >
+                  <circle
+                    className='opacity-25'
+                    cx='12'
+                    cy='12'
+                    r='10'
+                    stroke='currentColor'
+                    strokeWidth='4'
+                  ></circle>
+                  <path
+                    className='opacity-75'
+                    fill='currentColor'
+                    d='M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z'
+                  ></path>
+                </svg>
+              ) : (
+                'Quienes somos'
+              )}
             </Link>
           </div>
         </div>
@@ -67,15 +154,67 @@ export default function HomePage() {
           <div className='flex justify-center gap-3 flex-wrap'>
             <Link
               href='/products'
-              className='bg-custom-green3 text-white px-5 py-2 rounded-full text-base hover:bg-custom-green4 transition font-bold'
+              onClick={handleProductsClick}
+              className={`bg-custom-green3 w-52 text-white px-5 py-2 rounded-full text-base font-semibold hover:bg-custom-green4 active:animate-press focus:ring-4 focus:ring-custom-green4 transition-all duration-200 shadow-lg flex items-center justify-center ${
+                isLoadingProducts ? 'cursor-not-allowed opacity-75' : ''
+              }`}
             >
-              Ver productos
+              {isLoadingProducts ? (
+                <svg
+                  className='animate-spin h-5 w-5 text-white'
+                  xmlns='http://www.w3.org/2000/svg'
+                  fill='none'
+                  viewBox='0 0 24 24'
+                >
+                  <circle
+                    className='opacity-25'
+                    cx='12'
+                    cy='12'
+                    r='10'
+                    stroke='currentColor'
+                    strokeWidth='4'
+                  ></circle>
+                  <path
+                    className='opacity-75'
+                    fill='currentColor'
+                    d='M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z'
+                  ></path>
+                </svg>
+              ) : (
+                'Ver productos'
+              )}
             </Link>
             <Link
               href='/aboutUs'
-              className='bg-white text-custom-green3 px-5 py-2 rounded-full text-base hover:bg-gray-200 transition font-bold'
+              onClick={handleAboutClick}
+              className={`bg-white w-52 text-custom-green3 px-5 py-2 rounded-full text-base font-semibold hover:bg-gray-200 active:animate-press focus:ring-4 focus:ring-custom-green4 transition-all duration-200 shadow-lg flex items-center justify-center ${
+                isLoadingAbout ? 'cursor-not-allowed opacity-75' : ''
+              }`}
             >
-              Quienes somos
+              {isLoadingAbout ? (
+                <svg
+                  className='animate-spin h-5 w-5 text-custom-green3'
+                  xmlns='http://www.w3.org/2000/svg'
+                  fill='none'
+                  viewBox='0 0 24 24'
+                >
+                  <circle
+                    className='opacity-25'
+                    cx='12'
+                    cy='12'
+                    r='10'
+                    stroke='currentColor'
+                    strokeWidth='4'
+                  ></circle>
+                  <path
+                    className='opacity-75'
+                    fill='currentColor'
+                    d='M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z'
+                  ></path>
+                </svg>
+              ) : (
+                'Quienes somos'
+              )}
             </Link>
           </div>
         </div>
@@ -110,8 +249,8 @@ export default function HomePage() {
           <h2 className='text-4xl font-bold text-gray-700 text-center'>
             Productos destacados
           </h2>
-          <br></br>
-          <FavoriteProductsContainer products={myProducts} />
+          <br />
+          <FavoriteProductsContainer products={favorites} />
         </div>
       </section>
       {/* NOSOTROS PREVIEW */}
@@ -125,7 +264,7 @@ export default function HomePage() {
             creemos en las segundas oportunidades y en la belleza de lo simple.
           </p>
           <Link
-            href='/nosotros'
+            href='/aboutUs'
             className='inline-block text-custom-green3 font-semibold underline hover:text-custom-green4 transition'
           >
             Conocé más sobre nosotros →
@@ -138,7 +277,7 @@ export default function HomePage() {
           <h2 className='text-4xl font-bold text-gray-700'>
             Seguinos en Instagram
           </h2>
-          <br></br>
+          <br />
           <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-8'>
             <div className='aspect-[4/5] w-full'>
               <iframe
@@ -170,28 +309,80 @@ export default function HomePage() {
           </div>
 
           {/* Botón "Ver más" */}
-          <div className='mt-10'>
+          <div className='mt-10 flex justify-center'>
             <a
               href='https://www.instagram.com/gudpipolok/'
               target='_blank'
               rel='noopener noreferrer'
-              className='inline-block bg-custom-green3 text-white px-6 py-3 rounded-full text-lg font-semibold hover:bg-custom-green4 transition'
+              onClick={handleInstagramClick}
+              className={`inline-block bg-custom-green3 mt-8 h-12 w-60 text-white px-4 py-2.5 rounded-full text-base font-semibold hover:bg-custom-green4 active:animate-press transition-all duration-200 shadow-lg flex items-center justify-center ${
+                isLoadingInstagram ? 'cursor-not-allowed opacity-75' : ''
+              }`}
             >
-              Ver más en Instagram
+              {isLoadingInstagram ? (
+                <svg
+                  className='animate-spin h-5 w-5 text-white'
+                  xmlns='http://www.w3.org/2000/svg'
+                  fill='none'
+                  viewBox='0 0 24 24'
+                >
+                  <circle
+                    className='opacity-25'
+                    cx='12'
+                    cy='12'
+                    r='10'
+                    stroke='currentColor'
+                    strokeWidth='4'
+                  ></circle>
+                  <path
+                    className='opacity-75'
+                    fill='currentColor'
+                    d='M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z'
+                  ></path>
+                </svg>
+              ) : (
+                'Ver más en Instagram'
+              )}
             </a>
           </div>
         </div>
       </section>
       {/* CTA FINAL */}
-      <section className='bg-custom-green3 text-white py-16 text-center px-4'>
+      <section className='bg-custom-green3 text-white py-16 text-center px-4 flex flex-col justify-evenly items-center'>
         <h2 className='text-3xl sm:text-4xl font-bold mb-4'>
           Explorá nuestra colección completa
         </h2>
         <Link
           href='/productos'
-          className='inline-block bg-white text-custom-green3 px-6 py-3 rounded-full text-lg font-semibold hover:bg-gray-200 transition'
+          onClick={handleProductsClick}
+          className={`bg-white w-64 h-12 text-custom-green3 px-4 py-2.5 rounded-full text-base font-semibold hover:bg-gray-200 active:animate-press transition-all duration-200 shadow-lg flex items-center justify-center ${
+            isLoadingProducts ? 'cursor-not-allowed opacity-75' : ''
+          }`}
         >
-          Ver todos los productos
+          {isLoadingProducts ? (
+            <svg
+              className='animate-spin h-5 w-5 text-custom-green3'
+              xmlns='http://www.w3.org/2000/svg'
+              fill='none'
+              viewBox='0 0 24 24'
+            >
+              <circle
+                className='opacity-25'
+                cx='12'
+                cy='12'
+                r='10'
+                stroke='currentColor'
+                strokeWidth='4'
+              ></circle>
+              <path
+                className='opacity-75'
+                fill='currentColor'
+                d='M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z'
+              ></path>
+            </svg>
+          ) : (
+            'Ver todos los productos'
+          )}
         </Link>
       </section>
     </div>
