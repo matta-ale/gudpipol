@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import { FaWhatsapp, FaInstagram, FaFacebook } from 'react-icons/fa';
 import { MdEmail } from 'react-icons/md';
 import { useState } from 'react';
-import  sendContactEmail  from '../utils/sendContactEmail'; // Asegurate de tener esta función en esa ruta
+import sendContactEmail from '../utils/sendContactEmail';
 
 export default function Contact() {
   const {
@@ -16,17 +16,17 @@ export default function Contact() {
 
   const [statusMessage, setStatusMessage] = useState('');
   const [submitError, setSubmitError] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const onSubmit = async (data) => {
+    setIsLoading(true);
     try {
-      console.log(data);
-      console.log(process.env.NEXT_PUBLIC_EMAIL2_CONTACT_TEMPLATE);
       const { status } = await sendContactEmail(
         data,
         process.env.NEXT_PUBLIC_EMAIL2_CONTACT_TEMPLATE
       );
 
-      if (status === "OK") {
+      if (status === 'OK') {
         setStatusMessage('¡Mensaje enviado! Responderemos a la brevedad');
         setSubmitError(false);
         reset();
@@ -34,8 +34,12 @@ export default function Contact() {
         throw new Error();
       }
     } catch (err) {
-      setStatusMessage('Hubo un error al enviar el mensaje. Intenta nuevamente.');
+      setStatusMessage(
+        'Hubo un error al enviar el mensaje. Intenta nuevamente.'
+      );
       setSubmitError(true);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -43,7 +47,9 @@ export default function Contact() {
     <div className='flex justify-center'>
       <div className='min-h-screen flex flex-col items-center justify-center px-6 py-6 mt-32 lg:mt-48 w-[700px]'>
         <div className='flex flex-col items-start pl-12 py-12 text-custom-green5 w-full text-lg bg-gray-100 rounded-2xl shadow-2xl'>
-          <h1 className='text-4xl font-extrabold tracking-wide text-custom-green5 text-left'>Contacto</h1>
+          <h1 className='text-4xl font-extrabold tracking-wide text-custom-green5 text-left'>
+            Contacto
+          </h1>
           <br />
           <div className='flex flex-col md:flex-row'>
             <div className='mr-8'>
@@ -120,7 +126,9 @@ export default function Contact() {
                 Nombre
               </label>
               {errors.name && (
-                <p className='mt-4 text-red-500 text-sm'>El nombre es obligatorio</p>
+                <p className='mt-4 text-red-500 text-sm'>
+                  El nombre es obligatorio
+                </p>
               )}
             </div>
 
@@ -142,7 +150,9 @@ export default function Contact() {
                 Correo
               </label>
               {errors.email && (
-                <p className='mt-4 text-red-500 text-sm'>El correo es obligatorio</p>
+                <p className='mt-4 text-red-500 text-sm'>
+                  El correo es obligatorio
+                </p>
               )}
             </div>
 
@@ -164,19 +174,51 @@ export default function Contact() {
                 Mensaje
               </label>
               {errors.message && (
-                <p className='mt-4 text-red-500 text-sm'>El mensaje es obligatorio</p>
+                <p className='mt-4 text-red-500 text-sm'>
+                  El mensaje es obligatorio
+                </p>
               )}
             </div>
 
             <button
               type='submit'
-              className='w-full py-4 bg-custom-green3 hover:bg-custom-green4 focus:ring-4 focus:ring-custom-green4 rounded-lg text-white font-semibold text-lg transition shadow-lg'
+              disabled={isLoading}
+              className={`w-full py-4 bg-custom-green3 hover:bg-custom-green4 active:animate-press focus:ring-4 focus:ring-custom-green4 rounded-lg text-white font-semibold text-lg transition-all duration-200 shadow-lg flex items-center justify-center ${
+                isLoading ? 'cursor-not-allowed opacity-75' : ''
+              }`}
             >
-              Enviar
+              {isLoading ? (
+                <svg
+                  className='animate-spin h-5 w-5 text-white'
+                  xmlns='http://www.w3.org/2000/svg'
+                  fill='none'
+                  viewBox='0 0 24 24'
+                >
+                  <circle
+                    className='opacity-25'
+                    cx='12'
+                    cy='12'
+                    r='10'
+                    stroke='currentColor'
+                    strokeWidth='4'
+                  ></circle>
+                  <path
+                    className='opacity-75'
+                    fill='currentColor'
+                    d='M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z'
+                  ></path>
+                </svg>
+              ) : (
+                'Enviar'
+              )}
             </button>
 
             {statusMessage && (
-              <p className={`mt-4 text-sm ${submitError ? 'text-red-500' : 'text-green-600'}`}>
+              <p
+                className={`mt-4 text-sm ${
+                  submitError ? 'text-red-500' : 'text-green-600'
+                }`}
+              >
                 {statusMessage}
               </p>
             )}

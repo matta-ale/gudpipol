@@ -25,7 +25,7 @@ const FavoriteProductsContainer = ({ products }) => {
       </button>
       <div
         ref={containerRef}
-        className="flex gap-4 px-0 snap-x snap-mandatory scroll-smooth ml-20 h-[550px] md:w-[990px] py-8 overflow-x-hidden z-50"
+        className="flex gap-8 md:gap-4 px-0 snap-x snap-mandatory scroll-smooth ml-[38px] md:ml-20 h-[550px] md:w-[990px] py-8 overflow-x-hidden z-50"
       >
         {products?.map((product) => (
           <div
