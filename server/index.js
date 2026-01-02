@@ -21,6 +21,12 @@ app.use('/',errorHandler);
 
 require('dotenv').config();
 
+console.log({
+  host: process.env.MYSQLHOST,
+  port: process.env.MYSQLPORT,
+  db: process.env.MYSQLDATABASE,
+});
+
 sequelize.sync({ alter: true }).then(() => {
   console.log('Database syncronized!');
 });
@@ -31,6 +37,6 @@ app.get('/', (req, res) => {
   res.send('Hello, World!');
 });
 
-app.listen(process.env.PORT, () => {
-  console.log(`Server running on http://localhost:${process.env.PORT}`);
+app.listen(process.env.MYSQLPORT, () => {
+  console.log(`Server running on http://localhost:${process.env.MYSQLPORT}`);
 });
