@@ -9,6 +9,7 @@ import { addItemToCart } from '../redux/features/cart/cartSlice';
 const ProductCard = (product) => {
   const dispatch = useDispatch();
   const [isImageLoaded, setIsImageLoaded] = useState(false);
+  const rate6 = process.env.NEXT_PUBLIC_RATE_6_CUOTAS;
 
   const imageUrl =
     product.images && product.images.length > 0
@@ -60,7 +61,11 @@ const ProductCard = (product) => {
           </span>
         </div>
         <p className='ml-4 text-xs text-custom-black'>
-          (hasta 6 cuotas sin interés)
+            (6 cuotas de ${' '}
+            {Math.round((product.price * (1 + rate6 / 100)) / 6).toLocaleString(
+              'es-ES'
+            )}
+            )
         </p>
         <div className='flex justify-center items-center mt-2 w-full'>
           <div className='flex flex-col gap-2'>
