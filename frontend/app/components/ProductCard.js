@@ -9,6 +9,7 @@ import { addItemToCart } from '../redux/features/cart/cartSlice';
 const ProductCard = (product) => {
   const dispatch = useDispatch();
   const [isImageLoaded, setIsImageLoaded] = useState(false);
+  const rate6 = process.env.NEXT_PUBLIC_RATE_6_CUOTAS;
 
   const imageUrl =
     product.images && product.images.length > 0
@@ -16,23 +17,25 @@ const ProductCard = (product) => {
       : placeholderImage;
 
   const addToCart = async () => {
-    dispatch(addItemToCart({
-      id: product.id,
-      name: product.name,
-      collection: product.collection.name,
-      price: product.price,
-      quantity: 1,
-      image: product.images?.[0]?.url || '',
-      color: 'Marron',
-    }));
+    dispatch(
+      addItemToCart({
+        id: product.id,
+        name: product.name,
+        collection: product.collection.name,
+        price: product.price,
+        quantity: 1,
+        image: product.images?.[0]?.url || '',
+        color: 'Marron',
+      })
+    );
   };
 
   return (
     <div className='bg-white shadow-2xl shadow-black p-0 h-[430px] w-[280px] text-custom-black transform transition-transform duration-300 hover:scale-105'>
       <div className='relative h-[220px] w-[280px] flex items-center justify-center bg-gray-200'>
         {!isImageLoaded && (
-          <div className="absolute inset-0 flex items-center justify-center z-10">
-            <div className="w-8 h-8 border-4 border-custom-green4 border-t-transparent rounded-full animate-spin"></div>
+          <div className='absolute inset-0 flex items-center justify-center z-10'>
+            <div className='w-8 h-8 border-4 border-custom-green4 border-t-transparent rounded-full animate-spin'></div>
           </div>
         )}
         <Image
@@ -40,7 +43,9 @@ const ProductCard = (product) => {
           alt={product.name}
           layout='fill'
           objectFit='cover'
-          className={`transition-opacity duration-500 ${isImageLoaded ? 'opacity-100' : 'opacity-0'}`}
+          className={`transition-opacity duration-500 ${
+            isImageLoaded ? 'opacity-100' : 'opacity-0'
+          }`}
           placeholder='blur'
           blurDataURL='/img/No-Image-Placeholder.svg'
           onLoad={() => setIsImageLoaded(true)}
@@ -60,7 +65,11 @@ const ProductCard = (product) => {
           </span>
         </div>
         <p className='ml-4 text-xs text-custom-black'>
-          (hasta 6 cuotas sin interés)
+          (o 6 cuotas de ${' '}
+          {Math.round((product.price * (1 + rate6 / 100)) / 6).toLocaleString(
+            'es-ES'
+          )}
+          )
         </p>
         <div className='flex justify-center items-center mt-2 w-full'>
           <div className='flex flex-col gap-2'>
