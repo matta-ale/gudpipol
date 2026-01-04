@@ -236,7 +236,7 @@ export default function ProductDetail({ params }) {
             $ {product.price.toLocaleString('es-ES')}
           </p>
           <p className='text-xs text-gray-700'>
-            (6 cuotas de ${' '}
+            (ó 6 cuotas de ${' '}
             {Math.round((product.price * (1 + rate6 / 100)) / 6).toLocaleString(
               'es-ES'
             )}

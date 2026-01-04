@@ -61,7 +61,7 @@ const ProductCard = (product) => {
           </span>
         </div>
         <p className='ml-4 text-xs text-custom-black'>
-            (6 cuotas de ${' '}
+            (ó 6 cuotas de ${' '}
             {Math.round((product.price * (1 + rate6 / 100)) / 6).toLocaleString(
               'es-ES'
             )}
