@@ -12,7 +12,7 @@ const createPaymentUrl = async (req, res) => {
 
   const backUrls = {
     success: `${APP_URL_FRONTEND}/success`,
-    failure: `$${APP_URL_FRONTEND}`,
+    failure: `${APP_URL_FRONTEND}`,
     pending: `${APP_URL}/pending`,
   };
   const notificationUrl = `${APP_URL}/webhook`;
