@@ -26,7 +26,7 @@ const ProductCard = (product) => {
         quantity: 1,
         image: product.images?.[0]?.url || '',
         color: 'Marron',
-      })
+      }),
     );
   };
 
@@ -67,7 +67,7 @@ const ProductCard = (product) => {
         <p className='ml-4 text-xs text-custom-black'>
           (o 6 cuotas de ${' '}
           {Math.round((product.price * (1 + rate6 / 100)) / 6).toLocaleString(
-            'es-ES'
+            'es-ES',
           )}
           )
         </p>

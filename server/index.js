@@ -21,6 +21,12 @@ app.use('/',errorHandler);
 
 require('dotenv').config();
 
+console.log({
+  host: process.env.DB_HOST,
+  port: process.env.DB_PORT,
+  db: process.env.DB_DATABASE,
+});
+
 sequelize.sync({ alter: true }).then(() => {
   console.log('Database syncronized!');
 });
