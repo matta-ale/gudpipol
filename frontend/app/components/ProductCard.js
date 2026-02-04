@@ -32,25 +32,27 @@ const ProductCard = (product) => {
 
   return (
     <div className='bg-white shadow-2xl shadow-black p-0 h-[430px] w-[280px] text-custom-black transform transition-transform duration-300 hover:scale-105'>
-      <div className='relative h-[220px] w-[280px] flex items-center justify-center bg-gray-200'>
-        {!isImageLoaded && (
-          <div className='absolute inset-0 flex items-center justify-center z-10'>
-            <div className='w-8 h-8 border-4 border-custom-green4 border-t-transparent rounded-full animate-spin'></div>
-          </div>
-        )}
-        <Image
-          src={imageUrl}
-          alt={product.name}
-          layout='fill'
-          objectFit='cover'
-          className={`transition-opacity duration-500 ${
-            isImageLoaded ? 'opacity-100' : 'opacity-0'
-          }`}
-          placeholder='blur'
-          blurDataURL='/img/No-Image-Placeholder.svg'
-          onLoad={() => setIsImageLoaded(true)}
-        />
-      </div>
+      <Link href={`/detail/${product.id}`}>
+        <div className='relative h-[220px] w-[280px] flex items-center justify-center bg-gray-200'>
+          {!isImageLoaded && (
+            <div className='absolute inset-0 flex items-center justify-center z-10'>
+              <div className='w-8 h-8 border-4 border-custom-green4 border-t-transparent rounded-full animate-spin'></div>
+            </div>
+          )}
+          <Image
+            src={imageUrl}
+            alt={product.name}
+            layout='fill'
+            objectFit='cover'
+            className={`transition-opacity duration-500 ${
+              isImageLoaded ? 'opacity-100' : 'opacity-0'
+            }`}
+            placeholder='blur'
+            blurDataURL='/img/No-Image-Placeholder.svg'
+            onLoad={() => setIsImageLoaded(true)}
+          />
+        </div>
+      </Link>
 
       <div className='flex flex-col justify-between h-[150px] pb-2 pt-2'>
         <div className='flex flex-col pt-1'>
