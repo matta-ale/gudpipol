@@ -82,20 +82,19 @@ export default function ProductDetail({ params }) {
   };
 
   return (
-    <main className='flex flex-col lg:flex-row items-start justify-center mt-32 lg:mt-56 w-[400px] lg:w-[650px] mx-auto shadow-2xl shadow-black bg-white'>
+    <main className='flex flex-col lg:flex-row items-start justify-center mt-32 lg:mt-56 w-[380px] lg:w-[650px] mx-auto shadow-2xl shadow-black bg-white'>
       {/* Recuadro izquierdo */}
       <div className='relative w-full h-[600px] md:h-[380px] lg:w-[280px] flex flex-col overflow-visible'>
         {/* Imagen: 60% */}
         <div className='relative h-[80%] md:h-[60%] overflow-visible group'>
-          {/* Fondo oscuro al hacer zoom */}
-          {isZoomed && (
-            <div className='fixed inset-0 bg-black bg-opacity-40 z-[100]'></div>
-          )}
-
-          {/* Imagen en zoom */}
-          {isZoomed ? (
+          {/* ZOOM MODAL - Solo en desktop (md en adelante) */}
+          {isZoomed && window.innerWidth >= 768 ? (
             <div className='fixed inset-0 z-[200] flex items-center justify-center'>
-              <div className='relative w-[90vw] h-[90vh] max-w-[1200px] max-h-[800px]'>
+              {/* Fondo oscuro al hacer zoom */}
+              <div className='fixed inset-0 bg-black bg-opacity-40 z-[100]'></div>
+
+              {/* Imagen en zoom */}
+              <div className='relative w-[90vw] h-[90vh] max-w-[1200px] max-h-[800px] z-[210]'>
                 {/* Loader for zoomed state */}
                 {isImageLoading && (
                   <div className='absolute inset-0 flex items-center justify-center bg-white z-[201]'>
@@ -157,73 +156,77 @@ export default function ProductDetail({ params }) {
                 </div>
               </div>
             </div>
-          ) : (
-            // Imagen normal
-            <div
-              ref={imageRef}
-              className='relative w-full h-full transition-transform duration-500 ease-in-out md:group-hover:scale-150 z-[50]'
-              onTouchStart={() => setIsZoomed(true)}
-            >
-              {/* Loader for normal state */}
-              {isImageLoading && (
-                <div className='absolute inset-0 flex items-center justify-center bg-white z-[70]'>
-                  <div className='w-12 h-12 border-4 border-t-4 border-gray-200 border-t-custom-green3  rounded-full animate-spin'></div>
-                </div>
-              )}
-              <Image
-                src={product.images?.[currentImageIndex]?.url}
-                fill
-                style={{
-                  objectFit: 'cover',
-                  objectPosition: 'center',
-                }}
-                alt={product.name}
-                onLoad={handleImageLoad}
-                className={`transition-opacity duration-300 ${
-                  isImageLoading ? 'opacity-0' : 'opacity-100'
-                }`}
-              />
+          ) : null}
 
-              {/* Flechas en modo normal */}
-              <button
-                className='absolute left-2 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-full z-[60]'
-                onClick={() =>
-                  handleImageSelect(
-                    (currentImageIndex - 1 + product.images.length) %
-                      product.images.length
-                  )
-                }
-              >
-                <FaChevronLeft size={20} />
-              </button>
-
-              <button
-                className='absolute right-2 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-full z-[60]'
-                onClick={() =>
-                  handleImageSelect(
-                    (currentImageIndex + 1) % product.images.length
-                  )
-                }
-              >
-                <FaChevronRight size={20} />
-              </button>
-
-              {/* Marcadores en modo normal */}
-              <div className='absolute bottom-4 left-0 right-0 flex justify-center z-[60]'>
-                {product.images?.map((_, index) => (
-                  <button
-                    key={index}
-                    className={`w-3 h-3 rounded-full mx-1 ${
-                      currentImageIndex === index
-                        ? 'bg-custom-green3 '
-                        : 'bg-gray-300'
-                    }`}
-                    onClick={() => handleImageSelect(index)}
-                  ></button>
-                ))}
+          {/* Imagen normal */}
+          <div
+            ref={imageRef}
+            className='relative w-full h-full transition-transform duration-500 ease-in-out md:group-hover:scale-150 z-[50]'
+            onTouchStart={() => {
+              if (window.innerWidth >= 768) {
+                setIsZoomed(true);
+              }
+            }}
+          >
+            {/* Loader for normal state */}
+            {isImageLoading && (
+              <div className='absolute inset-0 flex items-center justify-center bg-white z-[70]'>
+                <div className='w-12 h-12 border-4 border-t-4 border-gray-200 border-t-custom-green3 rounded-full animate-spin'></div>
               </div>
+            )}
+            <Image
+              src={product.images?.[currentImageIndex]?.url}
+              fill
+              style={{
+                objectFit: 'cover',
+                objectPosition: 'center',
+              }}
+              alt={product.name}
+              onLoad={handleImageLoad}
+              className={`transition-opacity duration-300 ${
+                isImageLoading ? 'opacity-0' : 'opacity-100'
+              }`}
+            />
+
+            {/* Flechas en modo normal */}
+            <button
+              className='absolute left-2 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-full z-[60]'
+              onClick={() =>
+                handleImageSelect(
+                  (currentImageIndex - 1 + product.images.length) %
+                    product.images.length
+                )
+              }
+            >
+              <FaChevronLeft size={20} />
+            </button>
+
+            <button
+              className='absolute right-2 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-full z-[60]'
+              onClick={() =>
+                handleImageSelect(
+                  (currentImageIndex + 1) % product.images.length
+                )
+              }
+            >
+              <FaChevronRight size={20} />
+            </button>
+
+            {/* Marcadores en modo normal */}
+            <div className='absolute bottom-4 left-0 right-0 flex justify-center z-[60]'>
+              {product.images?.map((_, index) => (
+                <button
+                  key={index}
+                  className={`w-3 h-3 rounded-full mx-1 ${
+                    currentImageIndex === index
+                      ? 'bg-custom-green3 '
+                      : 'bg-gray-300'
+                  }`}
+                  onClick={() => handleImageSelect(index)}
+                ></button>
+              ))}
             </div>
-          )}
+          </div>
         </div>
 
         {/* Info: 40% */}

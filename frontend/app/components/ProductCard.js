@@ -31,9 +31,9 @@ const ProductCard = (product) => {
   };
 
   return (
-    <div className='bg-white shadow-2xl shadow-black p-0 h-[430px] w-[280px] text-custom-black transform transition-transform duration-300 hover:scale-105'>
+    <div className='bg-white shadow-2xl shadow-black p-0 h-[430px] w-[320px] md:w-[280px] text-custom-black transform transition-transform duration-300 hover:scale-105'>
       <Link href={`/detail/${product.id}`}>
-        <div className='relative h-[220px] w-[280px] flex items-center justify-center bg-gray-200'>
+        <div className='relative h-[220px] w-[320px] md:w-[280px] flex items-center justify-center bg-gray-200'>
           {!isImageLoaded && (
             <div className='absolute inset-0 flex items-center justify-center z-10'>
               <div className='w-8 h-8 border-4 border-custom-green4 border-t-transparent rounded-full animate-spin'></div>
@@ -76,13 +76,13 @@ const ProductCard = (product) => {
         <div className='flex justify-center items-center mt-2 w-full'>
           <div className='flex flex-col gap-2'>
             <Link href={`/detail/${product.id}`}>
-              <button className='text-white text-xs font-bold bg-custom-black rounded-2xl h-8 w-64 py-1'>
+              <button className='text-white text-xs font-bold bg-custom-black rounded-2xl h-8 w-72 md:w-64 py-1'>
                 DETALLE
               </button>
             </Link>
             <button
               onClick={addToCart}
-              className='text-black text-xs font-bold bg-custom-green3 rounded-2xl h-8 w-64 py-1 mb-2'
+              className='text-black text-xs font-bold bg-custom-green3 rounded-2xl h-8 w-72 md:w-64 py-1 mb-2'
             >
               AGREGAR AL CARRITO
             </button>
