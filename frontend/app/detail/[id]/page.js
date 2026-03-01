@@ -84,9 +84,9 @@ export default function ProductDetail({ params }) {
   return (
     <main className='flex flex-col lg:flex-row items-start justify-center mt-32 lg:mt-56 w-[380px] lg:w-[650px] mx-auto shadow-2xl shadow-black bg-white'>
       {/* Recuadro izquierdo */}
-      <div className='relative w-full h-[600px] md:h-[380px] lg:w-[280px] flex flex-col overflow-visible'>
+      <div className='relative w-full h-[480px] md:h-[380px] lg:w-[280px] flex flex-col overflow-visible'>
         {/* Imagen: 60% */}
-        <div className='relative h-[80%] md:h-[60%] overflow-visible group'>
+        <div className='relative h-[70%] md:h-[60%] overflow-visible group'>
           {/* ZOOM MODAL - Solo en desktop (md en adelante) */}
           {isZoomed && window.innerWidth >= 768 ? (
             <div className='fixed inset-0 z-[200] flex items-center justify-center'>
@@ -230,7 +230,7 @@ export default function ProductDetail({ params }) {
         </div>
 
         {/* Info: 40% */}
-        <div className='h-[20%] md:h-[40%] flex flex-col pt-5 md:pt-8 px-4 text-custom-black bg-white mb-4'>
+        <div className='h-[10%] md:h-[40%] flex flex-col pt-5 md:pt-8 px-4 text-custom-black bg-white mb-4'>
           <p className='text-gray-700 font-bold text-sm mb-1'>
             {product.collection.name}
           </p>
