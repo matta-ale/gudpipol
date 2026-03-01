@@ -82,7 +82,7 @@ export default function ProductDetail({ params }) {
   };
 
   return (
-    <main className='flex flex-col lg:flex-row items-start justify-center mt-32 lg:mt-56 w-[380px] lg:w-[650px] mx-auto shadow-2xl shadow-black bg-white'>
+    <main className='flex flex-col lg:flex-row items-start justify-center mt-32 lg:mt-56 w-[360px] lg:w-[650px] mx-auto shadow-2xl shadow-black bg-white'>
       {/* Recuadro izquierdo */}
       <div className='relative w-full h-[480px] md:h-[380px] lg:w-[280px] flex flex-col overflow-visible'>
         {/* Imagen: 60% */}
@@ -332,7 +332,7 @@ export default function ProductDetail({ params }) {
           />
           <div className='flex flex-col items-center justify-between mt-4 mb-2 font-semibold'>
             <span className='mb-1 text-sm font-semibold'>CANTIDAD</span>
-            <div className='bg-custom-black-2 h-11 w-28 lg:w-20 mt-0 rounded-3xl flex justify-around items-center'>
+            <div className='bg-custom-black-2 h-11 w-24 lg:w-20 mt-0 rounded-3xl flex justify-around items-center'>
               <button
                 onClick={decreaseQuantity}
                 className='pl-4 rounded text-white'
