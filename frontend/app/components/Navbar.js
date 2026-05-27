@@ -7,6 +7,7 @@ import { FaAngleRight } from 'react-icons/fa';
 export default function Navbar({ sloganHeight, sloganVisible }) {
   const [isOpen, setIsOpen] = useState(false);
   const [isProductsOpen, setIsProductsOpen] = useState(false);
+  const [isNosotrosOpen, setIsNosotrosOpen] = useState(false);
   const [canShowProductsMenu, setCanShowProductsMenu] = useState(false);
   const myCollections = useSelector((state) => state.products.allCollections);
 
@@ -19,6 +20,7 @@ export default function Navbar({ sloganHeight, sloganVisible }) {
     } else {
       setIsOpen(false);
       setIsProductsOpen(false);
+      setIsNosotrosOpen(false);
       setCanShowProductsMenu(false);
     }
   };
@@ -26,6 +28,12 @@ export default function Navbar({ sloganHeight, sloganVisible }) {
   const handleProductsToggle = () => {
     if (canShowProductsMenu) {
       setIsProductsOpen(!isProductsOpen);
+    }
+  };
+
+  const handleNosotrosToggle = () => {
+    if (canShowProductsMenu) {
+      setIsNosotrosOpen(!isNosotrosOpen);
     }
   };
 
@@ -82,9 +90,28 @@ export default function Navbar({ sloganHeight, sloganVisible }) {
               Productos
             </a>
           </li>
-          <li className='flex items-center'>
-            <a href='/aboutUs' className='hover:text-custom-green3'>
+          <li className='relative flex items-center group'>
+            <button className='flex items-center gap-1 hover:text-custom-green3'>
               Nosotros
+              <svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' strokeWidth={2.5} stroke='currentColor' className='w-3.5 h-3.5 transition-transform duration-200 group-hover:rotate-180'>
+                <path strokeLinecap='round' strokeLinejoin='round' d='m19.5 8.25-7.5 7.5-7.5-7.5' />
+              </svg>
+            </button>
+            <div className='absolute top-full left-1/2 -translate-x-1/2 mt-1 hidden group-hover:block bg-white shadow-lg rounded-xl py-2 min-w-max z-50 border border-gray-100'>
+              <a href='/aboutUs' className='block px-5 py-2.5 text-custom-green4 hover:text-custom-green3 hover:bg-gray-50 transition-colors duration-150'>
+                Sobre nosotros
+              </a>
+              <a href='/prensa' className='block px-5 py-2.5 text-custom-green4 hover:text-custom-green3 hover:bg-gray-50 transition-colors duration-150'>
+                Prensa
+              </a>
+              <a href='/clientes' className='block px-5 py-2.5 text-custom-green4 hover:text-custom-green3 hover:bg-gray-50 transition-colors duration-150'>
+                Nuestros clientes
+              </a>
+            </div>
+          </li>
+          <li className='flex items-center'>
+            <a href='/faq' className='hover:text-custom-green3 leading-tight text-center'>
+              Preguntas<br />Frecuentes
             </a>
           </li>
           <li className='flex items-center'>
@@ -116,10 +143,59 @@ export default function Navbar({ sloganHeight, sloganVisible }) {
             </a>
           </li>
           <li className='flex justify-between w-full py-3'>
-            <a href='/aboutUs' className='hover:text-custom-green3'>
+            <button
+              onClick={handleNosotrosToggle}
+              className='hover:text-custom-green3 w-full text-left'
+            >
               Nosotros
-            </a>
+            </button>
+            <FaAngleRight />
           </li>
+
+          {/* Submenú hamburguesa nosotros */}
+          {canShowProductsMenu && (
+            <div
+              className={`${
+                isNosotrosOpen ? 'translate-x-0' : 'translate-x-full'
+              } xl:hidden fixed overflow-y-auto top-32 left-0 w-full h-full bg-white z-40 transform transition-transform duration-700 ease-in-out`}
+            >
+              <ul className='ml-6 space-y-2'>
+                <li className='bg-gray-200 py-2 pr-6' key='title'>
+                  <button
+                    onClick={() => setIsNosotrosOpen(false)}
+                    className='hover:text-custom-green3 w-full flex justify-between'
+                  >
+                    <span className='text-black pl-4'>Nosotros</span>
+                    <FaAngleRight />
+                  </button>
+                </li>
+                <li key='sobre-nosotros'>
+                  <a
+                    href='/aboutUs'
+                    className='hover:text-custom-green3 pl-6 py-2 font-semibold w-full block'
+                  >
+                    Sobre nosotros
+                  </a>
+                </li>
+                <li key='prensa'>
+                  <a
+                    href='/prensa'
+                    className='hover:text-custom-green3 pl-6 py-2 font-semibold w-full block'
+                  >
+                    Prensa
+                  </a>
+                </li>
+                <li key='clientes'>
+                  <a
+                    href='/clientes'
+                    className='hover:text-custom-green3 pl-6 py-2 font-semibold w-full block'
+                  >
+                    Nuestros clientes
+                  </a>
+                </li>
+              </ul>
+            </div>
+          )}
           <li className='flex justify-between w-full py-3'>
             <button
               onClick={handleProductsToggle}
@@ -166,6 +242,11 @@ export default function Navbar({ sloganHeight, sloganVisible }) {
               </ul>
             </div>
           )}
+          <li className='flex justify-between w-full py-3'>
+            <a href='/faq' className='hover:text-custom-green3'>
+              Preguntas Frecuentes
+            </a>
+          </li>
           <li className='flex justify-between w-full py-3'>
             <a href='/contact' className='hover:text-custom-green3'>
               Contacto
