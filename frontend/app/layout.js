@@ -7,8 +7,7 @@ import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import './globals.css';
 import { Providers } from './redux/provider';
-import { WhatsAppWidget } from 'react-whatsapp-widget';
-import 'react-whatsapp-widget/dist/index.css';
+import WhatsAppChat from './components/WhatsAppChat';
 import { useState, useEffect } from 'react';
 
 axios.defaults.baseURL = process.env.NEXT_PUBLIC_BACKEND_URL;
@@ -61,17 +60,7 @@ export default function RootLayout({ children }) {
           <main className='container mx-auto px-4 py-8 relative z-10'>
             {children}
           </main>
-          <div className='fixed bottom-4 right-4 z-50 text-custom-black'>
-            <WhatsAppWidget
-              phoneNumber='5493415924709'
-              message='Hola, enviá un mensaje así te redirigimos a un chat de Whatsapp con nosotros'
-              companyName='Gudpipol'
-              companyInitial='GP'
-              replyTimeText='Responderemos a la brevedad'
-              sendButtonText='Enviar'
-              inputPlaceHolder='Escribe un mensaje...'
-            />
-          </div>
+          <WhatsAppChat />
           <Footer />
         </Providers>
       </body>
