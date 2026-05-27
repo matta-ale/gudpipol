@@ -39,7 +39,7 @@ export default function WhatsAppChat() {
   }
 
   return (
-    <div className='fixed bottom-5 right-5 z-50 flex flex-col items-end gap-3'>
+    <div className='fixed bottom-5 right-5 z-50 flex flex-col items-end gap-3 pointer-events-none'>
 
       {/* Chat popup */}
       <div
@@ -159,7 +159,7 @@ export default function WhatsAppChat() {
       {/* FAB button */}
       <button
         onClick={handleOpen}
-        className='relative w-14 h-14 rounded-full flex items-center justify-center text-white shadow-lg hover:shadow-xl hover:scale-110 active:scale-95 transition-all duration-200'
+        className='relative w-14 h-14 rounded-full flex items-center justify-center text-white shadow-lg hover:shadow-xl hover:scale-110 active:scale-95 transition-all duration-200 pointer-events-auto'
         style={{ background: 'linear-gradient(135deg, #25D366 0%, #128C7E 100%)' }}
         aria-label='Abrir chat de WhatsApp'
       >

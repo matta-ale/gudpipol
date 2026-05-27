@@ -130,7 +130,7 @@ export default function Navbar({ sloganHeight, sloganVisible }) {
       {/* Menú hamburguesa expandido*/}
       <div
         className={`${
-          isOpen ? 'translate-x-0' : '-translate-x-full'
+          isOpen ? 'translate-x-0 pointer-events-auto' : '-translate-x-full pointer-events-none'
         } xl:hidden fixed  overflow-auto left-0 h-full w-full bg-white z-40 transform transition-transform duration-700 ease-in-out ${
         sloganVisible ? 'top-28' : 'top-20'
       }`}
@@ -156,7 +156,7 @@ export default function Navbar({ sloganHeight, sloganVisible }) {
           {canShowProductsMenu && (
             <div
               className={`${
-                isNosotrosOpen ? 'translate-x-0' : 'translate-x-full'
+                isNosotrosOpen ? 'translate-x-0 pointer-events-auto' : 'translate-x-full pointer-events-none'
               } xl:hidden fixed overflow-y-auto top-32 left-0 w-full h-full bg-white z-40 transform transition-transform duration-700 ease-in-out`}
             >
               <ul className='ml-6 space-y-2'>
@@ -210,7 +210,7 @@ export default function Navbar({ sloganHeight, sloganVisible }) {
           {canShowProductsMenu && (
             <div
               className={`${
-                isProductsOpen ? 'translate-x-0' : 'translate-x-full'
+                isProductsOpen ? 'translate-x-0 pointer-events-auto' : 'translate-x-full pointer-events-none'
               } xl:hidden fixed overflow-y-auto  top-32 left-0 w-full h-full bg-white z-40 transform transition-transform duration-700 ease-in-out`}
             >
               <ul className='ml-6 space-y-2'>

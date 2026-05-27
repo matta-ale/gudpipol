@@ -7,6 +7,7 @@ const cartSlice = createSlice({
     items: [], // Cada item tendrá un { id, name, price, quantity, image }
     totalQuantity: 0,
     totalPrice: 0,
+    lastAdded: null, // { id, name, image, quantity, addedAt }
   },
   reducers: {
     addItemToCart: (state, action) => {
@@ -22,10 +23,16 @@ const cartSlice = createSlice({
           quantity: newItem.quantity || 1,
         });
       }
-      
 
       state.totalQuantity += newItem.quantity || 1;
       state.totalPrice += newItem.price * (newItem.quantity || 1);
+      state.lastAdded = {
+        id: newItem.id,
+        name: newItem.name,
+        image: newItem.image || null,
+        quantity: newItem.quantity || 1,
+        addedAt: Date.now(),
+      };
     },
 
     removeItemFromCart: (state, action) => {

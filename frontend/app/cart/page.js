@@ -12,8 +12,31 @@ export default function Cart() {
 
   if (cartItems.length === 0) {
     return (
-      <div className='flex flex-col justify-center w-[320px] md:w-[544px] h-64 mx-auto mt-28 md:mt-56 md:mb-16 py-6 rounded-lg items-center text-center text-custom-black bg-white font-semibold text-xl'>
-        <p>Tu carrito está vacío</p>
+      <div className='flex flex-col items-center justify-center text-center mx-auto mt-32 lg:mt-52 mb-16 px-6 max-w-sm'>
+        {/* Ícono ilustrativo */}
+        <div className='relative mb-6'>
+          <div className='w-28 h-28 rounded-full bg-custom-green2 flex items-center justify-center'>
+            <FaBox className='text-custom-green5 text-5xl' />
+          </div>
+          <span className='absolute -bottom-1 -right-1 w-9 h-9 rounded-full bg-white border-2 border-custom-green3 flex items-center justify-center text-lg'>
+            🛒
+          </span>
+        </div>
+
+        <h2 className='text-2xl font-bold text-gray-700 mb-2'>Tu carrito está vacío</h2>
+        <p className='text-gray-400 text-sm mb-8 leading-relaxed'>
+          Todavía no agregaste ningún producto. Explorá nuestra tienda y encontrá los muebles perfectos para vos.
+        </p>
+
+        <a
+          href='/products'
+          className='inline-flex items-center gap-2 bg-custom-green3 hover:bg-custom-green4 text-white font-semibold px-7 py-3 rounded-xl transition-all duration-200 hover:shadow-md hover:-translate-y-0.5 active:translate-y-0'
+        >
+          Ver productos
+          <svg xmlns='http://www.w3.org/2000/svg' className='w-4 h-4' fill='none' viewBox='0 0 24 24' strokeWidth={2.5} stroke='currentColor'>
+            <path strokeLinecap='round' strokeLinejoin='round' d='M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3' />
+          </svg>
+        </a>
       </div>
     );
   }

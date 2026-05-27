@@ -8,6 +8,7 @@ import Footer from './components/Footer';
 import './globals.css';
 import { Providers } from './redux/provider';
 import WhatsAppChat from './components/WhatsAppChat';
+import CartToast from './components/CartToast';
 import { useState, useEffect } from 'react';
 
 axios.defaults.baseURL = process.env.NEXT_PUBLIC_BACKEND_URL;
@@ -61,6 +62,7 @@ export default function RootLayout({ children }) {
             {children}
           </main>
           <WhatsAppChat />
+          <CartToast />
           <Footer />
         </Providers>
       </body>
