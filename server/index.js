@@ -6,6 +6,10 @@ const { productsRouter,collectionsRouter,productImagesRouter, mercadopagoRouter,
 const {errorHandler} = require('./middlewares');
 const app = express();
 
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: 'ok', service: 'gudpipol-backend', ts: Date.now() });
+});
+
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
