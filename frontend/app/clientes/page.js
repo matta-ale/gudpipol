@@ -1,5 +1,18 @@
 import React from 'react';
 
+export const metadata = {
+  title: 'Nuestros Clientes',
+  description:
+    'Empresas y organismos que confían en los muebles de plástico reciclado de GudPipol: gastronomía, hotelería, municipios y más.',
+  alternates: { canonical: 'https://www.gudpipol.com.ar/clientes' },
+  openGraph: {
+    title: 'Nuestros Clientes | GudPipol',
+    description:
+      'Empresas y organismos que confían en los muebles de plástico reciclado de GudPipol.',
+    url: 'https://www.gudpipol.com.ar/clientes',
+  },
+};
+
 const categories = [
   {
     icon: '🏛️',

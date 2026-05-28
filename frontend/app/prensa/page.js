@@ -1,5 +1,18 @@
 import React from 'react';
 
+export const metadata = {
+  title: 'Prensa',
+  description:
+    'GudPipol en los medios: notas y artículos sobre nuestros muebles de plástico reciclado en La Capital, Punto Biz, ON24 y más.',
+  alternates: { canonical: 'https://www.gudpipol.com.ar/prensa' },
+  openGraph: {
+    title: 'Prensa | GudPipol',
+    description:
+      'GudPipol en los medios: notas y artículos sobre nuestros muebles de plástico reciclado.',
+    url: 'https://www.gudpipol.com.ar/prensa',
+  },
+};
+
 const articles = [
   {
     medium: 'La Capital',
