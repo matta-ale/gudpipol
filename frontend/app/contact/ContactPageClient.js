@@ -6,7 +6,7 @@ import { MdEmail } from 'react-icons/md';
 import { useState } from 'react';
 import sendContactEmail from '../utils/sendContactEmail';
 
-export default function Contact() {
+export default function ContactPageClient() {
   const {
     register,
     handleSubmit,

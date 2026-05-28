@@ -1,70 +1,99 @@
-'use client';
-import axios from 'axios';
-import SubNavbar from './components/SubNavbar';
-import ScrollingHeader from './components/ScrollingHeader';
-import SloganHeader from './components/SloganHeader';
-import Navbar from './components/Navbar';
-import Footer from './components/Footer';
 import './globals.css';
-import { Providers } from './redux/provider';
-import WhatsAppChat from './components/WhatsAppChat';
-import CartToast from './components/CartToast';
-import { useState, useEffect } from 'react';
+import ClientLayout from './components/ClientLayout';
+import MetaPixel from './components/MetaPixel';
+import Script from 'next/script';
 
-axios.defaults.baseURL = process.env.NEXT_PUBLIC_BACKEND_URL;
+export const metadata = {
+  metadataBase: new URL('https://www.gudpipol.com.ar'),
+  title: {
+    default: 'Muebles de plástico reciclado | GudPipol',
+    template: '%s | GudPipol',
+  },
+  description:
+    'GudPipol fabrica muebles sustentables de plástico reciclado. Resistentes, aptos todo clima y sin mantenimiento. Envíos a todo el país.',
+  keywords: [
+    'muebles plástico reciclado',
+    'muebles sustentables',
+    'economía circular',
+    'muebles exterior',
+    'Rosario',
+    'Argentina',
+  ],
+  openGraph: {
+    title: 'Muebles de plástico reciclado | GudPipol',
+    description:
+      'GudPipol fabrica muebles sustentables de plástico reciclado. Resistentes, aptos todo clima y sin mantenimiento.',
+    url: 'https://www.gudpipol.com.ar',
+    siteName: 'GudPipol',
+    locale: 'es_AR',
+    type: 'website',
+    images: [
+      {
+        url: '/img/logo.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'GudPipol - Muebles de plástico reciclado',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Muebles de plástico reciclado | GudPipol',
+    description:
+      'GudPipol fabrica muebles sustentables de plástico reciclado.',
+    images: ['/img/logo.jpg'],
+  },
+  robots: { index: true, follow: true },
+  alternates: { canonical: 'https://www.gudpipol.com.ar' },
+};
 
 export default function RootLayout({ children }) {
-  const [sloganHeight, setSloganHeight] = useState(32);
-  const [sloganVisible, setSloganVisible] = useState(true);
-
-  // Detect when the SloganHeader should hide
-  useEffect(() => {
-    const handleScroll = () => {
-      // Hide slogan when the scroll position is greater than the height of the slogan
-      if (window.scrollY > sloganHeight) {
-        setSloganVisible(false);
-      } else {
-        setSloganVisible(true);
-      }
-    };
-
-    // Add event listener
-    window.addEventListener('scroll', handleScroll);
-
-    // Clean up event listener on component unmount
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, [sloganHeight]);
-
   return (
-    <html lang='en'>
+    <html lang='es'>
       <head>
-        <title>Gudpipol ecomuebles</title>
-        <link
-          rel='icon'
-          href='/img/logoIcon.jpg'
-          type='image/<generated>'
-          sizes='<generated>'
-        />
+        <link rel='icon' href='/img/logoIcon.jpg' />
       </head>
       <body className='font-montserrat relative min-h-screen flex flex-col'>
-        <div
-        // className='absolute inset-0 bg-cover bg-center bg-fixed opacity-80 z-0'
-        // style={{ backgroundImage: "url('/img/background.jpg')" }}
-        ></div>
-        <Providers>
-          <SloganHeader onHeightChange={(height) => setSloganHeight(height)} />
-          <Navbar sloganHeight={sloganHeight} sloganVisible={sloganVisible} />
-          <SubNavbar sloganVisible={sloganVisible} />
-          <ScrollingHeader sloganVisible={sloganVisible} />
-          <main className='container mx-auto px-4 py-8 relative z-10'>
-            {children}
-          </main>
-          <WhatsAppChat />
-          <CartToast />
-          <Footer />
-        </Providers>
+        {/* GTM noscript fallback — must be first element after <body> */}
+        <noscript>
+          <iframe
+            src='https://www.googletagmanager.com/ns.html?id=GTM-NV2X5RXH'
+            height='0'
+            width='0'
+            style={{ display: 'none', visibility: 'hidden' }}
+          />
+        </noscript>
+
+        <MetaPixel />
+        <ClientLayout>{children}</ClientLayout>
+
+        {/* Google Tag Manager */}
+        <Script id='gtm' strategy='afterInteractive'>{`
+          (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+          new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+          j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+          'https://www.googletagmanager.com/gtm.js?id='+i+dl;
+          f.parentNode.insertBefore(j,f);
+          })(window,document,'script','dataLayer','GTM-NV2X5RXH');
+        `}</Script>
+
+        {/* Google Ads conversion helper — usado en botones WhatsApp */}
+        <Script id='gtag-conversion' strategy='afterInteractive'>{`
+          function gtag_report_conversion(url) {
+            var callback = function () {
+              if (typeof url !== 'undefined') { window.location = url; }
+            };
+            if (typeof gtag === 'function') {
+              gtag('event', 'conversion', {
+                'send_to': 'AW-18174891936/vgCxCMPC_K8cEKCvu9pD',
+                'event_callback': callback
+              });
+            } else {
+              callback();
+            }
+            return false;
+          }
+        `}</Script>
       </body>
     </html>
   );

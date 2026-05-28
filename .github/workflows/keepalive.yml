@@ -1,0 +1,15 @@
+name: Keepalive Backend
+
+on:
+  schedule:
+    - cron: '*/4 * * * *'
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping backend via keepalive endpoint
+        continue-on-error: true
+        run: |
+          curl -s --max-time 30 https://www.gudpipol.com.ar/api/keepalive || true

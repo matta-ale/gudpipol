@@ -1,6 +1,19 @@
 import React from 'react';
 import Image from 'next/image';
 
+export const metadata = {
+  title: 'Nosotros',
+  description:
+    'Conocé la historia de GudPipol: dos ingenieros rosarinos que transforman plástico reciclado en muebles duraderos, sustentables y de diseño.',
+  alternates: { canonical: 'https://www.gudpipol.com.ar/aboutUs' },
+  openGraph: {
+    title: 'Nosotros | GudPipol',
+    description:
+      'Conocé la historia de GudPipol: dos ingenieros rosarinos que transforman plástico reciclado en muebles duraderos, sustentables y de diseño.',
+    url: 'https://www.gudpipol.com.ar/aboutUs',
+  },
+};
+
 const AboutUs = () => {
   return (
     <div className="text-black min-h-screen py-8 px-4 sm:px-8 lg:px-12 mt-32 lg:mt-48">

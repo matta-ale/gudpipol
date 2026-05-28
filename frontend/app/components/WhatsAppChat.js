@@ -28,6 +28,9 @@ export default function WhatsAppChat() {
   function handleSend() {
     const text = message.trim() || GREETING;
     const url = `https://wa.me/${PHONE}?text=${encodeURIComponent(text)}`;
+    if (typeof window.gtag_report_conversion === 'function') {
+      window.gtag_report_conversion();
+    }
     window.open(url, '_blank', 'noopener,noreferrer');
   }
 

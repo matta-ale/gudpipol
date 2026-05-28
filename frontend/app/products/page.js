@@ -1,30 +1,19 @@
-'use client';
-import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { getProducts } from '../redux/features/products/productsSlice';
-import ProductsContainer from '../components/ProductsContainer';
+import ProductsPageClient from './ProductsPageClient';
 
-export default function Products() {
-  const dispatch = useDispatch();
-  const allProducts = useSelector((state) => state.products.allProducts);
+export const metadata = {
+  title: 'Productos',
+  description:
+    'Explorá toda la línea de muebles de plástico reciclado de GudPipol: sillas, mesas, bancos y más. Resistentes, aptos todo clima y sin mantenimiento.',
+  alternates: { canonical: 'https://www.gudpipol.com.ar/products' },
+  openGraph: {
+    title: 'Productos | GudPipol',
+    description:
+      'Explorá toda la línea de muebles de plástico reciclado de GudPipol: sillas, mesas, bancos y más.',
+    url: 'https://www.gudpipol.com.ar/products',
+  },
+};
 
-  useEffect(() => {
-    const fetchData = async () => {
-      dispatch(getProducts());
-    };
-    fetchData();
-  }, [dispatch]);
-
-  return (
-    <>
-      <div className='container mx-auto'>
-        <div className='max-w-[1200px] mx-auto'>
-          <h1 className='text-4xl font-bold text-custom-green5 mt-40 md:mt-52 text-center md:text-start'>
-            Productos
-          </h1>
-        </div>
-      </div>
-      <ProductsContainer products={allProducts} />
-    </>
-  );
+export default function ProductsPage() {
+  return <ProductsPageClient />;
 }
+
