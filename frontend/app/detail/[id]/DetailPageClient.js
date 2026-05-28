@@ -17,17 +17,46 @@ export default function DetailPageClient({ params }) {
   const [selectedColor, setSelectedColor] = useState('Marron');
   const [isZoomed, setIsZoomed] = useState(false);
   const [isImageLoading, setIsImageLoading] = useState(true);
+  const [loadingFetch, setLoadingFetch] = useState(false);
+  const [fetchError, setFetchError] = useState(false);
   const imageRef = useRef(null);
   const rate3 = process.env.NEXT_PUBLIC_RATE_3_CUOTAS;
   const rate6 = process.env.NEXT_PUBLIC_RATE_6_CUOTAS;
 
   useEffect(() => {
-    if (products) {
+    if (products && products.length > 0) {
       const selectedProduct = products.find((product) => product.id === id);
-      setProduct(selectedProduct);
-      setIsImageLoading(true);
+      if (selectedProduct) {
+        setProduct(selectedProduct);
+        setIsImageLoading(true);
+      }
     }
   }, [id, products]);
+
+  useEffect(() => {
+    if (product) return;
+    if (products && products.length > 0) return;
+
+    const fetchProduct = async () => {
+      setLoadingFetch(true);
+      setFetchError(false);
+      try {
+        const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
+        const res = await fetch(`${backendUrl}/products/${id}`, { cache: 'no-store' });
+        if (!res.ok) throw new Error('fetch_failed');
+        const data = await res.json();
+        const fetched = data.product ?? data;
+        setProduct(fetched);
+        setIsImageLoading(true);
+      } catch {
+        setFetchError(true);
+      } finally {
+        setLoadingFetch(false);
+      }
+    };
+
+    fetchProduct();
+  }, [id, product, products]);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -59,10 +88,25 @@ export default function DetailPageClient({ params }) {
     );
   };
 
+  if (fetchError) {
+    return (
+      <div className='flex flex-col items-center justify-center mt-60 lg:mt-44 max-w-[1200px] mx-auto h-96 font-semibold text-lg gap-4'>
+        <p>No pudimos cargar el producto. El servidor puede estar iniciando.</p>
+        <button
+          onClick={() => { setFetchError(false); setProduct(null); }}
+          className='bg-custom-green3 text-black px-6 py-2 rounded-3xl text-sm font-bold'
+        >
+          Reintentar
+        </button>
+      </div>
+    );
+  }
+
   if (!product) {
     return (
-      <div className='flex flex-col items-center justify-center mt-60 lg:mt-44 max-w-[1200px] mx-auto h-96 font-semibold text-lg'>
-        <p>Cargando detalle de producto...</p>
+      <div className='flex flex-col items-center justify-center mt-60 lg:mt-44 max-w-[1200px] mx-auto h-96 font-semibold text-lg gap-3'>
+        <div className='w-10 h-10 border-4 border-gray-200 border-t-custom-green3 rounded-full animate-spin'></div>
+        <p>{loadingFetch ? 'Cargando producto, por favor esperá...' : 'Cargando detalle de producto...'}</p>
       </div>
     );
   }
