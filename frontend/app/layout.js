@@ -39,8 +39,7 @@ export const metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'Muebles de plástico reciclado | GudPipol',
-    description:
-      'GudPipol fabrica muebles sustentables de plástico reciclado.',
+    description: 'GudPipol fabrica muebles sustentables de plástico reciclado.',
     images: ['/img/logo.jpg'],
   },
   robots: { index: true, follow: true },

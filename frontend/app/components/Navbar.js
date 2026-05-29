@@ -40,7 +40,7 @@ export default function Navbar({ sloganHeight, sloganVisible }) {
   return (
     <nav
       className='fixed left-0 w-full h-20 flex items-center px-5 z-30 bg-white transition-all duration-500 '
-      style={{ top: window.innerWidth <= 640 ? 0 :`${sloganHeight}px` }} // Ajusta top con la altura del SloganHeader
+      style={{ top: window.innerWidth <= 640 ? 0 : `${sloganHeight}px` }} // Ajusta top con la altura del SloganHeader
     >
       {/*menú hamburguesa*/}
       <div className='xl:hidden flex items-center z-50'>
@@ -93,25 +93,50 @@ export default function Navbar({ sloganHeight, sloganVisible }) {
           <li className='relative flex items-center group'>
             <button className='flex items-center gap-1 hover:text-custom-green3'>
               Nosotros
-              <svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' strokeWidth={2.5} stroke='currentColor' className='w-3.5 h-3.5 transition-transform duration-200 group-hover:rotate-180'>
-                <path strokeLinecap='round' strokeLinejoin='round' d='m19.5 8.25-7.5 7.5-7.5-7.5' />
+              <svg
+                xmlns='http://www.w3.org/2000/svg'
+                fill='none'
+                viewBox='0 0 24 24'
+                strokeWidth={2.5}
+                stroke='currentColor'
+                className='w-3.5 h-3.5 transition-transform duration-200 group-hover:rotate-180'
+              >
+                <path
+                  strokeLinecap='round'
+                  strokeLinejoin='round'
+                  d='m19.5 8.25-7.5 7.5-7.5-7.5'
+                />
               </svg>
             </button>
             <div className='absolute top-full left-1/2 -translate-x-1/2 mt-1 hidden group-hover:block bg-white shadow-lg rounded-xl py-2 min-w-max z-50 border border-gray-100'>
-              <a href='/aboutUs' className='block px-5 py-2.5 text-custom-green4 hover:text-custom-green3 hover:bg-gray-50 transition-colors duration-150'>
+              <a
+                href='/aboutUs'
+                className='block px-5 py-2.5 text-custom-green4 hover:text-custom-green3 hover:bg-gray-50 transition-colors duration-150'
+              >
                 Sobre nosotros
               </a>
-              <a href='/prensa' className='block px-5 py-2.5 text-custom-green4 hover:text-custom-green3 hover:bg-gray-50 transition-colors duration-150'>
+              <a
+                href='/prensa'
+                className='block px-5 py-2.5 text-custom-green4 hover:text-custom-green3 hover:bg-gray-50 transition-colors duration-150'
+              >
                 Prensa
               </a>
-              <a href='/clientes' className='block px-5 py-2.5 text-custom-green4 hover:text-custom-green3 hover:bg-gray-50 transition-colors duration-150'>
+              <a
+                href='/clientes'
+                className='block px-5 py-2.5 text-custom-green4 hover:text-custom-green3 hover:bg-gray-50 transition-colors duration-150'
+              >
                 Nuestros clientes
               </a>
             </div>
           </li>
           <li className='flex items-center'>
-            <a href='/faq' className='hover:text-custom-green3 leading-tight text-center'>
-              Preguntas<br />Frecuentes
+            <a
+              href='/faq'
+              className='hover:text-custom-green3 leading-tight text-center'
+            >
+              Preguntas
+              <br />
+              Frecuentes
             </a>
           </li>
           <li className='flex items-center'>
@@ -130,11 +155,12 @@ export default function Navbar({ sloganHeight, sloganVisible }) {
       {/* Menú hamburguesa expandido*/}
       <div
         className={`${
-          isOpen ? 'translate-x-0 pointer-events-auto' : '-translate-x-full pointer-events-none'
+          isOpen
+            ? 'translate-x-0 pointer-events-auto'
+            : '-translate-x-full pointer-events-none'
         } xl:hidden fixed  overflow-auto left-0 h-full w-full bg-white z-40 transform transition-transform duration-700 ease-in-out ${
-        sloganVisible ? 'top-28' : 'top-20'
-      }`}
-        
+          sloganVisible ? 'top-28' : 'top-20'
+        }`}
       >
         <ul className='flex flex-col items-start p-6 text-custom-green4 font-semibold'>
           <li className='flex justify-between w-full py-3'>
@@ -156,7 +182,9 @@ export default function Navbar({ sloganHeight, sloganVisible }) {
           {canShowProductsMenu && (
             <div
               className={`${
-                isNosotrosOpen ? 'translate-x-0 pointer-events-auto' : 'translate-x-full pointer-events-none'
+                isNosotrosOpen
+                  ? 'translate-x-0 pointer-events-auto'
+                  : 'translate-x-full pointer-events-none'
               } xl:hidden fixed overflow-y-auto top-32 left-0 w-full h-full bg-white z-40 transform transition-transform duration-700 ease-in-out`}
             >
               <ul className='ml-6 space-y-2'>
@@ -210,7 +238,9 @@ export default function Navbar({ sloganHeight, sloganVisible }) {
           {canShowProductsMenu && (
             <div
               className={`${
-                isProductsOpen ? 'translate-x-0 pointer-events-auto' : 'translate-x-full pointer-events-none'
+                isProductsOpen
+                  ? 'translate-x-0 pointer-events-auto'
+                  : 'translate-x-full pointer-events-none'
               } xl:hidden fixed overflow-y-auto  top-32 left-0 w-full h-full bg-white z-40 transform transition-transform duration-700 ease-in-out`}
             >
               <ul className='ml-6 space-y-2'>
@@ -234,7 +264,10 @@ export default function Navbar({ sloganHeight, sloganVisible }) {
                 {myCollections &&
                   myCollections.map((collection) => (
                     <li key={collection.id}>
-                      <a href={`/products/${collection.name}`} className='hover:text-custom-green3 pl-6'>
+                      <a
+                        href={`/products/${collection.name}`}
+                        className='hover:text-custom-green3 pl-6'
+                      >
                         {collection.name}
                       </a>
                     </li>

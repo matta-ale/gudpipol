@@ -25,7 +25,8 @@ const articles = [
   {
     medium: 'Punto Biz',
     domain: 'puntobiz.com.ar',
-    title: 'Son ingenieros y salieron al ruedo con muebles de plástico reciclado',
+    title:
+      'Son ingenieros y salieron al ruedo con muebles de plástico reciclado',
     description:
       'Punto Biz presenta la historia de los fundadores de GudPipol, dos ingenieros que decidieron emprender apostando a la economía circular y el diseño sustentable.',
     url: 'https://puntobiz.com.ar/negocios/son-ingenieros-y-salieron-al-ruedo-con-muebles-de-plastico-reciclado--2022915600',
@@ -33,7 +34,8 @@ const articles = [
   {
     medium: 'Punto Biz',
     domain: 'puntobiz.com.ar',
-    title: 'Brindan soluciones con plástico reciclado y apuestan a la economía circular',
+    title:
+      'Brindan soluciones con plástico reciclado y apuestan a la economía circular',
     description:
       'Una segunda nota en Punto Biz profundiza en el modelo de negocio de GudPipol y su compromiso con la reutilización de materiales plásticos industriales y post consumo.',
     url: 'https://puntobiz.com.ar/negocios/brindan-soluciones-con-plastico-reciclado-y-apuestan-a-la-economia-circular-2023918600',
@@ -97,7 +99,11 @@ function ArticleCard({ article }) {
             stroke='currentColor'
             className='w-4 h-4 transition-transform duration-200 group-hover:translate-x-1'
           >
-            <path strokeLinecap='round' strokeLinejoin='round' d='M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3' />
+            <path
+              strokeLinecap='round'
+              strokeLinejoin='round'
+              d='M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3'
+            />
           </svg>
         </div>
       </div>
