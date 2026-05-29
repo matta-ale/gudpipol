@@ -35,27 +35,39 @@ export default function DetailPageClient({ params }) {
 
   useEffect(() => {
     if (product) return;
-    if (products && products.length > 0) return;
+    // Solo omitir el fetch si este producto específico ya está en Redux
+    if (products?.find((p) => p.id === id)) return;
+
+    const controller = new AbortController();
 
     const fetchProduct = async () => {
       setLoadingFetch(true);
       setFetchError(false);
       try {
         const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
-        const res = await fetch(`${backendUrl}/products/${id}`, { cache: 'no-store' });
+        const res = await fetch(`${backendUrl}/products/${id}`, {
+          cache: 'no-store',
+          signal: controller.signal,
+        });
         if (!res.ok) throw new Error('fetch_failed');
         const data = await res.json();
         const fetched = data.product ?? data;
         setProduct(fetched);
         setIsImageLoading(true);
-      } catch {
-        setFetchError(true);
+      } catch (err) {
+        if (err.name !== 'AbortError') {
+          setFetchError(true);
+        }
       } finally {
-        setLoadingFetch(false);
+        if (!controller.signal.aborted) {
+          setLoadingFetch(false);
+        }
       }
     };
 
     fetchProduct();
+
+    return () => controller.abort();
   }, [id, product, products]);
 
   useEffect(() => {
@@ -90,11 +102,19 @@ export default function DetailPageClient({ params }) {
 
   if (fetchError) {
     return (
-      <div className='flex flex-col items-center justify-center mt-60 lg:mt-44 max-w-[1200px] mx-auto h-96 font-semibold text-lg gap-4'>
-        <p>No pudimos cargar el producto. El servidor puede estar iniciando.</p>
+      <div className='flex flex-col items-center justify-center text-center mx-auto mt-32 lg:mt-52 mb-16 px-6 max-w-sm'>
+        <div className='relative mb-6'>
+          <div className='w-28 h-28 rounded-full bg-red-50 flex items-center justify-center'>
+            <span className='text-5xl'>⚠️</span>
+          </div>
+        </div>
+        <h2 className='text-2xl font-bold text-gray-700 mb-2'>No pudimos cargar el producto</h2>
+        <p className='text-gray-400 text-sm mb-8 leading-relaxed'>
+          El servidor puede estar iniciando. Por favor intentá de nuevo en unos segundos.
+        </p>
         <button
           onClick={() => { setFetchError(false); setProduct(null); }}
-          className='bg-custom-green3 text-black px-6 py-2 rounded-3xl text-sm font-bold'
+          className='inline-flex items-center gap-2 bg-custom-green3 hover:bg-custom-green4 text-white font-semibold px-7 py-3 rounded-xl transition-all duration-200 hover:shadow-md hover:-translate-y-0.5 active:translate-y-0'
         >
           Reintentar
         </button>
@@ -104,9 +124,18 @@ export default function DetailPageClient({ params }) {
 
   if (!product) {
     return (
-      <div className='flex flex-col items-center justify-center mt-60 lg:mt-44 max-w-[1200px] mx-auto h-96 font-semibold text-lg gap-3'>
-        <div className='w-10 h-10 border-4 border-gray-200 border-t-custom-green3 rounded-full animate-spin'></div>
-        <p>{loadingFetch ? 'Cargando producto, por favor esperá...' : 'Cargando detalle de producto...'}</p>
+      <div className='flex flex-col items-center justify-center text-center mx-auto mt-32 lg:mt-52 mb-16 px-6 max-w-sm'>
+        <div className='relative mb-6'>
+          <div className='w-28 h-28 rounded-full bg-custom-green2 flex items-center justify-center'>
+            <div className='w-12 h-12 border-4 border-custom-green2 border-t-custom-green5 rounded-full animate-spin'></div>
+          </div>
+        </div>
+        <h2 className='text-2xl font-bold text-gray-700 mb-2'>Cargando producto...</h2>
+        <p className='text-gray-400 text-sm leading-relaxed'>
+          {loadingFetch
+            ? 'El servidor puede estar iniciando. Esto puede tomar unos segundos.'
+            : 'Buscando la información del producto...'}
+        </p>
       </div>
     );
   }
