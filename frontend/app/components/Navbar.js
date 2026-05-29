@@ -2,66 +2,53 @@ import { useState } from 'react';
 import Image from 'next/image';
 import Cart from './Cart';
 import { useSelector } from 'react-redux';
-import { FaAngleRight } from 'react-icons/fa';
+import { FaHome, FaBoxOpen, FaUsers, FaQuestionCircle, FaEnvelope, FaTimes, FaChevronDown, FaLeaf } from 'react-icons/fa';
 
 export default function Navbar({ sloganHeight, sloganVisible }) {
   const [isOpen, setIsOpen] = useState(false);
   const [isProductsOpen, setIsProductsOpen] = useState(false);
   const [isNosotrosOpen, setIsNosotrosOpen] = useState(false);
-  const [canShowProductsMenu, setCanShowProductsMenu] = useState(false);
   const myCollections = useSelector((state) => state.products.allCollections);
 
   const handleMenuToggle = () => {
-    if (!isOpen) {
-      setIsOpen(true);
-      setTimeout(() => {
-        setCanShowProductsMenu(true);
-      }, 700);
-    } else {
+    if (isOpen) {
       setIsOpen(false);
       setIsProductsOpen(false);
       setIsNosotrosOpen(false);
-      setCanShowProductsMenu(false);
+    } else {
+      setIsOpen(true);
     }
   };
 
-  const handleProductsToggle = () => {
-    if (canShowProductsMenu) {
-      setIsProductsOpen(!isProductsOpen);
-    }
-  };
-
-  const handleNosotrosToggle = () => {
-    if (canShowProductsMenu) {
-      setIsNosotrosOpen(!isNosotrosOpen);
-    }
-  };
+  const handleProductsToggle = () => setIsProductsOpen((v) => !v);
+  const handleNosotrosToggle = () => setIsNosotrosOpen((v) => !v);
 
   return (
     <nav
       className='fixed left-0 w-full h-20 flex items-center px-5 z-30 bg-white transition-all duration-500 '
       style={{ top: window.innerWidth <= 640 ? 0 : `${sloganHeight}px` }} // Ajusta top con la altura del SloganHeader
     >
-      {/*menú hamburguesa*/}
+      {/* Botón hamburguesa — pill style */}
       <div className='xl:hidden flex items-center z-50'>
         <button
           onClick={handleMenuToggle}
-          className='text-black focus:outline-none'
+          aria-label='Abrir menú'
+          className={`flex items-center gap-2.5 px-5 py-2.5 rounded-full text-[11px] font-black tracking-widest uppercase transition-all duration-200 shadow-sm focus:outline-none active:scale-95 ${
+            isOpen
+              ? 'bg-white text-custom-green5 shadow-md scale-100'
+              : 'bg-custom-green5 text-white hover:bg-custom-green4 hover:shadow-lg hover:scale-105'
+          }`}
         >
-          <svg
-            className='w-6 h-6'
-            fill='none'
-            stroke='currentColor'
-            viewBox='0 0 24 24'
-            xmlns='http://www.w3.org/2000/svg'
-          >
-            <path
-              strokeLinecap='round'
-              strokeLinejoin='round'
-              strokeWidth={2}
-              d='M4 6h16M4 12h16m-7 6h7'
-            />
-          </svg>
+          {isOpen ? (
+            <FaTimes size={12} />
+          ) : (
+            <span className='flex flex-col gap-[4px]'>
+              <span className='block w-[15px] h-[2px] bg-current rounded-full' />
+              <span className='block w-[11px] h-[2px] bg-current rounded-full' />
+              <span className='block w-[15px] h-[2px] bg-current rounded-full' />
+            </span>
+          )}
+          {isOpen ? 'Cerrar' : 'Menú'}
         </button>
       </div>
 
@@ -152,140 +139,142 @@ export default function Navbar({ sloganHeight, sloganVisible }) {
         <Cart />
       </a>
 
-      {/* Menú hamburguesa expandido*/}
+      {/* Overlay oscuro */}
+      {isOpen && (
+        <div
+          className='xl:hidden fixed inset-0 bg-black/40 backdrop-blur-[2px] z-[39]'
+          onClick={handleMenuToggle}
+        />
+      )}
+
+      {/* Panel del menú */}
       <div
-        className={`${
-          isOpen
-            ? 'translate-x-0 pointer-events-auto'
-            : '-translate-x-full pointer-events-none'
-        } xl:hidden fixed  overflow-auto left-0 h-full w-full bg-white z-40 transform transition-transform duration-700 ease-in-out ${
-          sloganVisible ? 'top-28' : 'top-20'
-        }`}
+        className={`xl:hidden fixed left-0 w-full sm:w-[320px] flex flex-col z-40 transform transition-transform duration-500 ease-in-out ${
+          isOpen ? 'translate-x-0' : '-translate-x-full'
+        } ${sloganVisible ? 'top-28' : 'top-20'} bottom-0 overflow-hidden shadow-2xl`}
       >
-        <ul className='flex flex-col items-start p-6 text-custom-green4 font-semibold'>
-          <li className='flex justify-between w-full py-3'>
-            <a href='/' className='hover:text-custom-green3'>
-              Inicio
-            </a>
-          </li>
-          <li className='flex justify-between w-full py-3'>
-            <button
-              onClick={handleNosotrosToggle}
-              className='hover:text-custom-green3 w-full text-left'
-            >
-              Nosotros
-            </button>
-            <FaAngleRight />
-          </li>
+        {/* Cabecera del panel */}
+        <div className='bg-custom-green5 px-5 py-4 flex items-center justify-between flex-shrink-0'>
+          <a href='/' onClick={handleMenuToggle}>
+            <Image
+              src='/img/logo_transp.png'
+              alt='GudPipol'
+              width={130}
+              height={34}
+              style={{ objectFit: 'contain' }}
+            />
+          </a>
+          <button
+            onClick={handleMenuToggle}
+            className='text-white/60 hover:text-white transition-colors p-1'
+          >
+            <FaTimes size={18} />
+          </button>
+        </div>
 
-          {/* Submenú hamburguesa nosotros */}
-          {canShowProductsMenu && (
-            <div
-              className={`${
-                isNosotrosOpen
-                  ? 'translate-x-0 pointer-events-auto'
-                  : 'translate-x-full pointer-events-none'
-              } xl:hidden fixed overflow-y-auto top-32 left-0 w-full h-full bg-white z-40 transform transition-transform duration-700 ease-in-out`}
-            >
-              <ul className='ml-6 space-y-2'>
-                <li className='bg-gray-200 py-2 pr-6' key='title'>
-                  <button
-                    onClick={() => setIsNosotrosOpen(false)}
-                    className='hover:text-custom-green3 w-full flex justify-between'
-                  >
-                    <span className='text-black pl-4'>Nosotros</span>
-                    <FaAngleRight />
-                  </button>
-                </li>
-                <li key='sobre-nosotros'>
-                  <a
-                    href='/aboutUs'
-                    className='hover:text-custom-green3 pl-6 py-2 font-semibold w-full block'
-                  >
-                    Sobre nosotros
-                  </a>
-                </li>
-                <li key='prensa'>
-                  <a
-                    href='/prensa'
-                    className='hover:text-custom-green3 pl-6 py-2 font-semibold w-full block'
-                  >
-                    Prensa
-                  </a>
-                </li>
-                <li key='clientes'>
-                  <a
-                    href='/clientes'
-                    className='hover:text-custom-green3 pl-6 py-2 font-semibold w-full block'
-                  >
-                    Nuestros clientes
-                  </a>
-                </li>
-              </ul>
-            </div>
-          )}
-          <li className='flex justify-between w-full py-3'>
-            <button
-              onClick={handleProductsToggle}
-              className='hover:text-custom-green3 w-full text-left'
-            >
-              Productos
-            </button>
-            <FaAngleRight></FaAngleRight>
-          </li>
+        {/* Links */}
+        <nav className='flex-1 overflow-y-auto bg-white'>
+          <a
+            href='/'
+            onClick={handleMenuToggle}
+            className='flex items-center gap-3.5 px-5 py-4 text-custom-black hover:bg-custom-green3/15 hover:text-custom-green5 transition-colors border-b border-gray-100 font-semibold'
+          >
+            <FaHome size={14} className='text-custom-green4 flex-shrink-0' />
+            Inicio
+          </a>
 
-          {/* Submenú hamburguesa productos */}
-          {canShowProductsMenu && (
-            <div
-              className={`${
-                isProductsOpen
-                  ? 'translate-x-0 pointer-events-auto'
-                  : 'translate-x-full pointer-events-none'
-              } xl:hidden fixed overflow-y-auto  top-32 left-0 w-full h-full bg-white z-40 transform transition-transform duration-700 ease-in-out`}
+          {/* Productos acordeón */}
+          <button
+            onClick={handleProductsToggle}
+            className='w-full flex items-center gap-3.5 px-5 py-4 text-custom-black hover:bg-custom-green3/15 hover:text-custom-green5 transition-colors border-b border-gray-100 font-semibold'
+          >
+            <FaBoxOpen size={14} className='text-custom-green4 flex-shrink-0' />
+            <span className='flex-1 text-left'>Productos</span>
+            <FaChevronDown
+              size={11}
+              className={`text-custom-green4 transition-transform duration-300 ${
+                isProductsOpen ? 'rotate-180' : ''
+              }`}
+            />
+          </button>
+          <div
+            className={`overflow-hidden transition-all duration-300 bg-gray-50 border-b border-gray-100 ${
+              isProductsOpen ? 'max-h-[360px]' : 'max-h-0'
+            }`}
+          >
+            <a
+              href='/products'
+              onClick={handleMenuToggle}
+              className='flex items-center pl-12 pr-5 py-3 text-sm text-custom-green5 font-bold hover:text-custom-green3 hover:bg-white transition-colors border-b border-gray-100'
             >
-              <ul className='ml-6 space-y-2'>
-                <li className='bg-gray-200 py-2 pr-6' key='title'>
-                  <button
-                    onClick={() => setIsProductsOpen(false)}
-                    className='hover:text-custom-green3 w-full flex justify-between'
-                  >
-                    <span className='text-black pl-4'>Productos</span>
-                    <FaAngleRight></FaAngleRight>
-                  </button>
-                </li>
-                <li key='productos'>
-                  <a
-                    href='/products'
-                    className='hover:text-custom-green3 bg-custom-green2 pl-6 py-2 font-bold w-full block'
-                  >
-                    Ver todos
-                  </a>
-                </li>
-                {myCollections &&
-                  myCollections.map((collection) => (
-                    <li key={collection.id}>
-                      <a
-                        href={`/products/${collection.name}`}
-                        className='hover:text-custom-green3 pl-6'
-                      >
-                        {collection.name}
-                      </a>
-                    </li>
-                  ))}
-              </ul>
-            </div>
-          )}
-          <li className='flex justify-between w-full py-3'>
-            <a href='/faq' className='hover:text-custom-green3'>
-              Preguntas Frecuentes
+              Ver todos los productos
             </a>
-          </li>
-          <li className='flex justify-between w-full py-3'>
-            <a href='/contact' className='hover:text-custom-green3'>
-              Contacto
+            {myCollections?.map((collection) => (
+              <a
+                key={collection.id}
+                href={`/products/${collection.name}`}
+                onClick={handleMenuToggle}
+                className='flex items-center pl-12 pr-5 py-2.5 text-sm text-custom-green4 hover:text-custom-green5 hover:bg-white transition-colors border-b border-gray-100'
+              >
+                {collection.name}
+              </a>
+            ))}
+          </div>
+
+          {/* Nosotros acordeón */}
+          <button
+            onClick={handleNosotrosToggle}
+            className='w-full flex items-center gap-3.5 px-5 py-4 text-custom-black hover:bg-custom-green3/15 hover:text-custom-green5 transition-colors border-b border-gray-100 font-semibold'
+          >
+            <FaUsers size={14} className='text-custom-green4 flex-shrink-0' />
+            <span className='flex-1 text-left'>Nosotros</span>
+            <FaChevronDown
+              size={11}
+              className={`text-custom-green4 transition-transform duration-300 ${
+                isNosotrosOpen ? 'rotate-180' : ''
+              }`}
+            />
+          </button>
+          <div
+            className={`overflow-hidden transition-all duration-300 bg-gray-50 border-b border-gray-100 ${
+              isNosotrosOpen ? 'max-h-48' : 'max-h-0'
+            }`}
+          >
+            <a href='/aboutUs' onClick={handleMenuToggle} className='flex items-center pl-12 pr-5 py-2.5 text-sm text-custom-green4 hover:text-custom-green5 hover:bg-white transition-colors border-b border-gray-100'>
+              Sobre nosotros
             </a>
-          </li>
-        </ul>
+            <a href='/prensa' onClick={handleMenuToggle} className='flex items-center pl-12 pr-5 py-2.5 text-sm text-custom-green4 hover:text-custom-green5 hover:bg-white transition-colors border-b border-gray-100'>
+              Prensa
+            </a>
+            <a href='/clientes' onClick={handleMenuToggle} className='flex items-center pl-12 pr-5 py-2.5 text-sm text-custom-green4 hover:text-custom-green5 hover:bg-white transition-colors border-b border-gray-100'>
+              Nuestros clientes
+            </a>
+          </div>
+
+          <a
+            href='/faq'
+            onClick={handleMenuToggle}
+            className='flex items-center gap-3.5 px-5 py-4 text-custom-black hover:bg-custom-green3/15 hover:text-custom-green5 transition-colors border-b border-gray-100 font-semibold'
+          >
+            <FaQuestionCircle size={14} className='text-custom-green4 flex-shrink-0' />
+            Preguntas Frecuentes
+          </a>
+
+          <a
+            href='/contact'
+            onClick={handleMenuToggle}
+            className='flex items-center gap-3.5 px-5 py-4 text-custom-black hover:bg-custom-green3/15 hover:text-custom-green5 transition-colors border-b border-gray-100 font-semibold'
+          >
+            <FaEnvelope size={14} className='text-custom-green4 flex-shrink-0' />
+            Contacto
+          </a>
+        </nav>
+
+        {/* Footer del panel */}
+        <div className='bg-gray-50 border-t border-gray-200 px-5 py-4 flex items-center gap-2 flex-shrink-0'>
+          <FaLeaf size={12} className='text-custom-green4' />
+          <p className='text-xs text-gray-400'>Muebles de plástico reciclado</p>
+        </div>
       </div>
     </nav>
   );
