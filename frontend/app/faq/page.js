@@ -16,4 +16,3 @@ export const metadata = {
 export default function FaqPage() {
   return <FaqPageClient />;
 }
-

@@ -98,25 +98,30 @@ function ClientCard({ client }) {
       <div className='w-14 h-14 rounded-full bg-custom-green2 flex items-center justify-center text-custom-green5 font-bold text-2xl select-none flex-shrink-0'>
         {initial}
       </div>
-      <p className='text-gray-600 text-xs font-medium leading-snug'>{client.name}</p>
+      <p className='text-gray-600 text-xs font-medium leading-snug'>
+        {client.name}
+      </p>
     </div>
   );
 }
 
 export default function ClientesPage() {
-  const totalClients = categories.reduce((acc, cat) => acc + cat.clients.length, 0);
+  const totalClients = categories.reduce(
+    (acc, cat) => acc + cat.clients.length,
+    0,
+  );
 
   return (
     <div className='text-black min-h-screen py-8 px-2 sm:px-6 lg:px-12 mt-32 lg:mt-48'>
       <div className='max-w-5xl mx-auto space-y-12'>
-
         {/* Encabezado */}
         <div className='space-y-3'>
           <h1 className='text-5xl sm:text-4xl font-bold tracking-tight text-gray-700'>
             Nuestros Clientes
           </h1>
           <p className='text-gray-500 text-lg'>
-            Más de {totalClients} organizaciones de todo el país ya eligieron GudPipol.
+            Más de {totalClients} organizaciones de todo el país ya eligieron
+            GudPipol.
           </p>
         </div>
 
@@ -143,14 +148,17 @@ export default function ClientesPage() {
             ¿Querés sumarte?
           </p>
           <p className='text-gray-500 text-sm'>
-            Municipios, empresas, clubes y organizaciones de todo el país ya confían en nuestros muebles.{' '}
-            <a href='/contact' className='text-custom-green3 hover:underline font-medium'>
+            Municipios, empresas, clubes y organizaciones de todo el país ya
+            confían en nuestros muebles.{' '}
+            <a
+              href='/contact'
+              className='text-custom-green3 hover:underline font-medium'
+            >
               Contactanos
             </a>{' '}
             y encontramos la solución ideal para vos.
           </p>
         </div>
-
       </div>
     </div>
   );

@@ -1,10 +1,13 @@
 'use client';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import Image from 'next/image';
-import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import { FaChevronLeft, FaChevronRight, FaWhatsapp, FaTimes } from 'react-icons/fa';
 import ColorSelector from '@/app/components/ColorSelector';
 import { addItemToCart } from '@/app/redux/features/cart/cartSlice';
+
+const PHONE = '5493415924709';
 
 export default function DetailPageClient({ params }) {
   const { id } = params;
@@ -71,20 +74,25 @@ export default function DetailPageClient({ params }) {
   }, [id, product, products]);
 
   useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (imageRef.current && !imageRef.current.contains(event.target)) {
-        setIsZoomed(false);
-      }
-    };
-    if (isZoomed) {
-      document.addEventListener('touchstart', handleClickOutside);
-      document.addEventListener('mousedown', handleClickOutside);
-    }
+    if (!isZoomed) return;
+    const handleKey = (e) => { if (e.key === 'Escape') setIsZoomed(false); };
+    document.addEventListener('keydown', handleKey);
+    document.body.style.overflow = 'hidden';
     return () => {
-      document.removeEventListener('touchstart', handleClickOutside);
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleKey);
+      document.body.style.overflow = '';
     };
   }, [isZoomed]);
+
+  const handleWhatsApp = () => {
+    if (typeof window !== 'undefined' && window.gtag_report_conversion) {
+      window.gtag_report_conversion();
+    }
+    const msg = encodeURIComponent(
+      `Hola! Me interesa el producto: ${product.name} - $${product.price.toLocaleString('es-ES')}`,
+    );
+    window.open(`https://wa.me/${PHONE}?text=${msg}`, '_blank');
+  };
 
   const addToCart = () => {
     dispatch(
@@ -96,7 +104,7 @@ export default function DetailPageClient({ params }) {
         quantity,
         image: product.images?.[0]?.url || '',
         color: selectedColor,
-      })
+      }),
     );
   };
 
@@ -108,12 +116,18 @@ export default function DetailPageClient({ params }) {
             <span className='text-5xl'>⚠️</span>
           </div>
         </div>
-        <h2 className='text-2xl font-bold text-gray-700 mb-2'>No pudimos cargar el producto</h2>
+        <h2 className='text-2xl font-bold text-gray-700 mb-2'>
+          No pudimos cargar el producto
+        </h2>
         <p className='text-gray-400 text-sm mb-8 leading-relaxed'>
-          El servidor puede estar iniciando. Por favor intentá de nuevo en unos segundos.
+          El servidor puede estar iniciando. Por favor intentá de nuevo en unos
+          segundos.
         </p>
         <button
-          onClick={() => { setFetchError(false); setProduct(null); }}
+          onClick={() => {
+            setFetchError(false);
+            setProduct(null);
+          }}
           className='inline-flex items-center gap-2 bg-custom-green3 hover:bg-custom-green4 text-white font-semibold px-7 py-3 rounded-xl transition-all duration-200 hover:shadow-md hover:-translate-y-0.5 active:translate-y-0'
         >
           Reintentar
@@ -130,7 +144,9 @@ export default function DetailPageClient({ params }) {
             <div className='w-12 h-12 border-4 border-custom-green2 border-t-custom-green5 rounded-full animate-spin'></div>
           </div>
         </div>
-        <h2 className='text-2xl font-bold text-gray-700 mb-2'>Cargando producto...</h2>
+        <h2 className='text-2xl font-bold text-gray-700 mb-2'>
+          Cargando producto...
+        </h2>
         <p className='text-gray-400 text-sm leading-relaxed'>
           {loadingFetch
             ? 'El servidor puede estar iniciando. Esto puede tomar unos segundos.'
@@ -154,169 +170,163 @@ export default function DetailPageClient({ params }) {
     setIsImageLoading(false);
   };
 
-  return (
-    <main className='flex flex-col lg:flex-row items-start justify-center mt-32 lg:mt-56 w-[360px] lg:w-[650px] mx-auto shadow-2xl shadow-black bg-white'>
-      {/* Recuadro izquierdo */}
-      <div className='relative w-full h-[480px] md:h-[380px] lg:w-[280px] flex flex-col overflow-visible'>
-        {/* Imagen: 60% */}
-        <div className='relative h-[70%] md:h-[60%] overflow-visible group'>
-          {/* ZOOM MODAL - Solo en desktop (md en adelante) */}
-          {isZoomed && window.innerWidth >= 768 ? (
-            <div className='fixed inset-0 z-[200] flex items-center justify-center'>
-              {/* Fondo oscuro al hacer zoom */}
-              <div className='fixed inset-0 bg-black bg-opacity-40 z-[100]'></div>
-
-              {/* Imagen en zoom */}
-              <div className='relative w-[90vw] h-[90vh] max-w-[1200px] max-h-[800px] z-[210]'>
-                {/* Loader for zoomed state */}
-                {isImageLoading && (
-                  <div className='absolute inset-0 flex items-center justify-center bg-white z-[201]'>
-                    <div className='w-12 h-12 border-4 border-t-4 border-gray-200 border-t-custom-green3 rounded-full animate-spin'></div>
-                  </div>
-                )}
-                <Image
-                  src={product.images?.[currentImageIndex]?.url}
-                  fill
-                  style={{
-                    objectFit: 'contain',
-                    objectPosition: 'center',
-                  }}
-                  alt={product.name}
-                  onLoad={handleImageLoad}
-                  className={`transition-opacity duration-300 ${
-                    isImageLoading ? 'opacity-0' : 'opacity-100'
-                  }`}
-                />
-
-                {/* Flecha izquierda */}
-                <button
-                  className='absolute left-10 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-3 rounded-full z-[210]'
-                  onClick={() =>
-                    handleImageSelect(
-                      (currentImageIndex - 1 + product.images.length) %
-                        product.images.length
-                    )
-                  }
-                >
-                  <FaChevronLeft size={32} />
-                </button>
-
-                {/* Flecha derecha */}
-                <button
-                  className='absolute right-10 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-3 rounded-full z-[210]'
-                  onClick={() =>
-                    handleImageSelect(
-                      (currentImageIndex + 1) % product.images.length
-                    )
-                  }
-                >
-                  <FaChevronRight size={32} />
-                </button>
-
-                {/* Marcadores */}
-                <div className='absolute bottom-10 left-1/2 transform -translate-x-1/2 flex z-[210]'>
-                  {product.images?.map((_, index) => (
-                    <button
-                      key={index}
-                      className={`w-4 h-4 rounded-full mx-2 ${
-                        currentImageIndex === index
-                          ? 'bg-custom-green3'
-                          : 'bg-gray-300'
-                      }`}
-                      onClick={() => handleImageSelect(index)}
-                    ></button>
-                  ))}
-                </div>
-              </div>
-            </div>
-          ) : null}
-
-          {/* Imagen normal */}
+  const zoomModal = isZoomed && typeof window !== 'undefined' && window.innerWidth >= 768
+    ? createPortal(
+        <div className='fixed inset-0 flex items-center justify-center' style={{ zIndex: 9999 }}>
+          {/* Backdrop */}
           <div
-            ref={imageRef}
-            className='relative w-full h-full transition-transform duration-500 ease-in-out md:group-hover:scale-150 z-[50]'
-            onTouchStart={() => {
-              if (window.innerWidth >= 768) {
-                setIsZoomed(true);
-              }
-            }}
-          >
-            {/* Loader for normal state */}
+            className='absolute inset-0 bg-black/70 backdrop-blur-sm'
+            onClick={() => setIsZoomed(false)}
+          />
+          {/* Imagen ampliada */}
+          <div className='relative w-[92vw] h-[88vh] max-w-[1200px] max-h-[820px]' style={{ zIndex: 10000 }}>
             {isImageLoading && (
-              <div className='absolute inset-0 flex items-center justify-center bg-white z-[70]'>
-                <div className='w-12 h-12 border-4 border-t-4 border-gray-200 border-t-custom-green3 rounded-full animate-spin'></div>
+              <div className='absolute inset-0 flex items-center justify-center'>
+                <div className='w-12 h-12 border-4 border-white/30 border-t-white rounded-full animate-spin' />
               </div>
             )}
             <Image
               src={product.images?.[currentImageIndex]?.url}
               fill
-              style={{
-                objectFit: 'cover',
-                objectPosition: 'center',
-              }}
+              style={{ objectFit: 'contain', objectPosition: 'center' }}
               alt={product.name}
               onLoad={handleImageLoad}
-              className={`transition-opacity duration-300 ${
-                isImageLoading ? 'opacity-0' : 'opacity-100'
-              }`}
+              className={`transition-opacity duration-300 ${isImageLoading ? 'opacity-0' : 'opacity-100'}`}
             />
-
-            {/* Flechas en modo normal */}
-            <button
-              className='absolute left-2 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-full z-[60]'
-              onClick={() =>
-                handleImageSelect(
-                  (currentImageIndex - 1 + product.images.length) %
-                    product.images.length
-                )
-              }
-            >
-              <FaChevronLeft size={20} />
-            </button>
-
-            <button
-              className='absolute right-2 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-full z-[60]'
-              onClick={() =>
-                handleImageSelect(
-                  (currentImageIndex + 1) % product.images.length
-                )
-              }
-            >
-              <FaChevronRight size={20} />
-            </button>
-
-            {/* Marcadores en modo normal */}
-            <div className='absolute bottom-4 left-0 right-0 flex justify-center z-[60]'>
-              {product.images?.map((_, index) => (
+            {product.images?.length > 1 && (
+              <>
                 <button
-                  key={index}
-                  className={`w-3 h-3 rounded-full mx-1 ${
-                    currentImageIndex === index
-                      ? 'bg-custom-green3 '
-                      : 'bg-gray-300'
-                  }`}
-                  onClick={() => handleImageSelect(index)}
-                ></button>
-              ))}
-            </div>
+                  className='absolute left-3 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/40 backdrop-blur-sm text-white p-3 rounded-full transition-all duration-200'
+                  onClick={() => handleImageSelect((currentImageIndex - 1 + product.images.length) % product.images.length)}
+                >
+                  <FaChevronLeft size={20} />
+                </button>
+                <button
+                  className='absolute right-3 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/40 backdrop-blur-sm text-white p-3 rounded-full transition-all duration-200'
+                  onClick={() => handleImageSelect((currentImageIndex + 1) % product.images.length)}
+                >
+                  <FaChevronRight size={20} />
+                </button>
+                {/* Miniaturas en zoom */}
+                <div className='absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2'>
+                  {product.images.map((_, i) => (
+                    <button
+                      key={i}
+                      onClick={() => handleImageSelect(i)}
+                      className={`w-2.5 h-2.5 rounded-full transition-all duration-200 ${
+                        currentImageIndex === i ? 'bg-white scale-125' : 'bg-white/40 hover:bg-white/70'
+                      }`}
+                    />
+                  ))}
+                </div>
+              </>
+            )}
+            {/* Cerrar */}
+            <button
+              className='absolute top-3 right-3 bg-white/20 hover:bg-white/40 backdrop-blur-sm text-white w-10 h-10 rounded-full flex items-center justify-center transition-all duration-200'
+              onClick={() => setIsZoomed(false)}
+            >
+              <FaTimes size={16} />
+            </button>
+            {/* Hint */}
+            <p className='absolute bottom-3 right-4 text-white/50 text-[11px] select-none'>ESC para cerrar</p>
           </div>
+        </div>,
+        document.body,
+      )
+    : null;
+
+  return (
+    <>
+    {zoomModal}
+    <main className='flex flex-col lg:flex-row items-start justify-center mt-32 lg:mt-56 w-[360px] lg:w-[650px] mx-auto rounded-2xl overflow-hidden shadow-xl border border-gray-200 bg-white'>
+      {/* Recuadro izquierdo */}
+      <div className='w-full lg:w-[280px] flex flex-col bg-white'>
+
+        {/* ── Imagen principal ── */}
+        <div
+          className='relative w-full overflow-hidden group'
+          style={{ aspectRatio: '4/3' }}
+        >
+
+          {/* Loader */}
+          {isImageLoading && (
+            <div className='absolute inset-0 flex items-center justify-center bg-gray-50 z-[70]'>
+              <div className='w-10 h-10 border-4 border-gray-200 border-t-custom-green3 rounded-full animate-spin' />
+            </div>
+          )}
+
+          {/* Imagen */}
+          <Image
+            src={product.images?.[currentImageIndex]?.url}
+            fill
+            style={{ objectFit: 'cover', objectPosition: 'center' }}
+            alt={product.name}
+            onLoad={handleImageLoad}
+            onClick={() => { if (window.innerWidth >= 768) setIsZoomed(true); }}
+            className={`transition-all duration-500 group-hover:scale-105 ${isImageLoading ? 'opacity-0' : 'opacity-100'} md:cursor-zoom-in`}
+          />
+
+          {/* Flechas – sólo si hay >1 imagen */}
+          {product.images?.length > 1 && (
+            <>
+              <button
+                className='absolute left-2 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white text-gray-700 p-1.5 rounded-full z-[60] shadow-md transition-all duration-200 opacity-100 md:opacity-0 md:group-hover:opacity-100'
+                onClick={(e) => { e.stopPropagation(); handleImageSelect((currentImageIndex - 1 + product.images.length) % product.images.length); }}
+              >
+                <FaChevronLeft size={13} />
+              </button>
+              <button
+                className='absolute right-2 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white text-gray-700 p-1.5 rounded-full z-[60] shadow-md transition-all duration-200 opacity-100 md:opacity-0 md:group-hover:opacity-100'
+                onClick={(e) => { e.stopPropagation(); handleImageSelect((currentImageIndex + 1) % product.images.length); }}
+              >
+                <FaChevronRight size={13} />
+              </button>
+              {/* Contador */}
+              <div className='absolute bottom-2 right-2 bg-black/50 text-white text-[10px] font-medium px-2 py-0.5 rounded-full z-[60] transition-opacity duration-200 opacity-100 md:opacity-0 md:group-hover:opacity-100'>
+                {currentImageIndex + 1} / {product.images.length}
+              </div>
+            </>
+          )}
         </div>
 
-        {/* Info: 40% */}
-        <div className='h-[10%] md:h-[40%] flex flex-col pt-5 md:pt-8 px-4 text-custom-black bg-white mb-4'>
-          <p className='text-gray-700 font-bold text-sm mb-1'>
+        {/* ── Strip de miniaturas – sólo si hay >1 imagen ── */}
+        {product.images?.length > 1 && (
+          <div className='flex gap-2 px-3 py-2.5 overflow-x-auto bg-gray-50 border-b border-gray-100 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]'>
+            {product.images.map((img, index) => (
+              <button
+                key={index}
+                onClick={() => handleImageSelect(index)}
+                className={`relative flex-shrink-0 w-[52px] h-[52px] rounded-lg overflow-hidden transition-all duration-200 ${
+                  currentImageIndex === index
+                    ? 'ring-2 ring-custom-green4 ring-offset-1 opacity-100'
+                    : 'opacity-45 hover:opacity-80'
+                }`}
+              >
+                <Image
+                  src={img.url}
+                  fill
+                  style={{ objectFit: 'cover' }}
+                  alt={`${product.name} ${index + 1}`}
+                  sizes='52px'
+                />
+              </button>
+            ))}
+          </div>
+        )}
+
+        {/* ── Info del producto ── */}
+        <div className='flex flex-col px-4 pt-4 pb-4 text-custom-black bg-white'>
+          <p className='text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-1'>
             {product.collection.name}
           </p>
           <h1 className='text-xl font-bold mb-1'>{product.name}</h1>
-          <p className='font-semibold text-xl mb-1'>
+          <p className='font-semibold text-xl mb-0.5'>
             $ {product.price.toLocaleString('es-ES')}
           </p>
-          <p className='text-xs text-gray-700'>
-            (o 6 cuotas de ${' '}
-            {Math.round((product.price * (1 + rate6 / 100)) / 6).toLocaleString(
-              'es-ES'
-            )}
-            )
+          <p className='text-xs text-gray-500'>
+            o 6 cuotas de ${' '}
+            {Math.round((product.price * (1 + rate6 / 100)) / 6).toLocaleString('es-ES')}
           </p>
         </div>
       </div>
@@ -376,21 +386,29 @@ export default function DetailPageClient({ params }) {
                 <span>💵</span>
                 <p className='ml-2 mt-1'>
                   Transf/efectivo $
-                  {(Math.round(product.price, 2)).toLocaleString('es-ES')}
+                  {Math.round(product.price, 2).toLocaleString('es-ES')}
                 </p>
               </div>
               <div className='flex items-center'>
                 <span>💳</span>
                 <p className='ml-2 mt-[5px]'>
                   3 cuotas de $
-                  {(Math.round(100 * ((product.price * (1 + rate3 / 100)) / 3)) / 100).toLocaleString('es-ES')}
+                  {(
+                    Math.round(
+                      100 * ((product.price * (1 + rate3 / 100)) / 3),
+                    ) / 100
+                  ).toLocaleString('es-ES')}
                 </p>
               </div>
               <div className='flex items-center'>
                 <span>💳</span>
                 <p className='ml-2 mt-[5px]'>
                   6 cuotas de $
-                  {(Math.round(100 * ((product.price * (1 + rate6 / 100)) / 6)) / 100).toLocaleString('es-ES')}
+                  {(
+                    Math.round(
+                      100 * ((product.price * (1 + rate6 / 100)) / 6),
+                    ) / 100
+                  ).toLocaleString('es-ES')}
                 </p>
               </div>
             </div>
@@ -431,14 +449,24 @@ export default function DetailPageClient({ params }) {
           </div>
         </div>
 
-        {/* Botón agregar al carrito */}
-        <button
-          className='mt-4 bg-custom-green3 text-black h-11 px-6 py-2 text-sm font-bold w-full rounded-3xl'
-          onClick={addToCart}
-        >
-          AGREGAR AL CARRITO
-        </button>
+        {/* Botones */}
+        <div className='mt-4 flex flex-col gap-2'>
+          <button
+            className='bg-custom-green3 hover:bg-custom-green5 text-black hover:text-white h-11 px-6 py-2 text-sm font-bold w-full rounded-3xl transition-colors'
+            onClick={addToCart}
+          >
+            AGREGAR AL CARRITO
+          </button>
+          <button
+            className='flex items-center justify-center gap-2 bg-[#1da850] hover:bg-[#0c7e34] text-white h-11 px-6 py-2 text-sm font-bold w-full rounded-3xl transition-colors'
+            onClick={handleWhatsApp}
+          >
+            <FaWhatsapp size={18} />
+            CONSULTAR POR WHATSAPP
+          </button>
+        </div>
       </div>
     </main>
+    </>
   );
 }
