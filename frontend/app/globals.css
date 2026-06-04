@@ -50,6 +50,17 @@ body {
   animation: scroll 55s linear infinite;
 }
 
+/* Marquee: starts immediately visible, seamless loop with 2 copies */
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-marquee {
+  display: inline-block;
+  animation: marquee 28s linear infinite;
+}
+
 
 .custom-scrollbar::-webkit-scrollbar {
   width: 8px;

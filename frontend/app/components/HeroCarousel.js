@@ -161,7 +161,7 @@ export default function HeroCarousel() {
       </div>
 
       {/* ── MOBILE: full-screen portrait image with overlay ── */}
-      <div className='flex md:hidden relative mt-[108px] h-[calc(100vh-140px)] overflow-hidden'>
+      <div className='flex md:hidden relative mt-[34px] h-[calc(100vh-114px)] overflow-hidden'>
         {SLIDES.map(({ src, caption }, i) => (
           <Image
             key={src}
