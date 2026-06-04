@@ -1,13 +1,14 @@
 'use client';
 import { useState, useEffect, useRef, useCallback } from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { FaWhatsapp } from 'react-icons/fa';
 
 const SLIDES = [
-  { src: '/img/Home1.png', caption: 'Toyota Argentina, Zárate' },
-  { src: '/img/Home2.png', caption: 'San Martín de los Andes, Neuquén' },
-  { src: '/img/Home3.png', caption: 'FyO, Puerto Norte, Rosario' },
-  { src: '/img/Home4.png', caption: 'Pizzería La Gran Argentina, Rosario' },
+  { src: '/img/Home1.webp', caption: 'Toyota Argentina, Zárate' },
+  { src: '/img/Home2.webp', caption: 'San Martín de los Andes, Neuquén' },
+  { src: '/img/Home3.webp', caption: 'FyO, Puerto Norte, Rosario' },
+  { src: '/img/Home4.webp', caption: 'Pizzería La Gran Argentina, Rosario' },
 ];
 
 const WHATSAPP_URL =
@@ -118,11 +119,14 @@ export default function HeroCarousel() {
         {/* Right: portrait image panel */}
         <div className='w-[45%] lg:w-[48%] relative overflow-hidden'>
           {SLIDES.map(({ src, caption }, i) => (
-            <img
+            <Image
               key={src}
               src={src}
               alt={caption}
-              className='absolute inset-0 w-full h-full object-cover object-center transition-opacity duration-700'
+              fill
+              priority={i === 0}
+              sizes='(max-width: 768px) 0vw, 48vw'
+              className='object-cover object-center transition-opacity duration-700'
               style={{ opacity: i === current ? 1 : 0 }}
             />
           ))}
@@ -159,11 +163,14 @@ export default function HeroCarousel() {
       {/* ── MOBILE: full-screen portrait image with overlay ── */}
       <div className='flex md:hidden relative h-screen overflow-hidden'>
         {SLIDES.map(({ src, caption }, i) => (
-          <img
+          <Image
             key={src}
             src={src}
             alt={caption}
-            className='absolute inset-0 w-full h-full object-cover object-top transition-opacity duration-700'
+            fill
+            priority={i === 0}
+            sizes='(max-width: 768px) 100vw, 0vw'
+            className='object-cover object-top transition-opacity duration-700'
             style={{ opacity: i === current ? 1 : 0 }}
           />
         ))}
