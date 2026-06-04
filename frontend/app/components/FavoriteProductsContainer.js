@@ -7,30 +7,36 @@ const FavoriteProductsContainer = ({ products }) => {
   const containerRef = useRef(null);
 
   const scroll = (direction) => {
-    const scrollAmount = 300;
-    if (direction === 'left') {
-      containerRef.current.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
-    } else {
-      containerRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
-    }
+    const firstCard = containerRef.current?.querySelector('[data-card]');
+    const amount = firstCard ? firstCard.offsetWidth + 16 : 286;
+    containerRef.current?.scrollBy({
+      left: direction === 'left' ? -amount : amount,
+      behavior: 'smooth',
+    });
   };
 
   return (
-    <section className="relative w-full max-w-[1200px] mx-auto mt-16 z-50">
+    <div className='relative w-full'>
+      {/* Arrows — mobile/tablet only */}
       <button
         onClick={() => scroll('left')}
-        className="absolute left-2 top-1/2 -translate-y-1/2 z-10 bg-white p-2 rounded-full shadow-md"
+        aria-label='Anterior'
+        className='xl:hidden absolute left-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 md:w-10 md:h-10 flex items-center justify-center bg-custom-green5 hover:bg-custom-green4 active:scale-95 text-white rounded-full shadow-lg transition-all duration-200'
       >
-        <ChevronLeft />
+        <ChevronLeft size={15} />
       </button>
+
+      {/* Mobile/tablet: horizontal scroll carousel */}
       <div
         ref={containerRef}
-        className="flex gap-8 md:gap-4 px-0 snap-x snap-mandatory scroll-smooth ml-[38px] md:ml-20 h-[550px] md:w-[990px] py-8 overflow-x-hidden z-50"
+        className='xl:hidden flex gap-4 overflow-x-auto scroll-smooth snap-x snap-mandatory py-6 px-10 md:px-14'
+        style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
       >
         {products?.map((product) => (
           <div
             key={product.id}
-            className="snap-start flex-shrink-0 w-[85vw] sm:w-[45vw] md:w-[30vw] lg:w-[22vw]"
+            className='snap-center flex-shrink-0 w-[calc(100vw-5rem)] md:w-auto flex justify-center md:block'
+            data-card='true'
           >
             <ProductCard
               id={product.id}
@@ -49,14 +55,38 @@ const FavoriteProductsContainer = ({ products }) => {
           </div>
         ))}
       </div>
+
+      {/* Desktop: grid showing all cards */}
+      <div className='hidden xl:grid xl:grid-cols-4 gap-6 py-6'>
+        {products?.map((product) => (
+          <ProductCard
+            key={product.id}
+            id={product.id}
+            name={product.name}
+            description={product.description}
+            collection={product.collection}
+            length={product.length}
+            width={product.width}
+            height={product.height}
+            weight={product.weight}
+            isDestacado={product.isDestacado}
+            isActive={product.isActive}
+            images={product.images}
+            price={product.price}
+          />
+        ))}
+      </div>
+
       <button
         onClick={() => scroll('right')}
-        className="absolute right-2 top-1/2 -translate-y-1/2 z-10 bg-white p-2 rounded-full shadow-md"
+        aria-label='Siguiente'
+        className='xl:hidden absolute right-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 md:w-10 md:h-10 flex items-center justify-center bg-custom-green5 hover:bg-custom-green4 active:scale-95 text-white rounded-full shadow-lg transition-all duration-200'
       >
-        <ChevronRight />
+        <ChevronRight size={15} />
       </button>
-    </section>
+    </div>
   );
 };
 
 export default FavoriteProductsContainer;
+

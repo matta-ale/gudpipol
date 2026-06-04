@@ -7,6 +7,7 @@ const getAllProductsHandler = async (page, pageSize) => {
       { model: ProductImage, as: 'images' },
       { model: Collection, as: 'collection' },
     ],
+    order: [['priority', 'DESC']],
   });
   if (products.rows.length === 0) {
     const error = new Error('No products in database');

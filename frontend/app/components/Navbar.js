@@ -72,10 +72,38 @@ export default function Navbar({ sloganHeight, sloganVisible }) {
               Inicio
             </a>
           </li>
-          <li className='flex items-center'>
-            <a href='/products' className='hover:text-custom-green3'>
+          <li className='relative flex items-center group'>
+            <button className='flex items-center gap-1 hover:text-custom-green3'>
               Productos
-            </a>
+              <svg
+                xmlns='http://www.w3.org/2000/svg'
+                fill='none'
+                viewBox='0 0 24 24'
+                strokeWidth={2.5}
+                stroke='currentColor'
+                className='w-3.5 h-3.5 transition-transform duration-200 group-hover:rotate-180'
+              >
+                <path
+                  strokeLinecap='round'
+                  strokeLinejoin='round'
+                  d='m19.5 8.25-7.5 7.5-7.5-7.5'
+                />
+              </svg>
+            </button>
+            <div className='absolute top-full left-1/2 -translate-x-1/2 mt-1 hidden group-hover:block bg-white shadow-lg rounded-xl py-2 min-w-max z-50 border border-gray-100'>
+              <a
+                href='/products'
+                className='block px-5 py-2.5 text-custom-green4 hover:text-custom-green3 hover:bg-gray-50 transition-colors duration-150'
+              >
+                Todos los productos
+              </a>
+              <a
+                href='/products/destacados'
+                className='block px-5 py-2.5 text-custom-green4 hover:text-custom-green3 hover:bg-gray-50 transition-colors duration-150'
+              >
+                Productos destacados
+              </a>
+            </div>
           </li>
           <li className='relative flex items-center group'>
             <button className='flex items-center gap-1 hover:text-custom-green3'>
@@ -199,7 +227,7 @@ export default function Navbar({ sloganHeight, sloganVisible }) {
           </button>
           <div
             className={`overflow-hidden transition-all duration-300 bg-gray-50 border-b border-gray-100 ${
-              isProductsOpen ? 'max-h-[360px]' : 'max-h-0'
+              isProductsOpen ? 'max-h-[1000px]' : 'max-h-0'
             }`}
           >
             <a
@@ -208,6 +236,13 @@ export default function Navbar({ sloganHeight, sloganVisible }) {
               className='flex items-center pl-12 pr-5 py-3 text-sm text-custom-green5 font-bold hover:text-custom-green3 hover:bg-white transition-colors border-b border-gray-100'
             >
               Ver todos los productos
+            </a>
+            <a
+              href='/products/destacados'
+              onClick={handleMenuToggle}
+              className='flex items-center pl-12 pr-5 py-3 text-sm text-custom-green5 font-bold hover:text-custom-green3 hover:bg-white transition-colors border-b border-gray-100'
+            >
+              Productos destacados
             </a>
             {myCollections?.map((collection) => (
               <a
