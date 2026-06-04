@@ -59,7 +59,7 @@ const ProductCard = (product) => {
     >
       {/* Imagen */}
       <div
-        className='relative w-full overflow-hidden'
+        className='relative w-full overflow-hidden rounded-t-2xl'
         style={{ aspectRatio: '4/3' }}
       >
         {/* Badge destacado */}

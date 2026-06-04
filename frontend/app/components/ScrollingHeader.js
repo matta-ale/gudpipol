@@ -1,5 +1,5 @@
 const ScrollingHeader = ({ sloganVisible }) => {
-  const text = '🚚 Cotizamos envíos a todo el país | 💳 Cuota simple: 3 y 6 cuotas | 🔄 Devolución sin cargo por 30 días';
+  const text = '🚚 Cotizamos envíos a todo el país | 💳 Pagá por transferencia o en 3 o 6 cuotas con tarjeta | 🔄 Devolución sin cargo por 30 días';
 
   return (
     <div
