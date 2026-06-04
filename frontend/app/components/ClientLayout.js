@@ -34,7 +34,7 @@ export default function ClientLayout({ children }) {
       <SloganHeader onHeightChange={(height) => setSloganHeight(height)} />
       <Navbar sloganHeight={sloganHeight} sloganVisible={sloganVisible} />
       <SubNavbar sloganVisible={sloganVisible} />
-      <ScrollingHeader sloganVisible={sloganVisible} />
+      <ScrollingHeader sloganVisible={sloganVisible} sloganHeight={sloganHeight} />
       <main className='container mx-auto px-4 py-8 relative z-10'>
         {children}
       </main>

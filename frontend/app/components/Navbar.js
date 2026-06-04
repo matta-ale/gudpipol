@@ -26,7 +26,7 @@ export default function Navbar({ sloganHeight, sloganVisible }) {
   return (
     <nav
       className='fixed left-0 w-full h-20 flex items-center px-5 z-30 bg-white transition-all duration-500 '
-      style={{ top: window.innerWidth <= 640 ? 0 : `${sloganHeight}px` }} // Ajusta top con la altura del SloganHeader
+      style={{ top: `${sloganHeight}px` }} // Ajusta top con la altura del SloganHeader
     >
       {/* Botón hamburguesa — pill style */}
       <div className='xl:hidden flex items-center z-50'>
