@@ -3,6 +3,7 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { FaWhatsapp } from 'react-icons/fa';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 const SLIDES = [
   { src: '/img/Home1.webp', caption: 'Toyota Argentina, Zárate' },
@@ -20,13 +21,24 @@ export default function HeroCarousel() {
   const [current, setCurrent] = useState(0);
   const [paused, setPaused] = useState(false);
   const timerRef = useRef(null);
+  const touchStartX = useRef(null);
 
   const next = useCallback(() => {
     setCurrent((prev) => (prev + 1) % SLIDES.length);
   }, []);
 
+  const prev = useCallback(() => {
+    setCurrent((prev) => (prev - 1 + SLIDES.length) % SLIDES.length);
+  }, []);
+
   const goTo = (index) => {
     setCurrent(index);
+    if (timerRef.current) clearInterval(timerRef.current);
+    timerRef.current = setInterval(next, INTERVAL_MS);
+  };
+
+  const nudge = (dir) => {
+    if (dir === 'next') next(); else prev();
     if (timerRef.current) clearInterval(timerRef.current);
     timerRef.current = setInterval(next, INTERVAL_MS);
   };
@@ -38,13 +50,15 @@ export default function HeroCarousel() {
     return () => clearInterval(timerRef.current);
   }, [paused, next]);
 
-  const handleMouseEnter = () => {
-    setPaused(true);
-    clearInterval(timerRef.current);
-  };
+  const handleMouseEnter = () => { setPaused(true); clearInterval(timerRef.current); };
+  const handleMouseLeave = () => { setPaused(false); };
 
-  const handleMouseLeave = () => {
-    setPaused(false);
+  const handleTouchStart = (e) => { touchStartX.current = e.touches[0].clientX; };
+  const handleTouchEnd = (e) => {
+    if (touchStartX.current === null) return;
+    const delta = e.changedTouches[0].clientX - touchStartX.current;
+    if (Math.abs(delta) > 40) nudge(delta < 0 ? 'next' : 'prev');
+    touchStartX.current = null;
   };
 
   return (
@@ -57,13 +71,9 @@ export default function HeroCarousel() {
       <div className='hidden md:flex h-[90vh] mt-44'>
         {/* Left: text panel */}
         <div className='w-[55%] lg:w-[52%] flex flex-col justify-center px-12 lg:px-20 relative overflow-hidden bg-custom-green5'>
-          {/* subtle depth gradient */}
           <div
             className='absolute inset-0 pointer-events-none'
-            style={{
-              background:
-                'linear-gradient(135deg, rgba(26,34,25,0.9) 0%, rgba(53,63,52,0.6) 100%)',
-            }}
+            style={{ background: 'linear-gradient(135deg, rgba(26,34,25,0.9) 0%, rgba(53,63,52,0.6) 100%)' }}
           />
           <div className='relative z-10'>
             <span className='inline-block mb-5 px-4 py-1.5 rounded-full text-xs font-semibold tracking-widest uppercase text-white border border-white/30 bg-white/10'>
@@ -99,16 +109,14 @@ export default function HeroCarousel() {
               </Link>
             </div>
             {/* Dots */}
-            <div className='flex gap-2 mt-10'>
+            <div className='flex items-center gap-2 mt-10'>
               {SLIDES.map((_, i) => (
                 <button
                   key={i}
                   onClick={() => goTo(i)}
                   aria-label={`Ir a imagen ${i + 1}`}
-                  className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
-                    i === current
-                      ? 'bg-white scale-110'
-                      : 'bg-white/35 hover:bg-white/65'
+                  className={`rounded-full transition-all duration-300 ${
+                    i === current ? 'bg-white w-5 h-2.5' : 'bg-white/35 hover:bg-white/65 w-2.5 h-2.5'
                   }`}
                 />
               ))}
@@ -130,12 +138,28 @@ export default function HeroCarousel() {
               style={{ opacity: i === current ? 1 : 0 }}
             />
           ))}
+
+          {/* Arrow prev — over image */}
+          <button
+            onClick={() => nudge('prev')}
+            aria-label='Imagen anterior'
+            className='absolute left-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 flex items-center justify-center rounded-full bg-black/30 hover:bg-black/55 backdrop-blur-sm text-white transition-all duration-200 active:scale-90'
+          >
+            <ChevronLeft size={20} />
+          </button>
+
+          {/* Arrow next — over image */}
+          <button
+            onClick={() => nudge('next')}
+            aria-label='Imagen siguiente'
+            className='absolute right-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 flex items-center justify-center rounded-full bg-black/30 hover:bg-black/55 backdrop-blur-sm text-white transition-all duration-200 active:scale-90'
+          >
+            <ChevronRight size={20} />
+          </button>
           {/* bottom gradient for caption */}
           <div
             className='absolute inset-x-0 bottom-0 h-16 pointer-events-none'
-            style={{
-              background: 'linear-gradient(to top, rgba(0,0,0,0.55) 0%, transparent 100%)',
-            }}
+            style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.55) 0%, transparent 100%)' }}
           />
           {/* Caption */}
           <div className='absolute bottom-0 inset-x-0 z-10 pb-3 px-4'>
@@ -149,19 +173,20 @@ export default function HeroCarousel() {
               </p>
             ))}
           </div>
-          {/* left-edge blend with text panel */}
+          {/* left-edge blend */}
           <div
             className='absolute inset-y-0 left-0 w-12 pointer-events-none'
-            style={{
-              background:
-                'linear-gradient(to right, rgba(53,63,52,0.7) 0%, transparent 100%)',
-            }}
+            style={{ background: 'linear-gradient(to right, rgba(53,63,52,0.7) 0%, transparent 100%)' }}
           />
         </div>
       </div>
 
-      {/* ── MOBILE: full-screen portrait image with overlay ── */}
-      <div className='flex md:hidden relative mt-[34px] h-[calc(100vh-114px)] overflow-hidden'>
+      {/* ── MOBILE: full-screen portrait image with overlay + swipe ── */}
+      <div
+        className='flex md:hidden relative mt-[34px] h-[calc(100vh-114px)] overflow-hidden'
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+      >
         {SLIDES.map(({ src, caption }, i) => (
           <Image
             key={src}
@@ -174,13 +199,10 @@ export default function HeroCarousel() {
             style={{ opacity: i === current ? 1 : 0 }}
           />
         ))}
-        {/* bottom-heavy gradient for text legibility */}
+        {/* bottom-heavy gradient */}
         <div
           className='absolute inset-0'
-          style={{
-            background:
-              'linear-gradient(to bottom, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0.15) 40%, rgba(0,0,0,0.65) 70%, rgba(0,0,0,0.82) 100%)',
-          }}
+          style={{ background: 'linear-gradient(to bottom, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0.15) 40%, rgba(0,0,0,0.65) 70%, rgba(0,0,0,0.82) 100%)' }}
         />
         {/* Content pinned to bottom */}
         <div className='relative z-10 flex flex-col justify-end pb-10 px-6 h-full'>
@@ -218,20 +240,20 @@ export default function HeroCarousel() {
               </Link>
             </div>
           </div>
-          {/* Dots */}
+          {/* Dots row */}
           <div className='flex gap-2 mt-6 justify-center'>
             {SLIDES.map((_, i) => (
               <button
                 key={i}
                 onClick={() => goTo(i)}
                 aria-label={`Ir a imagen ${i + 1}`}
-                className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
-                  i === current ? 'bg-white scale-110' : 'bg-white/40'
+                className={`rounded-full transition-all duration-300 ${
+                  i === current ? 'bg-white w-5 h-2.5' : 'bg-white/40 w-2.5 h-2.5'
                 }`}
               />
             ))}
           </div>
-          {/* Caption mobile */}
+          {/* Caption */}
           <div className='relative h-4 mt-3'>
             {SLIDES.map(({ caption }, i) => (
               <p
