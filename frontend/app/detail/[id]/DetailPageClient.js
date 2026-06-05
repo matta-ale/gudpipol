@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import Image from 'next/image';
-import { FaChevronLeft, FaChevronRight, FaWhatsapp, FaTimes } from 'react-icons/fa';
+import { FaChevronLeft, FaChevronRight, FaWhatsapp, FaTimes, FaShoppingCart } from 'react-icons/fa';
 import ColorSelector from '@/app/components/ColorSelector';
 import { addItemToCart } from '@/app/redux/features/cart/cartSlice';
 
@@ -264,8 +264,21 @@ export default function DetailPageClient({ params }) {
             alt={product.name}
             onLoad={handleImageLoad}
             onClick={() => { if (window.innerWidth >= 768) setIsZoomed(true); }}
-            className={`transition-all duration-500 group-hover:scale-105 ${isImageLoading ? 'opacity-0' : 'opacity-100'} md:cursor-zoom-in`}
+            className={`transition-all duration-500 group-hover:scale-105 ${isImageLoading ? 'opacity-0' : 'opacity-100'} md:cursor-pointer`}
           />
+
+          {/* Zoom hint badge — desktop hover */}
+          <div className='hidden md:flex absolute inset-0 items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none'>
+            <div className='flex items-center gap-2 bg-black/50 backdrop-blur-sm text-white text-xs font-semibold tracking-wide px-4 py-2 rounded-full shadow-lg'>
+              <svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='2.2' strokeLinecap='round' strokeLinejoin='round'>
+                <circle cx='11' cy='11' r='8'/>
+                <line x1='21' y1='21' x2='16.65' y2='16.65'/>
+                <line x1='11' y1='8' x2='11' y2='14'/>
+                <line x1='8' y1='11' x2='14' y2='11'/>
+              </svg>
+              Ampliar imagen
+            </div>
+          </div>
 
           {/* Flechas – sólo si hay >1 imagen */}
           {product.images?.length > 1 && (
@@ -292,7 +305,7 @@ export default function DetailPageClient({ params }) {
 
         {/* ── Strip de miniaturas – sólo si hay >1 imagen ── */}
         {product.images?.length > 1 && (
-          <div className='flex gap-2 px-3 py-2.5 overflow-x-auto bg-gray-50 border-b border-gray-100 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]'>
+          <div className='flex gap-2 px-3 py-2.5 overflow-x-auto bg-white [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]'>
             {product.images.map((img, index) => (
               <button
                 key={index}
@@ -452,17 +465,18 @@ export default function DetailPageClient({ params }) {
         {/* Botones */}
         <div className='mt-4 flex flex-col gap-2'>
           <button
-            className='bg-custom-green3 hover:bg-custom-green5 text-black hover:text-white h-11 px-6 py-2 text-sm font-bold w-full rounded-3xl transition-colors'
+            className='flex items-center justify-center gap-1.5 bg-custom-green3 hover:bg-custom-green5 text-white h-11 px-6 py-2 text-sm font-bold w-full rounded-xl transition-colors shadow-sm'
             onClick={addToCart}
           >
-            AGREGAR AL CARRITO
+            <FaShoppingCart size={15} />
+            Agregar al carrito
           </button>
           <button
-            className='flex items-center justify-center gap-2 bg-[#1da850] hover:bg-[#0c7e34] text-white h-11 px-6 py-2 text-sm font-bold w-full rounded-3xl transition-colors'
+            className='flex items-center justify-center gap-1.5 bg-[#1da850] hover:bg-[#0c7e34] text-white h-11 px-6 py-2 text-sm font-bold w-full rounded-xl transition-colors shadow-sm'
             onClick={handleWhatsApp}
           >
-            <FaWhatsapp size={18} />
-            CONSULTAR POR WHATSAPP
+            <FaWhatsapp size={16} />
+            Consultar por WhatsApp
           </button>
         </div>
       </div>
