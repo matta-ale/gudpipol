@@ -124,7 +124,7 @@ const ProductCard = (product) => {
           className='flex-1 flex items-center justify-center gap-1.5 bg-custom-green3 hover:bg-custom-green5 text-white text-[11px] font-bold rounded-xl h-9 transition-colors shadow-sm'
         >
           <FaShoppingCart size={12} />
-          Carrito
+          Agregar
         </button>
         <button
           onClick={handleWhatsApp}

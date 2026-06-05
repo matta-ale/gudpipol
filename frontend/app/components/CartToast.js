@@ -20,12 +20,10 @@ export default function CartToast() {
     if (!lastAdded || lastAdded.addedAt === prevAddedAt.current) return;
     prevAddedAt.current = lastAdded.addedAt;
 
-    // Reset if already showing
     clearTimeout(timerRef.current);
     setLeaving(false);
     setVisible(true);
 
-    // Start exit animation at 5s, fully hide at 5.4s
     timerRef.current = setTimeout(() => {
       setLeaving(true);
       setTimeout(() => setVisible(false), 400);
@@ -36,90 +34,123 @@ export default function CartToast() {
 
   if (!visible || !lastAdded) return null;
 
+  const price = lastAdded.price
+    ? `$ ${(lastAdded.price * lastAdded.quantity).toLocaleString('es-ES')}`
+    : null;
+
   return (
-    <div
-      className={`
-        fixed top-24 right-4 z-[100] w-72 sm:w-80
-        bg-white rounded-2xl shadow-2xl border border-gray-100
-        transition-all duration-400
-        ${leaving
-          ? 'opacity-0 translate-x-4 scale-95 pointer-events-none'
-          : 'opacity-100 translate-x-0 scale-100'}
-      `}
-      style={{ willChange: 'transform, opacity' }}
-    >
-      {/* Progress bar */}
-      <div className='absolute top-0 left-0 h-0.5 w-full rounded-t-2xl overflow-hidden bg-gray-100'>
-        <div
-          className='h-full bg-custom-green3 rounded-full'
-          style={{
-            animation: 'shrink 5s linear forwards',
-          }}
-        />
-      </div>
+    <>
+      {/* Backdrop */}
+      <div
+        className={`fixed inset-0 z-[99] bg-black/30 backdrop-blur-[2px] transition-opacity duration-400 ${
+          leaving ? 'opacity-0' : 'opacity-100'
+        }`}
+        onClick={dismiss}
+      />
 
-      <div className='flex items-center gap-3 px-4 py-3.5'>
-        {/* Product image or icon */}
-        <div className='flex-shrink-0 relative'>
-          {lastAdded.image ? (
-            <img
-              src={lastAdded.image}
-              alt={lastAdded.name}
-              className='w-12 h-12 rounded-xl object-cover border border-gray-100'
-            />
-          ) : (
-            <div className='w-12 h-12 rounded-xl bg-custom-green2 flex items-center justify-center'>
-              <FaShoppingCart className='text-custom-green5 text-xl' />
-            </div>
-          )}
-          {/* Check badge */}
-          <span className='absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-custom-green flex items-center justify-center border-2 border-white'>
-            <FaCheck className='text-white text-[9px]' />
-          </span>
+      {/* Modal */}
+      <div
+        className={`
+          fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[100]
+          w-[90vw] max-w-sm
+          bg-white rounded-3xl shadow-2xl border border-gray-100
+          transition-all duration-400
+          ${leaving
+            ? 'opacity-0 scale-90 pointer-events-none'
+            : 'opacity-100 scale-100'}
+        `}
+        style={{ willChange: 'transform, opacity' }}
+      >
+        {/* Progress bar */}
+        <div className='absolute top-0 left-0 h-1 w-full rounded-t-3xl overflow-hidden bg-gray-100'>
+          <div
+            className='h-full bg-custom-green3 rounded-full'
+            style={{ animation: 'shrink 5s linear forwards' }}
+          />
         </div>
-
-        {/* Text */}
-        <div className='flex-1 min-w-0'>
-          <p className='text-xs text-gray-400 font-medium uppercase tracking-wide'>
-            Agregado al carrito
-          </p>
-          <p className='text-gray-700 font-semibold text-sm leading-snug truncate mt-0.5'>
-            {lastAdded.name}
-          </p>
-          {lastAdded.quantity > 1 && (
-            <p className='text-xs text-gray-400 mt-0.5'>
-              Cantidad: {lastAdded.quantity}
-            </p>
-          )}
-        </div>
-
-        {/* Cart link */}
-        <a
-          href='/cart'
-          onClick={dismiss}
-          className='flex-shrink-0 text-xs font-semibold text-custom-green3 hover:text-custom-green transition-colors whitespace-nowrap'
-        >
-          Ver carrito →
-        </a>
 
         {/* Close button */}
         <button
           onClick={dismiss}
-          className='flex-shrink-0 text-gray-300 hover:text-gray-500 transition-colors ml-1'
+          className='absolute top-4 right-4 text-gray-300 hover:text-gray-500 transition-colors'
           aria-label='Cerrar'
         >
-          <svg xmlns='http://www.w3.org/2000/svg' className='w-4 h-4' fill='none' viewBox='0 0 24 24' strokeWidth={2.5} stroke='currentColor'>
+          <svg xmlns='http://www.w3.org/2000/svg' className='w-5 h-5' fill='none' viewBox='0 0 24 24' strokeWidth={2.5} stroke='currentColor'>
             <path strokeLinecap='round' strokeLinejoin='round' d='M6 18 18 6M6 6l12 12' />
           </svg>
         </button>
-      </div>
 
-      <style jsx>{`
-        @keyframes shrink {
-          from { width: 100%; }
-          to { width: 0%; }
-        }
-      `}</style>
-    </div>
+        <div className='px-6 pt-8 pb-6'>
+          {/* Header */}
+          <div className='flex items-center gap-2 mb-5'>
+            <span className='w-6 h-6 rounded-full bg-custom-green3 flex items-center justify-center'>
+              <FaCheck className='text-white text-[10px]' />
+            </span>
+            <p className='text-sm font-bold text-custom-green5 tracking-wide uppercase'>
+              Producto agregado al carrito
+            </p>
+          </div>
+
+          {/* Product row */}
+          <div className='flex gap-4 items-center'>
+            {lastAdded.image ? (
+              <img
+                src={lastAdded.image}
+                alt={lastAdded.name}
+                className='w-20 h-20 rounded-2xl object-cover border border-gray-100 flex-shrink-0'
+              />
+            ) : (
+              <div className='w-20 h-20 rounded-2xl bg-gray-100 flex items-center justify-center flex-shrink-0'>
+                <FaShoppingCart className='text-gray-400 text-2xl' />
+              </div>
+            )}
+
+            <div className='flex-1 min-w-0'>
+              {lastAdded.collection && (
+                <p className='text-[10px] font-bold text-custom-green4 uppercase tracking-widest mb-0.5'>
+                  {lastAdded.collection}
+                </p>
+              )}
+              <p className='text-gray-800 font-bold text-base leading-snug'>
+                {lastAdded.name}
+              </p>
+              {lastAdded.color && (
+                <p className='text-xs text-gray-400 mt-1'>Color: {lastAdded.color}</p>
+              )}
+              {lastAdded.quantity && (
+                <p className='text-xs text-gray-400'>Cantidad: {lastAdded.quantity}</p>
+              )}
+              {price && (
+                <p className='text-lg font-extrabold text-custom-green5 mt-1'>{price}</p>
+              )}
+            </div>
+          </div>
+
+          {/* Actions */}
+          <div className='flex gap-3 mt-6'>
+            <button
+              onClick={dismiss}
+              className='flex-1 py-2.5 rounded-xl border border-gray-200 text-sm font-semibold text-gray-500 hover:bg-gray-50 transition-colors'
+            >
+              Seguir comprando
+            </button>
+            <a
+              href='/cart'
+              onClick={dismiss}
+              className='flex-1 py-2.5 rounded-xl bg-custom-green5 hover:bg-custom-green4 text-white text-sm font-bold text-center transition-colors'
+            >
+              Ver carrito →
+            </a>
+          </div>
+        </div>
+
+        <style jsx>{`
+          @keyframes shrink {
+            from { width: 100%; }
+            to { width: 0%; }
+          }
+        `}</style>
+      </div>
+    </>
   );
 }
