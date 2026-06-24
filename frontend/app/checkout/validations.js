@@ -37,4 +37,9 @@ export const validateFullName = (fullName) => {
     if (!city) return 'Localidad es requerida';
     return '';
   };
+
+  export const validateProvince = (province) => {
+    if (!province) return 'Provincia es requerida';
+    return '';
+  };
   

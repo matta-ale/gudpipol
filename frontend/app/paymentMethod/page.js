@@ -281,7 +281,7 @@ export default function PaymentMethod() {
                     Realice una transferencia bancaria por&nbsp;$&nbsp;
                     {totalPrice.toFixed(2).toLocaleString('es-ES')} a la siguiente cuenta: <br />
                     <span className='block mt-4'>Alias:&nbsp; {alias}</span>
-                    <span className='block'>CVU:&nbsp; {cvu}</span>
+                    <span className='block'>CBU:&nbsp; {cvu}</span>
                     <span className='block'>A nombre de:&nbsp; {aNombreDe}</span>
                     <span className='block mb-4'>CUIT:&nbsp; {cuit}</span>
                   </li>

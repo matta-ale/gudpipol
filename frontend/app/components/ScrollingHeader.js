@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 
 const ITEMS = [
-  { icon: '🚚', text: 'Cotizamos envíos a todo el país' },
+  { icon: '🚚', text: 'Hacemos envíos a todo el país' },
   { icon: '💳', text: 'Pagá por transferencia o en 3 o 6 cuotas con tarjeta' },
   { icon: '🔄', text: 'Devolución sin cargo por 30 días' },
 ];
