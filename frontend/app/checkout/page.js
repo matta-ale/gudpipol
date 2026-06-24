@@ -190,9 +190,12 @@ export default function Checkout() {
   }));
 
   const inputClass = (name) =>
-    `peer block w-full rounded-lg bg-custom-gray border-2 ${
+    `block w-full h-12 rounded-lg bg-custom-gray border-2 ${
       touched[name] && errors[name] ? 'border-red-500' : 'border-custom-green3'
-    } text-custom-green5 px-4 pt-8 pb-2 focus:outline-none focus:ring-2 focus:ring-custom-green4 transition`;
+    } text-custom-green5 px-4 focus:outline-none focus:ring-2 focus:ring-custom-green4 transition text-[0.95rem]`;
+
+  const fieldLabelClass =
+    'block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2';
 
   return (
     <main className="flex justify-center px-4">
@@ -227,7 +230,10 @@ export default function Checkout() {
           <form onSubmit={handleSubmit} className="p-6 md:p-8 space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-2">
               {TEXT_FIELDS.map((field) => (
-                <div key={field.name} className="relative">
+                <div key={field.name}>
+                  <label htmlFor={field.name} className={fieldLabelClass}>
+                    {field.label}
+                  </label>
                   <input
                     id={field.name}
                     type={field.type}
@@ -236,16 +242,9 @@ export default function Checkout() {
                     onChange={handleInputChange}
                     onBlur={handleBlur}
                     autoComplete={field.autoComplete}
-                    placeholder=" "
                     className={inputClass(field.name)}
                     required
                   />
-                  <label
-                    htmlFor={field.name}
-                    className="absolute left-4 top-2 text-custom-green4 text-sm transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-placeholder-shown:text-custom-green3 peer-focus:top-2 peer-focus:text-custom-green5 peer-focus:text-sm select-none"
-                  >
-                    {field.label}
-                  </label>
                   <div className="min-h-[20px] mt-1">
                     {touched[field.name] && errors[field.name] && (
                       <span className="text-red-500 text-sm">
