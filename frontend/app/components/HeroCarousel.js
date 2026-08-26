@@ -2,7 +2,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { FaWhatsapp } from 'react-icons/fa';
+import { FaWhatsapp, FaTruck } from 'react-icons/fa';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 const SLIDES = [
@@ -16,6 +16,37 @@ const WHATSAPP_URL =
   'https://wa.me/5493415924709?text=Hola%2C%20vi%20su%20web%20y%20quiero%20cotizar%20muebles%20para%20mi%20empresa%20o%20institución.%20%C2%BFPueden%20asesorarme%3F';
 
 const INTERVAL_MS = 5000;
+
+function FreeShippingPromo({ compact = false }) {
+  return (
+    <div
+      className={`flex items-start gap-3 rounded-full border border-custom-green3/70 bg-custom-green3/20 backdrop-blur-sm shadow-lg ${
+        compact ? 'mb-5 px-4 py-3' : 'mb-8 px-6 py-4'
+      }`}
+    >
+      <span className='mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-custom-green3 text-white'>
+        <FaTruck className='text-base' />
+      </span>
+      <div>
+        <p
+          className={`font-extrabold text-white tracking-wide ${
+            compact ? 'text-sm' : 'text-base'
+          }`}
+        >
+          ENVÍO GRATIS
+        </p>
+        <p
+          className={`text-white/80 font-light leading-snug ${
+            compact ? 'text-xs mt-0.5' : 'text-sm mt-1'
+          }`}
+        >
+          CABA, Buenos Aires, Córdoba, Santa Fe y Entre Ríos
+          <span className='text-white/55'> · productos seleccionados</span>
+        </p>
+      </div>
+    </div>
+  );
+}
 
 export default function HeroCarousel() {
   const [current, setCurrent] = useState(0);
@@ -82,9 +113,10 @@ export default function HeroCarousel() {
             <h1 className='text-4xl lg:text-5xl xl:text-[3.25rem] font-extrabold text-white leading-tight drop-shadow-md mb-4'>
               El mobiliario outdoor que eligen municipios, empresas e instituciones.
             </h1>
-            <p className='text-base lg:text-lg text-white/70 font-light tracking-wide mb-8'>
+            <p className='text-base lg:text-lg text-white/70 font-light tracking-wide mb-6'>
               Municipios · Constructoras · Hoteles · Empresas
             </p>
+            <FreeShippingPromo />
             <div className='flex flex-col sm:flex-row gap-3 flex-wrap'>
               <a
                 href={WHATSAPP_URL}
@@ -212,9 +244,10 @@ export default function HeroCarousel() {
           <h1 className='text-3xl font-extrabold text-white leading-tight drop-shadow-md mb-2'>
             El mobiliario outdoor que eligen municipios, empresas e instituciones.
           </h1>
-          <p className='text-sm text-white/75 font-light tracking-wide mb-6'>
+          <p className='text-sm text-white/75 font-light tracking-wide mb-4'>
             Municipios · Constructoras · Hoteles · Empresas
           </p>
+          <FreeShippingPromo compact />
           <div className='flex flex-col gap-3'>
             <a
               href={WHATSAPP_URL}
