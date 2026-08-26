@@ -2,9 +2,10 @@
 import { useState, useEffect } from 'react';
 
 const ITEMS = [
-  { icon: '🚚', text: 'Hacemos envíos a todo el país' },
   { icon: '💳', text: 'Pagá por transferencia o en 3 o 6 cuotas con tarjeta' },
   { icon: '🔄', text: 'Devolución sin cargo por 30 días' },
+  { icon: '🎁', text: 'ENVÍO GRATIS a CABA, Provincias de Buenos Aires, Córdoba, Santa Fé y Entre Ríos en productos seleccionados' },
+  { icon: '🚚', text: 'Consultá costo de envío a resto del país' },
 ];
 
 const SEPARATOR = <span className='mx-6 text-white/30'>·</span>;
