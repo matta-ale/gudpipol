@@ -27,9 +27,9 @@ const storage = typeof window !== "undefined" ? createWebStorage("local") : crea
 
 //hasta acá se puede hacer en otro archivo e importarlo
 const persistConfig = {
-  key: 'root',
+  key: 'gudpipol-v2',
   storage,
-  whitelist: ['products','cart'], // Aquí puedes añadir otros estados que quieras persistir
+  whitelist: ['cart'],
 };
 
 const rootReducer = combineReducers({

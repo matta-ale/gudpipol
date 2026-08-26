@@ -3,7 +3,7 @@ import ProductCard from './ProductCard';
 const ProductsContainer = ({products}) => {
 
     return (
-    <main className='flex min-h-screen flex-col gap-16 items-center justify-between mt-16 md:mt-16 md:grid md: grid-cols-2 lg:grid-cols-3 xl:grid-cols-4  md:mx-auto md:justify-items-center md:items-start max-w-[1200px] '>
+    <main className='flex min-h-screen flex-col gap-16 items-center justify-between mt-16 md:mt-16 md:grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 md:mx-auto md:justify-items-center md:items-stretch max-w-[1200px] '>
       {products ? (
         products.map((product) => {
           return (
@@ -18,6 +18,7 @@ const ProductsContainer = ({products}) => {
               height={product.height}
               weight={product.weight}
               isDestacado={product.isDestacado}
+              isFreeShipping={product.isFreeShipping}
               isActive={product.isActive}
               images={product.images}
               price={product.price}

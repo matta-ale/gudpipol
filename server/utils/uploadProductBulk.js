@@ -1,6 +1,13 @@
 const xlsx = require('xlsx');
 const { Product } = require('../models');
 
+const parseBoolean = (value) => {
+  if (value === undefined || value === null || value === '') return undefined;
+  if (typeof value === 'boolean') return value;
+  if (typeof value === 'number') return value === 1;
+  return ['true', '1', 'yes', 'si', 'sí'].includes(String(value).trim().toLowerCase());
+};
+
 const uploadProductsBulk = async (req, res) => {
   try {
     const file = req.file;
@@ -25,6 +32,14 @@ const uploadProductsBulk = async (req, res) => {
         console.log(row.collectionId);
         const collectionId = parseInt(row.collectionId, 10);
         row.collectionId = collectionId;
+
+        if (row.isDestacado !== undefined) {
+          row.isDestacado = parseBoolean(row.isDestacado);
+        }
+        if (row.isFreeShipping !== undefined) {
+          row.isFreeShipping = parseBoolean(row.isFreeShipping);
+        }
+
         if (existingProduct) {
           // Update existing product
           await existingProduct.update(row);

@@ -1,5 +1,6 @@
 'use client'
 import SmallColorSelector from '../components/SmallColorSelector';
+import FreeShippingBadge from '../components/FreeShippingBadge';
 import { FaTrashAlt } from 'react-icons/fa';
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -44,6 +45,9 @@ export default function CartItem({ item }) {
             <div>
               <p className='text-xs text-gray-500 mb-1'>{item.collection}</p>
               <h2 className='text-base font-bold'>{item.name}</h2>
+              {item.isFreeShipping && (
+                <FreeShippingBadge className='mt-1.5' />
+              )}
             </div>
             
             <div className='flex items-center bg-gray-600 text-white h-9 w-36 rounded-full justify-center self-start ml-6'>
@@ -142,6 +146,9 @@ export default function CartItem({ item }) {
           <div>
             <p className='text-custom-black text-sm'>{item.collection}</p>
             <h2 className='text-md font-bold'>{item.name}</h2>
+            {item.isFreeShipping && (
+              <FreeShippingBadge className='mt-1.5' />
+            )}
           </div>
           <div className='flex items-center bg-gray-600 text-white h-9 w-32 rounded-full justify-around'>
             <p className='font-semibold text-md'>
