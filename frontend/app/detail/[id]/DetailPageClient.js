@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { FaChevronLeft, FaChevronRight, FaWhatsapp, FaTimes, FaShoppingCart } from 'react-icons/fa';
 import ColorSelector from '@/app/components/ColorSelector';
 import { addItemToCart } from '@/app/redux/features/cart/cartSlice';
+import FreeShippingBadge from '@/app/components/FreeShippingBadge';
 
 const PHONE = '5493415924709';
 
@@ -104,6 +105,7 @@ export default function DetailPageClient({ params }) {
         quantity,
         image: product.images?.[0]?.url || '',
         color: selectedColor,
+        isFreeShipping: product.isFreeShipping,
       }),
     );
   };
@@ -341,6 +343,9 @@ export default function DetailPageClient({ params }) {
             o 6 cuotas de ${' '}
             {Math.round((product.price * (1 + rate6 / 100)) / 6).toLocaleString('es-ES')}
           </p>
+          {product.isFreeShipping && (
+            <FreeShippingBadge variant='inline' className='mt-2' />
+          )}
         </div>
       </div>
 

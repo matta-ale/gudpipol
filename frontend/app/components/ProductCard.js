@@ -6,6 +6,7 @@ import placeholderImage from '../../public/img/No-Image-Placeholder.svg';
 import Link from 'next/link';
 import { FaWhatsapp, FaShoppingCart } from 'react-icons/fa';
 import { addItemToCart } from '../redux/features/cart/cartSlice';
+import FreeShippingBadge from './FreeShippingBadge';
 
 const PHONE = '5493415924709';
 
@@ -31,6 +32,7 @@ const ProductCard = (product) => {
         quantity: 1,
         image: product.images?.[0]?.url || '',
         color: 'Marron',
+        isFreeShipping: product.isFreeShipping,
       }),
     );
   };
@@ -55,7 +57,7 @@ const ProductCard = (product) => {
   return (
     <Link
       href={`/detail/${product.id}`}
-      className='group relative bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300 hover:-translate-y-1.5 w-[300px] md:w-[270px] flex flex-col border border-gray-100 cursor-pointer'
+      className='group relative bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300 hover:-translate-y-1.5 w-[300px] md:w-[270px] h-full flex flex-col border border-gray-100 cursor-pointer'
     >
       {/* Imagen */}
       <div
@@ -115,10 +117,15 @@ const ProductCard = (product) => {
             )}
           </p>
         </div>
+        <div className='mt-1 min-h-[1.25rem]'>
+          {product.isFreeShipping && (
+            <FreeShippingBadge variant='inline' />
+          )}
+        </div>
       </div>
 
       {/* Botones */}
-      <div className='px-4 pb-4 pt-3 flex gap-2'>
+      <div className='mt-auto px-4 pb-4 pt-3 flex gap-2'>
         <button
           onClick={addToCart}
           className='flex-1 flex items-center justify-center gap-1.5 bg-custom-green3 hover:bg-custom-green5 text-white text-[11px] font-bold rounded-xl h-9 transition-colors shadow-sm'

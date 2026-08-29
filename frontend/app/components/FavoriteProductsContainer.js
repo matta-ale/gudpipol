@@ -48,6 +48,7 @@ const FavoriteProductsContainer = ({ products }) => {
               height={product.height}
               weight={product.weight}
               isDestacado={product.isDestacado}
+              isFreeShipping={product.isFreeShipping}
               isActive={product.isActive}
               images={product.images}
               price={product.price}
@@ -70,6 +71,7 @@ const FavoriteProductsContainer = ({ products }) => {
             height={product.height}
             weight={product.weight}
             isDestacado={product.isDestacado}
+            isFreeShipping={product.isFreeShipping}
             isActive={product.isActive}
             images={product.images}
             price={product.price}

@@ -71,6 +71,13 @@ export const productsSlice = createSlice({
         state.myProducts = action.payload;
         state.loadingProducts = false;
       })
+      .addCase(getProducts.rejected, (state) => {
+        state.allProducts = [];
+        state.myProducts = [];
+        state.favoriteProducts = [];
+        state.allCollections = [];
+        state.loadingProducts = false;
+      })
 
       // FILTRADOS
       .addCase(getFilteredProducts.pending, (state) => {
@@ -87,6 +94,9 @@ export const productsSlice = createSlice({
       // FAVORITOS
       .addCase(getFavoriteProducts.fulfilled, (state, action) => {
         state.favoriteProducts = action.payload;
+      })
+      .addCase(getFavoriteProducts.rejected, (state) => {
+        state.favoriteProducts = [];
       })
 
       // COLECCIONES

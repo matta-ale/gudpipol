@@ -49,7 +49,13 @@ const faqs = [
   },
   {
     question: '¿Hacen envíos?',
-    answer: 'Sí. Realizamos envíos a todo Argentina.',
+    answer:
+      'Sí. Realizamos envíos a todo Argentina. En algunos productos hay envío gratis a provincias seleccionadas (ver pregunta siguiente).',
+  },
+  {
+    question: '¿En qué provincias hay envío gratis?',
+    answer:
+      'En los productos marcados con “Envío gratis”, el envío no tiene costo a PBA (incluye AMBA), Santa Fe, Entre Ríos y Córdoba. Para el resto del país podés consultar el costo por WhatsApp.',
   },
   {
     question: '¿Cuánto demora la entrega?',
