@@ -41,20 +41,17 @@ export default function CartItem({ item }) {
               className='rounded-lg'
             />
           </div>
-          <div className='flex-1 flex flex-col justify-between pr-6'>
-            <div>
-              <p className='text-xs text-gray-500 mb-1'>{item.collection}</p>
-              <h2 className='text-base font-bold'>{item.name}</h2>
-              {item.isFreeShipping && (
-                <FreeShippingBadge className='mt-1.5' />
-              )}
-            </div>
-            
-            <div className='flex items-center bg-gray-600 text-white h-9 w-36 rounded-full justify-center self-start ml-6'>
+          <div className='flex-1 flex flex-col pr-6'>
+            <p className='text-xs text-gray-500 mb-1'>{item.collection}</p>
+            <h2 className='text-base font-bold'>{item.name}</h2>
+            <div className='flex items-center bg-gray-600 text-white h-9 w-36 rounded-full justify-center self-start mt-2'>
               <p className='font-semibold text-sm'>
                 $ {(item.price * item.quantity).toLocaleString('es-ES')}
               </p>
             </div>
+            {item.isFreeShipping && (
+              <FreeShippingBadge variant='inline' className='mt-2' />
+            )}
           </div>
         </div>
 
@@ -142,19 +139,17 @@ export default function CartItem({ item }) {
         </div>
 
         {/* Product Info Section */}
-        <div className='flex flex-col justify-between'>
-          <div>
-            <p className='text-custom-black text-sm'>{item.collection}</p>
-            <h2 className='text-md font-bold'>{item.name}</h2>
-            {item.isFreeShipping && (
-              <FreeShippingBadge className='mt-1.5' />
-            )}
-          </div>
-          <div className='flex items-center bg-gray-600 text-white h-9 w-32 rounded-full justify-around'>
+        <div className='flex flex-col'>
+          <p className='text-custom-black text-sm'>{item.collection}</p>
+          <h2 className='text-md font-bold'>{item.name}</h2>
+          <div className='flex items-center bg-gray-600 text-white h-9 w-32 rounded-full justify-around mt-2'>
             <p className='font-semibold text-md'>
               $ {(item.price * item.quantity).toLocaleString('es-ES')}
             </p>
           </div>
+          {item.isFreeShipping && (
+            <FreeShippingBadge variant='inline' className='mt-2' />
+          )}
         </div>
       </div>
     </div>
