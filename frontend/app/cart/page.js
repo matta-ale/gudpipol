@@ -2,7 +2,7 @@
 import { useRouter } from 'next/navigation';
 import { useSelector } from 'react-redux';
 import CartItem from '../components/CartItem';
-import { FaWhatsapp, FaBox, FaCity, FaTruck } from 'react-icons/fa';
+import { FaWhatsapp, FaBox, FaTruck } from 'react-icons/fa';
 
 export default function Cart() {
   const cartItems = useSelector((state) => state.cart.items);
@@ -49,6 +49,13 @@ export default function Cart() {
     router.push('/checkout');
   };
 
+  const freeCount = cartItems.filter((item) => item.isFreeShipping).length;
+  const shippingMode =
+    freeCount === 0 ? 'none' : freeCount === cartItems.length ? 'all' : 'mixed';
+
+  const whatsappHref =
+    'https://wa.me/5493415924709?text=Hola%2C%20quiero%20hacer%20una%20consulta%20sobre%20sus%20muebles';
+
   return (
     <main className='w-[360px] md:w-[544px] mx-auto mt-60 md:mt-56 py-6 rounded-lg bg-white'>
       <h1 className='text-custom-black text-2xl mx-7 mb-6 font-bold'>
@@ -78,20 +85,72 @@ export default function Cart() {
             </div>
           </div>
 
-          {/* Costo envío Rosario */}
-          <div className='flex items-start mb-4 pb-4 border-b border-green-200'>
-            <div className='min-w-[40px] h-[40px] bg-custom-green3 rounded-lg flex items-center justify-center mr-4 flex-shrink-0'>
-              <FaTruck className='text-white text-lg' />
-            </div>
-            <div className='flex-1'>
-              <div className='text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1'>
-                Costo de envío Rosario
+          {/* Envío según carrito */}
+          {shippingMode === 'none' && (
+            <div className='flex items-start mb-4 pb-4 border-b border-green-200'>
+              <div className='min-w-[40px] h-[40px] bg-custom-green3 rounded-lg flex items-center justify-center mr-4 flex-shrink-0'>
+                <FaTruck className='text-white text-lg' />
               </div>
-              <div className='text-base font-semibold text-gray-800'>
-                $ {parseFloat(costoEnvíoRosario).toLocaleString('es-ES')}
+              <div className='flex-1'>
+                <div className='text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1'>
+                  Costo de envío Rosario
+                </div>
+                <div className='text-base font-semibold text-gray-800'>
+                  $ {parseFloat(costoEnvíoRosario).toLocaleString('es-ES')}
+                </div>
               </div>
             </div>
-          </div>
+          )}
+
+          {shippingMode === 'all' && (
+            <div className='flex items-start mb-4 pb-4 border-b border-green-200'>
+              <div className='min-w-[40px] h-[40px] bg-custom-green3 rounded-lg flex items-center justify-center mr-4 flex-shrink-0'>
+                <FaTruck className='text-white text-lg' />
+              </div>
+              <div className='flex-1'>
+                <div className='text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1'>
+                  Costo de envío a CABA, Buenos Aires, Córdoba, Santa Fe y Entre Ríos
+                </div>
+                <div className='text-base font-semibold text-custom-green'>
+                  Sin cargo
+                </div>
+              </div>
+            </div>
+          )}
+
+          {shippingMode === 'mixed' && (
+            <>
+              <div className='flex items-start mb-4 pb-4 border-b border-green-200'>
+                <div className='min-w-[40px] h-[40px] bg-custom-green3 rounded-lg flex items-center justify-center mr-4 flex-shrink-0'>
+                  <FaTruck className='text-white text-lg' />
+                </div>
+                <div className='flex-1'>
+                  <div className='text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1'>
+                    Envío gratis
+                  </div>
+                  <div className='text-sm font-semibold text-custom-green'>
+                    CABA, Buenos Aires, Córdoba, Santa Fe y Entre Ríos en los productos marcados
+                  </div>
+                </div>
+              </div>
+              <div className='flex items-start mb-4 pb-4 border-b border-green-200'>
+                <div className='min-w-[40px] h-[40px] bg-custom-green3 rounded-lg flex items-center justify-center mr-4 flex-shrink-0'>
+                  <FaTruck className='text-white text-lg' />
+                </div>
+                <div className='flex-1'>
+                  <div className='text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1'>
+                    Costo de envío Rosario
+                  </div>
+                  <div className='text-base font-semibold text-gray-800'>
+                    $ {parseFloat(costoEnvíoRosario).toLocaleString('es-ES')}
+                    <span className='block text-xs font-normal text-gray-500 mt-0.5'>
+                      para los productos sin envío gratis
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
 
           {/* Costo envío resto del país */}
           <div className='flex items-start'>
@@ -103,7 +162,7 @@ export default function Cart() {
                 Costo de envío resto del país
               </div>
               <a
-                href='https://wa.me/5493415924709?text=Hola%2C%20quiero%20hacer%20una%20consulta%20sobre%20sus%20muebles'
+                href={whatsappHref}
                 target='_blank'
                 rel='noopener noreferrer'
                 className='inline-flex items-center gap-2 bg-green-200 hover:bg-green-200 text-green-600 font-semibold px-4 py-2 rounded-lg transition-all duration-300 hover:translate-x-1'
