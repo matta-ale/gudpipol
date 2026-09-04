@@ -16,7 +16,7 @@ export default function DetailPageClient({ params }) {
   const products = useSelector((state) => state.products.myProducts);
   const [product, setProduct] = useState(null);
   const [quantity, setQuantity] = useState(1);
-  const [selectedTab, setSelectedTab] = useState('descripcion');
+  const [selectedTab, setSelectedTab] = useState('medidas');
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [selectedColor, setSelectedColor] = useState('Marron');
   const [isZoomed, setIsZoomed] = useState(false);
@@ -386,18 +386,24 @@ export default function DetailPageClient({ params }) {
         </div>
 
         {/* Contenido del tab */}
-        <div className='mt-4 text-custom-black w-full min-h-[100px] max-h-[100px] flex'>
+        <div className='mt-4 text-custom-black w-full min-h-[100px] max-h-[160px] overflow-y-auto flex'>
           {selectedTab === 'descripcion' && <p>{product.description}</p>}
-          {selectedTab === 'medidas' && (
-            <div className='grid grid-cols-2 w-full'>
-              <div className='flex flex-col items-start'>
-                <p>Largo: {product.length} cm</p>
-                <p>Ancho: {product.width} cm</p>
-                <p>Alto: {product.height} cm</p>
-                <p>Peso: {product.weight} kg</p>
+          {selectedTab === 'medidas' && (() => {
+            const texto = product.medidasTexto && String(product.medidasTexto).trim();
+            const tieneMedidasTexto = texto && texto !== '0';
+            return tieneMedidasTexto ? (
+              <p className='whitespace-pre-line w-full'>{texto}</p>
+            ) : (
+              <div className='grid grid-cols-2 w-full'>
+                <div className='flex flex-col items-start'>
+                  <p>Largo: {product.length} cm</p>
+                  <p>Ancho: {product.width} cm</p>
+                  <p>Alto: {product.height} cm</p>
+                  <p>Peso: {product.weight} kg</p>
+                </div>
               </div>
-            </div>
-          )}
+            );
+          })()}
           {selectedTab === 'formasdepago' && (
             <div className='flex flex-col space-y-2'>
               <div className='flex items-center'>

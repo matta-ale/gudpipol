@@ -36,6 +36,10 @@ const Product = sequelize.define('Product', {
     type: DataTypes.FLOAT,
     allowNull: false
   },
+  medidasTexto: {
+    type: DataTypes.TEXT,
+    allowNull: true
+  },
   tablas: {
     type: DataTypes.FLOAT,
     allowNull: false
