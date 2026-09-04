@@ -39,6 +39,13 @@ const uploadProductsBulk = async (req, res) => {
         if (row.isFreeShipping !== undefined) {
           row.isFreeShipping = parseBoolean(row.isFreeShipping);
         }
+        if (row.medidasTexto !== undefined && row.medidasTexto !== null) {
+          const text = String(row.medidasTexto).trim();
+          // Excel often coerces blank cells to 0; treat that as empty
+          row.medidasTexto = text === '' || text === '0' ? null : text;
+        } else {
+          row.medidasTexto = null;
+        }
 
         if (existingProduct) {
           // Update existing product
