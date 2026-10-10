@@ -1,8 +1,16 @@
-"use client";
+'use client';
 import emailjs from '@emailjs/browser';
 
 const sendOrderDataEmail = async (orderData, template_id) => {
   try {
+    const discountPercent = parseFloat(orderData.discountPercent) || 0;
+    const discountFactor = 1 - discountPercent / 100;
+
+    const subtotal = orderData.cart.reduce(
+      (total, item) => total + item.price * item.quantity,
+      0
+    );
+
     const emailParams = {
       to_email: process.env.NEXT_PUBLIC_EMAIL2_ADDRESS,
       from_email: process.env.NEXT_PUBLIC_EMAIL2_ADDRESS,
@@ -16,15 +24,15 @@ const sendOrderDataEmail = async (orderData, template_id) => {
       user_province: orderData.province,
       user_city: orderData.city,
       cart_items: orderData.cart
-        .map(item => {
-          const totalItemPrice = (item.price * item.quantity).toFixed(2);
+        .map((item) => {
+          const totalItemPrice = (item.price * item.quantity * discountFactor).toFixed(2);
           return `${item.quantity} x ${item.name} ${item.color} - $${totalItemPrice}`;
         })
         .join('\n'),
-      total_price: orderData.cart
-        .reduce((total, item) => total + item.price * item.quantity, 0)
-        .toFixed(2),
-      payment_method: orderData.paymentMethod
+      total_price: (subtotal * discountFactor).toFixed(2),
+      payment_method: orderData.paymentMethod,
+      discount_code: orderData.discountCode || '',
+      discount_percent: discountPercent || '',
     };
 
     await emailjs.send(
@@ -42,4 +50,4 @@ const sendOrderDataEmail = async (orderData, template_id) => {
   }
 };
 
-module.exports = sendOrderDataEmail;
+export default sendOrderDataEmail;

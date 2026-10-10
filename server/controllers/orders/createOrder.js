@@ -1,9 +1,35 @@
 // controllers/orderController.js
-const { Order, OrderProduct } = require('../../models')
+const { Order, OrderProduct } = require('../../models');
+const { resolveDiscount } = require('../../utils/discounts');
 
 const createOrder = async (req, res) => {
-  const { fullName, email, phone, idNumber, address, province, city, postalCode, paymentMethod,cart } = req.body;
+  const {
+    fullName,
+    email,
+    phone,
+    idNumber,
+    address,
+    province,
+    city,
+    postalCode,
+    paymentMethod,
+    cart,
+    discountCode: rawDiscountCode,
+  } = req.body;
+
   try {
+    let discountCode = null;
+    let discountPercent = null;
+
+    if (rawDiscountCode) {
+      const resolved = resolveDiscount(rawDiscountCode);
+      if (!resolved.valid) {
+        return res.status(400).json({ message: 'Código de descuento inválido' });
+      }
+      discountCode = resolved.code;
+      discountPercent = resolved.percent;
+    }
+
     // Crear la orden principal
     const newOrder = await Order.create({
       fullName,
@@ -14,7 +40,9 @@ const createOrder = async (req, res) => {
       province,
       city,
       postalCode,
-      paymentMethod
+      paymentMethod,
+      discountCode,
+      discountPercent,
     });
 
     // Asociar productos con la orden
@@ -34,4 +62,4 @@ const createOrder = async (req, res) => {
   }
 };
 
-module.exports = createOrder
+module.exports = createOrder;

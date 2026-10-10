@@ -9,12 +9,17 @@ const sendOrderConfirmationEmail = async (orderData, template_id) => {
         ? 1 + (parseFloat(process.env.NEXT_PUBLIC_RATE_6_CUOTAS) / 100 || 0)
         : 1;
 
-    // Calcular el total del carrito
-    const total = orderData.cart.reduce((acc, item) => {
-      const price = parseFloat(item.price) || 0; // Asegurarse de que price sea un número
-      const quantity = parseInt(item.quantity, 10) || 0; // Asegurarse de que quantity sea un número entero
+    const discountPercent = parseFloat(orderData.discountPercent) || 0;
+    const discountFactor = 1 - discountPercent / 100;
+
+    // Calcular el total del carrito (sin descuento ni cuotas)
+    const subtotal = orderData.cart.reduce((acc, item) => {
+      const price = parseFloat(item.price) || 0;
+      const quantity = parseInt(item.quantity, 10) || 0;
       return acc + price * quantity;
-    }, 0); // Inicializar acumulador en 0
+    }, 0);
+
+    const total = subtotal * discountFactor * multiplier;
 
     // Preparar los parámetros del correo
     const emailParams = {
@@ -28,17 +33,17 @@ const sendOrderConfirmationEmail = async (orderData, template_id) => {
       user_city: orderData.city,
       order_id: orderData.id,
       cart_items: orderData.cart
-        .map(
-          (item) => {
-            const price = parseFloat(item.price) || 0;
-            const quantity = parseInt(item.quantity, 10) || 0;
-            const itemTotal = (price * quantity * multiplier).toFixed(2);
-            return `${quantity} x ${item.name} ${item.color} - $${itemTotal}`;
-          }
-        )
+        .map((item) => {
+          const price = parseFloat(item.price) || 0;
+          const quantity = parseInt(item.quantity, 10) || 0;
+          const itemTotal = (price * quantity * discountFactor * multiplier).toFixed(2);
+          return `${quantity} x ${item.name} ${item.color} - $${itemTotal}`;
+        })
         .join('\n'),
-      total_price: (multiplier * total).toFixed(2),
+      total_price: total.toFixed(2),
       payment_method: orderData.paymentMethod,
+      discount_code: orderData.discountCode || '',
+      discount_percent: discountPercent || '',
     };
 
     // Enviar el correo
@@ -57,4 +62,4 @@ const sendOrderConfirmationEmail = async (orderData, template_id) => {
   }
 };
 
-export default sendOrderConfirmationEmail; // Cambiado a export default para Next.js
+export default sendOrderConfirmationEmail;

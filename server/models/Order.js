@@ -51,6 +51,14 @@ const Order = sequelize.define(
       allowNull: false,
       defaultValue: false,
     },
+    discountCode: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    discountPercent: {
+      type: DataTypes.FLOAT,
+      allowNull: true,
+    },
   },
   {
     tableName: 'Orders',
