@@ -23,6 +23,8 @@ export default function Success() {
     city: order.city,
     email: order.email,
     paymentMethod: order.paymentMethod,
+    discountCode: order.discountCode || null,
+    discountPercent: order.discountPercent || null,
     cart: order.products.map((p) => ({
       name: p.name,
       quantity: p.OrderProducts.quantity,

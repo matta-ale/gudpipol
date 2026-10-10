@@ -2,7 +2,7 @@ const express = require('express');
 const sequelize = require('./config/database');
 const cors = require('cors');
 
-const { productsRouter,collectionsRouter,productImagesRouter, mercadopagoRouter,ordersRouter,paymentsRouter } = require('./routes');
+const { productsRouter,collectionsRouter,productImagesRouter, mercadopagoRouter,ordersRouter,paymentsRouter,discountsRouter } = require('./routes');
 const {errorHandler} = require('./middlewares');
 const app = express();
 
@@ -19,6 +19,7 @@ app.use('/', productImagesRouter);
 app.use('/', mercadopagoRouter);
 app.use('/', ordersRouter);
 app.use('/', paymentsRouter);
+app.use('/', discountsRouter);
 
 // app.use('/',errorHandler);
 app.use('/',errorHandler);
